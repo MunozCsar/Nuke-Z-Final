@@ -5,6 +5,7 @@ using UnityEngine;
 public class BarrierLogic : MonoBehaviour
 {
     public int hitPoints;
+    public GameObject[] planks;
 
     // Start is called before the first frame update
     void Start()
@@ -21,14 +22,15 @@ public class BarrierLogic : MonoBehaviour
     public void ReduceHitPoints()
     {
         hitPoints--;
-        if(hitPoints <= 0)
-        {
-            DestroyBarrier();
-        }
+        DestroyBarrier();
     }
     public void DestroyBarrier()
     {
-        transform.GetChild(0).gameObject.SetActive(false);
+        planks[hitPoints].SetActive(false);
+        if(hitPoints <= 0)
+        {
+            transform.GetChild(0).gameObject.SetActive(false);
+        }
     }
     public void RepairBarrier()
     {
@@ -36,6 +38,7 @@ public class BarrierLogic : MonoBehaviour
         {
             transform.GetChild(0).gameObject.SetActive(true);
         }
+        planks[hitPoints].SetActive(true);
         hitPoints++;
         GameManager.Instance.AddPoints(10);
     }

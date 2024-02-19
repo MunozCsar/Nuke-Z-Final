@@ -70880,27 +70880,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &1839130185
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839130180}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 27ef47558341b624e96455d68b029408, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1841208241 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7332007321697398412, guid: aabf99a89ee15a641825a30d56878591, type: 3}
@@ -78994,18 +78973,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2096664414}
-    - target: {fileID: 574574257, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 574574257, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 649463266, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_Name
-      value: Resume
-      objectReference: {fileID: 0}
     - target: {fileID: 649463268, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -79026,14 +78993,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2096664414}
-    - target: {fileID: 1491240423, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1532091963, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1989755047, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -79042,18 +79001,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1634417864}
-    - target: {fileID: 891721440357679873, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_RenderMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 891721440357679873, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2252563135191010536, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 365
-      objectReference: {fileID: 0}
     - target: {fileID: 2445521912319237151, guid: 89886747cc802204c8468fcdb7e171a6, type: 3}
       propertyPath: m_Name
       value: UI

@@ -106,6 +106,23 @@ public class WeaponHandler : MonoBehaviour
                 BuyAmmo(activeSlot);
             }
         }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            weaponList[activeSlot].GetComponent<Animator>().SetBool("isWalking", true);
+        }
+        else
+        {
+            weaponList[activeSlot].GetComponent<Animator>().SetBool("isWalking", false);
+        }
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.LeftShift))
+        {
+            weaponList[activeSlot].GetComponent<Animator>().SetBool("isRunning", true);
+        }
+        else
+        {
+            weaponList[activeSlot].GetComponent<Animator>().SetBool("isRunning", false);
+        }
     }
 
     public void MaxAmmo()

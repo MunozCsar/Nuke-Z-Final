@@ -105,18 +105,27 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("Barrier_Trigger"))
         {
-            GameManager.Instance.interactText.text = "Press 'F' to repair barrier";
-            if (Input.GetKey(KeyCode.F))
+            if(other.GetComponent<BarrierLogic>().hitPoints < 9)
             {
-                if (t < t_Goal)
+                GameManager.Instance.interactText.gameObject.SetActive(true);
+                GameManager.Instance.interactText.text = "Press 'F' to repair barrier";
+                if (Input.GetKey(KeyCode.F))
                 {
-                    t += Time.deltaTime;
+                    if (t < t_Goal)
+                    {
+                        t += Time.deltaTime;
+                    }
+                    else if (t >= t_Goal)
+                    {
+                        t = 0f;
+                        other.GetComponent<BarrierLogic>().RepairBarrier();
+                    }
                 }
-                else if (t >= t_Goal && other.GetComponent<BarrierLogic>().hitPoints < 10)
-                {
-                    t = 0f;
-                    other.GetComponent<BarrierLogic>().RepairBarrier();
-                }
+
+            }
+            else if (other.GetComponent<BarrierLogic>().hitPoints >= 9)
+            {
+                GameManager.Instance.interactText.gameObject.SetActive(false);
             }
         }
     }

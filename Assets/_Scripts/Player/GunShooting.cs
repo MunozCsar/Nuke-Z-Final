@@ -27,6 +27,7 @@ public class GunShooting : MonoBehaviour
     public float rateOfFire, damage = 25f, rof, fireDelay ,headshotMultiplier, range;
     private float internalDamage;
     public ParticleSystem muzzleFX;
+    public ParticleSystem[] bloodFX;
 
     public bool fullAuto;
 
@@ -34,7 +35,7 @@ public class GunShooting : MonoBehaviour
     public int ammo;
     public int extraMags, initialMags, ammoCapacity;
     public int reserveAmmo;
-    public float reloadTime;
+    public float reloadTime, emptyReloadTime;
 
     private void Awake()
     {
@@ -114,35 +115,47 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Body_Collider"))
             {
+
+                int rnd = Random.Range(0, 5);
+                Instantiate(bloodFX[rnd], hit.point, transform.rotation);
+
                 if (GameManager.Instance.instaKill)
                 {
-                    hit.transform.parent.gameObject.GetComponent<ZM_HP>().zm_Death(headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(headShot);
                 }
                 else
                 {
-                    hit.transform.parent.gameObject.GetComponent<ZM_HP>().ReduceHP(internalDamage, headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(internalDamage, headShot);
                     headShot = false;
                 }
 
             }
+
             if (hit.transform.CompareTag("Head_Collider"))
+            {
+                int rnd = Random.Range(0, 5);
+                Instantiate(bloodFX[rnd], hit.point, transform.rotation);
+
                 if (GameManager.Instance.instaKill)
                 {
 
-                    hit.transform.parent.gameObject.GetComponent<ZM_HP>().zm_Death(headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(headShot);
                 }
                 else
                 {
                     Debug.Log("Headshot!");
-                    hit.transform.parent.gameObject.GetComponent<ZM_HP>().ReduceHP(internalDamage * headshotMultiplier, headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(internalDamage * headshotMultiplier, headShot);
                     headShot = true;
                 }
-        }
+            }
 
 
-        if (ammo == 0 && reserveAmmo > 0)
-        {
-            StartCoroutine(Reload());
+
+
+            if (ammo == 0 && reserveAmmo > 0)
+            {
+                StartCoroutine(Reload());
+            }
         }
     }
 
@@ -155,10 +168,20 @@ public class GunShooting : MonoBehaviour
 
     IEnumerator Reload()
     {
+        if(ammo <= 0)
+        {
+            gunAnimator.Play("Gun_ReloadEmpty");
+            gunAnimator.Play("Arms_ReloadEmpty");
+            yield return new WaitForSeconds(emptyReloadTime);
+        }
+        else
+        {
+            gunAnimator.Play("Gun_Reload");
+            gunAnimator.Play("Arms_Reload");
+            yield return new WaitForSeconds(reloadTime);
+        }
 
-        gunAnimator.Play("Gun_Reload");
-        gunAnimator.Play("Arms_Reload");
-        yield return new WaitForSeconds(reloadTime);
+
         for(int i = ammo; ammo < ammoCapacity && reserveAmmo > 0; i++)
         {
             ammo++;

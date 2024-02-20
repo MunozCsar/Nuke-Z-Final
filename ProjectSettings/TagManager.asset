@@ -18,6 +18,8 @@ TagManager:
   - WeaponChalk
   - DoublePoints
   - Damage_Trigger
+  - BarrierSpawner
+  - NormalSpawner
   layers:
   - Default
   - TransparentFX

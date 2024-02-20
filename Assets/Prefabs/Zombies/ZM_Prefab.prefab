@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 972951617333310665}
   - component: {fileID: 6584458934343888563}
   - component: {fileID: 723433751859950306}
-  - component: {fileID: 723433751859950305}
   - component: {fileID: 723433751859950304}
   - component: {fileID: 7527591947866139590}
   m_Layer: 2
@@ -118,22 +117,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &723433751859950305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 489571828008447603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7ffcf499764cf34bbc1f1ab76e7ed31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  spawner: {fileID: 0}
-  hp: 550
-  rot: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
 --- !u!114 &723433751859950304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,12 +129,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffa0289b3bbf3b45aeb2c816f67d520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zm_Animator: {fileID: 0}
   damageTrigger: {fileID: 5807661734089512743}
-  targetBarrier: {fileID: 0}
+  nearestObject: {fileID: 0}
+  targetBarrier:
+  - {fileID: 0}
   focusBarrier: 0
   zm_Hitpoints: 55
   t: 0
   t_Goal: 1
+  d_Nearest: 0
+  hp: 0
+  rot: {x: 270, y: 0, z: 0, w: 0}
 --- !u!135 &7527591947866139590
 SphereCollider:
   m_ObjectHideFlags: 0

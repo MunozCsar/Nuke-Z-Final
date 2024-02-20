@@ -7496,6 +7496,11 @@ MonoBehaviour:
   headshotMultiplier: 2.5
   range: 100
   muzzleFX: {fileID: 8377766678551279299}
+  bloodFX:
+  - {fileID: 5752563408022827785, guid: 76ce9e570b9a35c4a8e83a830712ccbe, type: 3}
+  - {fileID: 5752563408022827785, guid: 523d0f65592a0d446bfef2c6cbf21eb5, type: 3}
+  - {fileID: 5752563408022827785, guid: 5984fcaee8ddf3a4296f2281e2605065, type: 3}
+  - {fileID: 5752563408022827785, guid: 771b2e189a04aae4f9c16991c8ccfa31, type: 3}
   fullAuto: 0
   ammo: 0
   extraMags: 7
@@ -7503,6 +7508,7 @@ MonoBehaviour:
   ammoCapacity: 8
   reserveAmmo: 0
   reloadTime: 1.25
+  emptyReloadTime: 0
 --- !u!95 &3450467936482200615
 Animator:
   serializedVersion: 5

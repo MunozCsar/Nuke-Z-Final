@@ -117,11 +117,11 @@ public class ZM_Spawner : MonoBehaviour
                 GameManager.Instance.zm_spawned++;
                 GameManager.Instance.zm_alive++;
                 int rnd = Random.Range(0, zmSpawners.Length);
-                if (!barrierSpawner)
+                if (zmSpawners[rnd].CompareTag("BarrierSpawner"))
                 {
                     Instantiate(GameManager.Instance.zombie[0], zmSpawners[rnd].transform.position, Quaternion.identity);
                 }
-                else
+                else if (zmSpawners[rnd].CompareTag("NormalSpawner"))
                 {
                     Instantiate(GameManager.Instance.zombie[1], zmSpawners[rnd].transform.position, Quaternion.identity);
                 }
@@ -139,7 +139,7 @@ public class ZM_Spawner : MonoBehaviour
         GameManager.Instance.waveText.GetComponent<Animator>().SetTrigger("onRoundStart");
         if(GameManager.Instance.wave < 55)
         {
-            GameManager.Instance.zombie[0].GetComponent<ZM_HP>().hp = GameManager.Instance.IncreaseHP(GameManager.Instance.wave);
+            GameManager.Instance.zombie[0].GetComponent<ZM_AI>().hp = GameManager.Instance.IncreaseHP(GameManager.Instance.wave);
         }
         NextWave();
         Timings();

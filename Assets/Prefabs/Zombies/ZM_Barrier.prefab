@@ -771,7 +771,6 @@ GameObject:
   - component: {fileID: 4821870923440808380}
   - component: {fileID: 1444132494596422598}
   - component: {fileID: 4998999382605014935}
-  - component: {fileID: 4998999382605014932}
   - component: {fileID: 4998999382605014933}
   - component: {fileID: 2818484428338413235}
   m_Layer: 2
@@ -843,25 +842,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &4998999382605014932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5305639080620014342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7ffcf499764cf34bbc1f1ab76e7ed31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerUps:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  player: {fileID: 0}
-  spawner: {fileID: 0}
-  hp: 219.61502
 --- !u!114 &4998999382605014933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -874,11 +854,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffa0289b3bbf3b45aeb2c816f67d520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zm_Animator: {fileID: 0}
   damageTrigger: {fileID: 2302133026575516242}
-  targetBarrier: {fileID: 0}
+  nearestObject: {fileID: 0}
+  targetBarrier:
+  - {fileID: 0}
   focusBarrier: 1
+  zm_Hitpoints: 0
   t: 0
-  t_Goal: 1
+  t_Goal: 2.5
+  d_Nearest: 0
+  hp: 0
+  rot: {x: 270, y: 0, z: 0, w: 0}
 --- !u!135 &2818484428338413235
 SphereCollider:
   m_ObjectHideFlags: 0

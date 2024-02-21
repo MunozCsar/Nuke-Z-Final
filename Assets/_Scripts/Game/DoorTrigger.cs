@@ -23,7 +23,7 @@ public class DoorTrigger : MonoBehaviour
         if (other.CompareTag(("Player")))
         {
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
-            if (other.GetComponent<Player_EntryCard>().hasKeyCard.Equals(true))
+            if (other.GetComponent<PlayerController>().hasKeyCard.Equals(true))
             {
                 triggerOn = true;
                 doorText.SetActive(true);

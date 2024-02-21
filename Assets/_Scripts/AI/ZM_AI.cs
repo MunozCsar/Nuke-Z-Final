@@ -154,17 +154,7 @@ public class ZM_AI : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Enter");
-            //damageTrigger.SetActive(true);
-            int rnd = Random.Range(0, 2);
-            if(rnd == 0)
-            {
-                zm_Animator.Play("Zombie_Attack_R");
-            }
-            else if (rnd == 1)
-            {
-                zm_Animator.Play("Zombie_Attack_L");
-            }
-
+            zm_Animator.SetBool("isAttacking", true);
         }
 
     }
@@ -175,11 +165,12 @@ public class ZM_AI : MonoBehaviour
             Debug.Log("Exit");
             agent.speed = 2f;
             //damageTrigger.SetActive(false);
-            //zm_Animator.SetBool("isAttacking", false);
+            zm_Animator.SetBool("isAttacking", false);
         }
         if (other.CompareTag("Barrier_Trigger"))
         {
             focusBarrier = false;
+            zm_Animator.SetBool("isAttacking", false);
         }
     }
 
@@ -193,7 +184,7 @@ public class ZM_AI : MonoBehaviour
             }
             else if (t >= t_Goal && other.GetComponent<BarrierLogic>().hitPoints > 0)
             {
-                zm_Animator.Play("Zombie_Attack_R");
+                zm_Animator.SetBool("isAttacking", true);
                 t = 0f;
                 other.GetComponent<BarrierLogic>().ReduceHitPoints();
             }

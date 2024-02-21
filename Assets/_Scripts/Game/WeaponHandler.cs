@@ -187,17 +187,17 @@ public class WeaponHandler : MonoBehaviour
         if (other.CompareTag("WeaponChalk"))
         {
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
-            weaponID = other.GetComponent<WeaponChalk>().weapon.GetComponent<GunShooting>().id;
-            weaponCost = other.GetComponent<WeaponChalk>().weapon.GetComponent<GunShooting>().gunCost;
+            weaponID = other.GetComponent<WeaponChalk>().gunID;
+            weaponCost = weapons[weaponID].GetComponent<GunShooting>().gunCost;
 
 
             if (!weaponList[activeSlot].GetComponent<GunShooting>().id.Equals(weaponID))
             {
-                GameManager.Instance.interactText.text = "Press 'E' to buy " + other.GetComponent<WeaponChalk>().weapon.GetComponent<GunShooting>().gunName + "(" + weaponCost + ")";
+                GameManager.Instance.interactText.text = "Press 'E' to buy " + weapons[weaponID].GetComponent<GunShooting>().gunName + "(" + weaponCost + ")";
             }
             else
             {
-                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + other.GetComponent<WeaponChalk>().weapon.GetComponent<GunShooting>().gunName + "(" + weaponList[activeSlot].GetComponent<GunShooting>().ammoCost + ")";
+                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + weapons[weaponID].GetComponent<GunShooting>().gunName + "(" + weaponList[activeSlot].GetComponent<GunShooting>().ammoCost + ")";
                 Debug.Log("Buyammo");
             }
 

@@ -12,10 +12,6 @@ public class CameraMovement : MonoBehaviour
     float xRotation;
     float yRotation;
     // Start is called before the first frame update
-    void Awake()
-    {
-        transform.rotation = Quaternion.identity;
-    }
 
     // Update is called once per frame
     void Update()

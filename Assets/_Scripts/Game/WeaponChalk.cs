@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class WeaponChalk : MonoBehaviour
 {
-    public string gunID;
+    public int gunID;
     public GameObject weapon;
 }

@@ -89,7 +89,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3373595159905509093}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -126,7 +126,7 @@ Camera:
     height: 1
   near clip plane: 0.05
   far clip plane: 1000
-  field of view: 110
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 1
@@ -337,10 +337,7 @@ GameObject:
   - component: {fileID: 3373595160708061156}
   - component: {fileID: 3373595160708061159}
   - component: {fileID: 3373595160708061158}
-  - component: {fileID: 3409028329598870318}
-  - component: {fileID: 3373595160708061152}
-  - component: {fileID: 3373595160708061155}
-  - component: {fileID: 3373595160708061154}
+  - component: {fileID: 5751592132198553827}
   - component: {fileID: 1936774281}
   m_Layer: 7
   m_Name: Player
@@ -402,7 +399,7 @@ MonoBehaviour:
   clampMin: -5
   clampMax: 5
   sensitivityY: 12
---- !u!114 &3409028329598870318
+--- !u!114 &5751592132198553827
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -411,20 +408,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3373595160708061149}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5467bdb74d8394c4d885e59fcc200cb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hasKeyCard: 0
---- !u!114 &3373595160708061152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3373595160708061149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f80312b33cefb44aaf4ac8ff290db16, type: 3}
+  m_Script: {fileID: 11500000, guid: eb8ab9da75d8b314e874623faaec5098, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 3373595160708061159}
@@ -432,12 +416,12 @@ MonoBehaviour:
   regenSpeed: 15
   velocity: {x: 0, y: 0, z: 0}
   gravity: -9.81
-  weaponHandler: {fileID: 1189764795}
+  weaponHandler: {fileID: 1936774281}
   sprintSpeed: 10
   defaultSpeed: 7.5
   jumpHeight: 1.5
   t: 0
-  t_Goal: 0
+  t_Goal: 1
   regenT: 0
   regenGoal: 2
   groundCheck: {fileID: 3373595160237809682}
@@ -445,32 +429,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
---- !u!114 &3373595160708061155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3373595160708061149}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01a7831aacd65214884f3f67e6d1e085, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
-  score: 0
---- !u!114 &3373595160708061154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3373595160708061149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24a078e89c30e294db442182e3207829, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   flashLight: {fileID: 3373595161618769732}
 --- !u!114 &1936774281
 MonoBehaviour:
@@ -488,6 +446,7 @@ MonoBehaviour:
   - {fileID: 3642951605812598899, guid: 68e9dfeeb1711234182d8059fcede6ad, type: 3}
   - {fileID: 7195073838783392544, guid: 602dd1e89883afa4db53c4dc28142682, type: 3}
   - {fileID: 6208087771089303132, guid: 92cda9d237f0ad64fa447680f17843e9, type: 3}
+  - {fileID: 6376966681126640318, guid: 051e8f37b5d0b424f8be4a14e1b099dc, type: 3}
   weaponList: []
   cam: {fileID: 3373595159905509093}
   gunPos: {fileID: 1956274652}
@@ -555,7 +514,7 @@ Camera:
     height: 1
   near clip plane: 0.05
   far clip plane: 1000
-  field of view: 110
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 2

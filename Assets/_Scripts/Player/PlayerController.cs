@@ -2,18 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-
     public CharacterController controller;
 
     public float playerHP, regenSpeed;
     public Vector3 velocity;
     public float gravity = -9.81f;
     public WeaponHandler weaponHandler;
-    private float _speed;
-    public float sprintSpeed;
-    public float defaultSpeed;
+    public float walkSpeed, strafeSpeed;
+    public float sprintMultiplier;
     public float jumpHeight;
 
     public float t, t_Goal, regenT, regenGoal; // variable 't' es el tiempo actual del timer, 't_Goal' es el objetivo del timer.
@@ -21,17 +19,18 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-
-    private bool _isGrounded;
+    public GameObject flashLight;
+    private bool _isGrounded, flashOn;
+    public bool hasKeyCard;
     private void Update()
     {
-        if(regenT < regenGoal)
+        if (regenT < regenGoal)
         {
             regenT += Time.deltaTime;
         }
         else
         {
-            if(playerHP < 150)
+            if (playerHP < 150)
             {
                 RegenHP();
             }
@@ -41,34 +40,36 @@ public class PlayerMovement : MonoBehaviour
 
         _isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if(_isGrounded && velocity.y < 0)
+        if (_isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
-        else
-        {
-            _speed = 5f;
-        }
-
-        float x = Input.GetAxisRaw("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
-
-        Vector3 move = transform.right * x + transform.forward * z;
         if (Input.GetKey(KeyCode.W))
         {
-            controller.Move(move.normalized * _speed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                Debug.Log("Sprint");
+                MovePlayer(walkSpeed * sprintMultiplier);
+            }
+            else
+            {
+                Debug.Log("Walk");
+                MovePlayer(walkSpeed);
+            }
+
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            controller.Move(move.normalized * _speed / 1.5f * Time.deltaTime);
+
+            MovePlayer(strafeSpeed);
+
         }
-        else
+        else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
-            controller.Move(move.normalized * _speed / 0.75f * Time.deltaTime);
+
+            MovePlayer(strafeSpeed);
+
         }
-
-
-        Sprint();
 
         if (Input.GetButtonDown("Jump") && _isGrounded)
         {
@@ -78,18 +79,29 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
-    }
 
-    private void Sprint()
-    {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            _speed = sprintSpeed;
+            flashOn = !flashOn;
+        }
+
+        if (flashOn)
+        {
+            flashLight.SetActive(true);
         }
         else
         {
-            _speed = defaultSpeed;
+            flashLight.SetActive(false);
         }
+
+    }
+    private void MovePlayer(float speed)
+    {
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
+
+        Vector3 move = transform.right * x + transform.forward * z;
+        controller.Move(move.normalized * speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -99,13 +111,22 @@ public class PlayerMovement : MonoBehaviour
             GameManager.Instance.DamageIndicator(playerHP);
             takeDamage(other.transform.root.GetComponent<ZM_AI>().zm_Hitpoints);
         }
+
+        if (other.CompareTag("EntryCard"))
+        {
+            hasKeyCard = true;
+            GameManager.Instance.interactText.gameObject.SetActive(true);
+            GameManager.Instance.interactText.text = "Picked up a keycard";
+            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_fadeout");
+            Destroy(other.gameObject);
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Barrier_Trigger"))
         {
-            if(other.GetComponent<BarrierLogic>().hitPoints < 9)
+            if (other.GetComponent<BarrierLogic>().hitPoints < 9)
             {
                 GameManager.Instance.interactText.gameObject.SetActive(true);
                 GameManager.Instance.interactText.text = "Press 'F' to repair barrier";
@@ -140,5 +161,4 @@ public class PlayerMovement : MonoBehaviour
     {
         playerHP += regenSpeed * Time.deltaTime;
     }
-
 }

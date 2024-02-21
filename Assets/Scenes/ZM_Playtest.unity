@@ -78669,6 +78669,10 @@ PrefabInstance:
       propertyPath: doorText
       value: 
       objectReference: {fileID: 1839130180}
+    - target: {fileID: 4897327744531790178, guid: e0ae162a94e8a384c8b27ac43ad0af84, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4934947795229875846, guid: e0ae162a94e8a384c8b27ac43ad0af84, type: 3}
       propertyPath: m_RootOrder
       value: 5

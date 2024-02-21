@@ -5,36 +5,38 @@ using TMPro;
 
 public class GunShooting : MonoBehaviour
 {
+    [Header("GunData")]
     public string gunName;
     public int id, gunCost, ammoCost;
-    private Vector3 initialGunPos, currentGunPos, currentRot, targetGunRot, targetGunPos;
-    public Transform adsPos;
-    [Header("Recoil")]
-    public float recoilX;
-    public float recoilY;
-    public float recoilZ;
-    public float kickback;
-    public float returnTime;
-    public float snappiness;
 
-    public float adsSpeed;
-    public static GunShooting GunInstance { get; private set; }
+    private Vector3 initialGunPos, currentGunPos, currentRot, targetGunRot, targetGunPos;
+    [Header("Recoil")]
     public Animator gunAnimator;
+    public float recoilX, recoilY, recoilZ, kickback, returnTime, snappiness;
+
+    public static GunShooting GunInstance { get; private set; }
+
     public Camera cam;
 
+
+    [HideInInspector]
+    public bool instaKill;
     [Header("Firing")]
-    public bool isReloading, headShot, instaKill;
-    public float rateOfFire, damage = 25f, rof, fireDelay ,headshotMultiplier, range;
-    private float internalDamage;
+    public bool fullAuto;
+    private bool headShot;
+    public float rateOfFire, damage = 25f, headshotMultiplier, range;
+    private float rof, fireDelay;
     public ParticleSystem muzzleFX;
     public ParticleSystem[] bloodFX;
 
-    public bool fullAuto;
-
-    [Header("Ammunition")]
+    [Header("DisplayAmmunition")]
     public int ammo;
-    public int extraMags, initialMags, ammoCapacity;
     public int reserveAmmo;
+    [Header("InternalAmmunition")]
+    public int ammoCapacity;
+    public int extraMags, initialMags;
+    [Header("Reload")]
+    public bool isReloading;
     public float reloadTime, emptyReloadTime;
 
     private void Awake()
@@ -49,7 +51,6 @@ public class GunShooting : MonoBehaviour
     void Start()
     {
         //Se asignan los valores de las variables
-        internalDamage = damage;
         ammo = ammoCapacity;
         reserveAmmo = ammoCapacity * initialMags;
         gunAnimator = GetComponent<Animator>();
@@ -125,7 +126,7 @@ public class GunShooting : MonoBehaviour
                 }
                 else
                 {
-                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(internalDamage, headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(damage, headShot);
                     headShot = false;
                 }
 
@@ -144,7 +145,7 @@ public class GunShooting : MonoBehaviour
                 else
                 {
                     Debug.Log("Headshot!");
-                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(internalDamage * headshotMultiplier, headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(damage * headshotMultiplier, headShot);
                     headShot = true;
                 }
             }

@@ -20,6 +20,10 @@ TagManager:
   - Damage_Trigger
   - BarrierSpawner
   - NormalSpawner
+  - KnifeCollider
+  - DestroyBarrier
+  - Wall
+  - EndGamePoints
   layers:
   - Default
   - TransparentFX

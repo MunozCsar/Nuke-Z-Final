@@ -48,12 +48,10 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                Debug.Log("Sprint");
                 MovePlayer(walkSpeed * sprintMultiplier);
             }
             else
             {
-                Debug.Log("Walk");
                 MovePlayer(walkSpeed);
             }
 
@@ -126,7 +124,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Barrier_Trigger"))
         {
-            if (other.GetComponent<BarrierLogic>().hitPoints < 9)
+            if (other.transform.parent.GetComponent<BarrierLogic>().hitPoints < 9)
             {
                 GameManager.Instance.interactText.gameObject.SetActive(true);
                 GameManager.Instance.interactText.text = "Press 'F' to repair barrier";
@@ -139,12 +137,12 @@ public class PlayerController : MonoBehaviour
                     else if (t >= t_Goal)
                     {
                         t = 0f;
-                        other.GetComponent<BarrierLogic>().RepairBarrier();
+                        other.transform.parent.GetComponent<BarrierLogic>().RepairBarrier();
                     }
                 }
 
             }
-            else if (other.GetComponent<BarrierLogic>().hitPoints >= 9)
+            else if (other.transform.parent.GetComponent<BarrierLogic>().hitPoints >= 9)
             {
                 GameManager.Instance.interactText.gameObject.SetActive(false);
             }

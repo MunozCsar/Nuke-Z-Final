@@ -34,7 +34,7 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: Gun_Equip
-      takeName: MakarovRig|MakarovRigAction
+      takeName: MakarovRig|MakarovRig|MakarovRig|MakarovRigAction
       internalID: 3964725348162795291
       firstFrame: 265
       lastFrame: 280
@@ -63,7 +63,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Arms_Equip
-      takeName: Arms_Rig.001|Arms_Rig.001Action
+      takeName: Arms_Rig.001|Arms_Rig.001|Arms_Rig.001|Arms_Rig.001Action
       internalID: 7451063413848299274
       firstFrame: 265
       lastFrame: 280
@@ -92,7 +92,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Gun_Idle
-      takeName: MakarovRig|MakarovRigAction
+      takeName: MakarovRig|MakarovRig|MakarovRig|MakarovRigAction
       internalID: 7167270588181442273
       firstFrame: 220
       lastFrame: 259
@@ -121,7 +121,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Arms_Idle
-      takeName: Arms_Rig.001|Arms_Rig.001Action
+      takeName: Arms_Rig.001|Arms_Rig.001|Arms_Rig.001|Arms_Rig.001Action
       internalID: -1464631597119529109
       firstFrame: 220
       lastFrame: 259
@@ -150,7 +150,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Gun_Fire
-      takeName: MakarovRig|MakarovRigAction
+      takeName: MakarovRig|MakarovRig|MakarovRig|MakarovRigAction
       internalID: -472845863562129059
       firstFrame: 1
       lastFrame: 10
@@ -179,7 +179,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Arms_Fire
-      takeName: Arms_Rig.001|Arms_Rig.001Action
+      takeName: Arms_Rig.001|Arms_Rig.001|Arms_Rig.001|Arms_Rig.001Action
       internalID: 8510559213324079160
       firstFrame: 1
       lastFrame: 10
@@ -208,7 +208,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Gun_Reload
-      takeName: MakarovRig|MakarovRigAction
+      takeName: MakarovRig|MakarovRig|MakarovRig|MakarovRigAction
       internalID: 1182044581687234486
       firstFrame: 24
       lastFrame: 72
@@ -237,10 +237,10 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Arms_Reload
-      takeName: Arms_Rig.001|Arms_Rig.001Action
+      takeName: Arms_Rig.001|Arms_Rig.001|Arms_Rig.001|Arms_Rig.001Action
       internalID: -8473023068555401849
-      firstFrame: 0
-      lastFrame: 280
+      firstFrame: 24
+      lastFrame: 72
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -266,7 +266,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Gun_ReloadEmpty
-      takeName: MakarovRig|MakarovRigAction
+      takeName: MakarovRig|MakarovRig|MakarovRig|MakarovRigAction
       internalID: -4203724841270262261
       firstFrame: 150
       lastFrame: 220
@@ -295,7 +295,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Arms_ReloadEmpty
-      takeName: Arms_Rig.001|Arms_Rig.001Action
+      takeName: Arms_Rig.001|Arms_Rig.001|Arms_Rig.001|Arms_Rig.001Action
       internalID: 2041294246148076695
       firstFrame: 150
       lastFrame: 220
@@ -324,7 +324,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Gun_Walk
-      takeName: MakarovRig|MakarovRigAction
+      takeName: MakarovRig|MakarovRig|MakarovRig|MakarovRigAction
       internalID: 2289799612516752807
       firstFrame: 72
       lastFrame: 109
@@ -353,7 +353,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Arms_Walk
-      takeName: Arms_Rig.001|Arms_Rig.001Action
+      takeName: Arms_Rig.001|Arms_Rig.001|Arms_Rig.001|Arms_Rig.001Action
       internalID: 6834222832674531849
       firstFrame: 72
       lastFrame: 109
@@ -382,7 +382,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Gun_Run
-      takeName: MakarovRig|MakarovRigAction
+      takeName: MakarovRig|MakarovRig|MakarovRig|MakarovRigAction
       internalID: -956960682585404023
       firstFrame: 116
       lastFrame: 134
@@ -411,7 +411,7 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Arms_Run
-      takeName: Arms_Rig.001|Arms_Rig.001Action
+      takeName: Arms_Rig.001|Arms_Rig.001|Arms_Rig.001|Arms_Rig.001Action
       internalID: -7517565098402998535
       firstFrame: 116
       lastFrame: 134

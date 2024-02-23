@@ -763,12 +763,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1854596476641044888}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 1.6061392, y: -0.18252182, z: 3.3528771}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 1.6061398, y: -0.18252225, z: 3.3528767}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6731859184876858598}
+  m_Father: {fileID: 440279561084830770}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &3465375032251495506
@@ -1327,12 +1327,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3686936341622630386}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6731859184876858598}
+  m_Father: {fileID: 440279561084830770}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &2254702392307067141
@@ -1355,9 +1355,9 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 057b0d95b35ffed46bb0ba563d49b118, type: 2}
-  - {fileID: 2100000, guid: 057b0d95b35ffed46bb0ba563d49b118, type: 2}
-  - {fileID: 2100000, guid: 057b0d95b35ffed46bb0ba563d49b118, type: 2}
+  - {fileID: 2100000, guid: 813ec24575fc2734d8d940f4ce86c725, type: 2}
+  - {fileID: 2100000, guid: 01959cd6842eb48418c6bf3f162e0fb7, type: 2}
+  - {fileID: 2100000, guid: 01959cd6842eb48418c6bf3f162e0fb7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2084,13 +2084,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5151774275820813958}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 1.8763146, y: -1.820982, z: 0.25187528}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 1.8763138, y: -1.8209823, z: 0.25187272}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4422988006574256495}
-  m_Father: {fileID: 6731859184876858598}
+  m_Father: {fileID: 440279561084830770}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5341123731626439772
@@ -2282,6 +2282,115 @@ Transform:
   m_Father: {fileID: 336343445957406275}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5527535263829307318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 440279561084830770}
+  - component: {fileID: 6858025297391173801}
+  - component: {fileID: 4658845992779156311}
+  m_Layer: 7
+  m_Name: Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &440279561084830770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5527535263829307318}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7634735828723834917}
+  - {fileID: 6999334971403265660}
+  - {fileID: 4596120057992306317}
+  - {fileID: 6193803684083030248}
+  - {fileID: 6550176961962384642}
+  m_Father: {fileID: 6731859184876858598}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6858025297391173801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5527535263829307318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bd6f16213d7a0f45b0f0335c53251b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunName: M16A2
+  id: 2
+  gunCost: 1200
+  ammoCost: 500
+  pellets: 0
+  gunAnimator: {fileID: 0}
+  recoilX: -0.5
+  recoilY: 1
+  recoilZ: 1
+  kickback: 0.15
+  returnTime: 25
+  snappiness: 25
+  instaKill: 0
+  muzzleFX: {fileID: 6550176961962384643}
+  bloodFX:
+  - {fileID: 5752563408022827785, guid: 76ce9e570b9a35c4a8e83a830712ccbe, type: 3}
+  - {fileID: 5752563408022827785, guid: 523d0f65592a0d446bfef2c6cbf21eb5, type: 3}
+  - {fileID: 5752563408022827785, guid: 5984fcaee8ddf3a4296f2281e2605065, type: 3}
+  - {fileID: 5752563408022827785, guid: 771b2e189a04aae4f9c16991c8ccfa31, type: 3}
+  rateOfFire: 800
+  damage: 150
+  damagePellet: 0
+  headshotMultiplier: 2
+  range: 150
+  firingMode: 1
+  cam: {fileID: 0}
+  minX: 0
+  maxX: 0
+  minY: 0
+  maxY: 0
+  ammo: 0
+  reserveAmmo: 0
+  ammoCapacity: 30
+  extraMags: 6
+  initialMags: 2
+  isReloading: 0
+  reloadTime: 2.5
+  emptyReloadTime: 0
+--- !u!95 &4658845992779156311
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5527535263829307318}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 496e2e9ae9e84c740bd3fa73eeae57d9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5639607025602222317
 GameObject:
   m_ObjectHideFlags: 0
@@ -2419,8 +2528,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6731859184876858598}
-  - component: {fileID: 6550176963648310027}
-  - component: {fileID: -6178271994645847372}
   m_Layer: 7
   m_Name: M16A2
   m_TagString: Untagged
@@ -2440,84 +2547,10 @@ Transform:
   m_LocalScale: {x: 0.13, y: 0.13, z: 0.13}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 7634735828723834917}
-  - {fileID: 6999334971403265660}
-  - {fileID: 4596120057992306317}
-  - {fileID: 6193803684083030248}
-  - {fileID: 6550176961962384642}
+  - {fileID: 440279561084830770}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6550176963648310027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6208087771089303132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd6f16213d7a0f45b0f0335c53251b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunName: M16A2
-  id: 2
-  gunCost: 1200
-  ammoCost: 500
-  adsPos: {fileID: 0}
-  recoilX: -0.5
-  recoilY: 1
-  recoilZ: 1
-  kickback: 0.15
-  returnTime: 25
-  snappiness: 25
-  adsSpeed: 0
-  gunAnimator: {fileID: -6178271994645847372}
-  cam: {fileID: 0}
-  isReloading: 0
-  headShot: 0
-  instaKill: 0
-  rateOfFire: 800
-  damage: 150
-  rof: 0
-  fireDelay: 0
-  headshotMultiplier: 2
-  range: 150
-  muzzleFX: {fileID: 6550176961962384643}
-  bloodFX:
-  - {fileID: 5752563408022827785, guid: 76ce9e570b9a35c4a8e83a830712ccbe, type: 3}
-  - {fileID: 5752563408022827785, guid: 523d0f65592a0d446bfef2c6cbf21eb5, type: 3}
-  - {fileID: 5752563408022827785, guid: 5984fcaee8ddf3a4296f2281e2605065, type: 3}
-  - {fileID: 5752563408022827785, guid: 771b2e189a04aae4f9c16991c8ccfa31, type: 3}
-  fullAuto: 1
-  ammo: 0
-  extraMags: 6
-  initialMags: 2
-  ammoCapacity: 30
-  reserveAmmo: 0
-  reloadTime: 2.5
-  emptyReloadTime: 0
---- !u!95 &-6178271994645847372
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6208087771089303132}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 496e2e9ae9e84c740bd3fa73eeae57d9, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6470883359291227385
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,12 +2609,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6550176961962384644}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.64, y: 0.02, z: 9.57}
+  m_LocalPosition: {x: 1.6400007, y: 0.01999965, z: 9.569997}
   m_LocalScale: {x: 0.7692307, y: 0.7692307, z: 0.7692307}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6550176963355506958}
-  m_Father: {fileID: 6731859184876858598}
+  m_Father: {fileID: 440279561084830770}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &6550176961962384643
@@ -7994,13 +8027,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7775194162872482251}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3722332678889577964}
-  m_Father: {fileID: 6731859184876858598}
+  m_Father: {fileID: 440279561084830770}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7904264106290612086

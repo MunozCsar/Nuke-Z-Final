@@ -5,7 +5,7 @@ using UnityEngine.AI;
 public class ZM_AI : MonoBehaviour
 {
     public Animator zm_Animator;
-    public GameObject damageTrigger, nearestObject, bodyCollider, headCollider;
+    public GameObject nearestObject, bodyCollider, headCollider;
     private NavMeshAgent agent = null;
     private Transform target;
     public GameObject[] targetBarrier;
@@ -17,7 +17,7 @@ public class ZM_AI : MonoBehaviour
     void Start()
     {
         hp = GameManager.Instance.zm_HP;
-        targetBarrier = GameObject.FindGameObjectsWithTag("Barrier_Trigger");
+        targetBarrier = GameObject.FindGameObjectsWithTag("DestroyBarrier");
         nearestObject = targetBarrier[0];
         d_Nearest = Vector3.Distance(transform.position, nearestObject.transform.position);
 
@@ -35,7 +35,6 @@ public class ZM_AI : MonoBehaviour
         target = GameObject.Find("Player").transform;
         //targetBarrier = GameObject.FindGameObjectWithTag("Barrier_Trigger").transform;
         agent = GetComponent<NavMeshAgent>();
-        damageTrigger.SetActive(false);
         agent.speed = 2f;
 
     }
@@ -153,7 +152,6 @@ public class ZM_AI : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Enter");
             zm_Animator.SetBool("isAttacking", true);
         }
 
@@ -162,12 +160,10 @@ public class ZM_AI : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Exit");
             agent.speed = 2f;
-            //damageTrigger.SetActive(false);
             zm_Animator.SetBool("isAttacking", false);
         }
-        if (other.CompareTag("Barrier_Trigger"))
+        if (other.CompareTag("DestroyBarrier"))
         {
             focusBarrier = false;
             zm_Animator.SetBool("isAttacking", false);
@@ -176,20 +172,20 @@ public class ZM_AI : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Barrier_Trigger"))
+        if (other.CompareTag("DestroyBarrier"))
         {
             if (t < t_Goal)
             {
                 t += Time.deltaTime;
             }
-            else if (t >= t_Goal && other.GetComponent<BarrierLogic>().hitPoints > 0)
+            else if (t >= t_Goal && other.transform.parent.GetComponent<BarrierLogic>().hitPoints > 0)
             {
                 zm_Animator.SetBool("isAttacking", true);
                 t = 0f;
-                other.GetComponent<BarrierLogic>().ReduceHitPoints();
+                other.transform.parent.GetComponent<BarrierLogic>().ReduceHitPoints();
             }
 
-            if(other.GetComponent<BarrierLogic>().hitPoints <= 0)
+            if(other.transform.parent.GetComponent<BarrierLogic>().hitPoints <= 0)
             {
                 focusBarrier = false;
             }

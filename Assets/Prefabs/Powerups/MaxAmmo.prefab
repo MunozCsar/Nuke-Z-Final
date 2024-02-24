@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7061695611568421461}
   - component: {fileID: 3859386597923834641}
-  - component: {fileID: 4806938587921529762}
   m_Layer: 2
   m_Name: Point Light
   m_TagString: Untagged
@@ -95,26 +94,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &4806938587921529762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2010723530472479763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &5537997103780011828
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +109,7 @@ GameObject:
   - component: {fileID: 4619429706452574819}
   m_Layer: 2
   m_Name: MaxAmmo
-  m_TagString: AmmoBox
+  m_TagString: MaxAmmo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

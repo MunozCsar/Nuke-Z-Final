@@ -11,7 +11,7 @@ public class ZM_AI : MonoBehaviour
     public GameObject[] targetBarrier;
     public bool focusBarrier, isAlive;
     public int zm_Hitpoints;
-    public float t, t_Goal, d_Nearest, hp; // variable 't' es el tiempo actual del timer, 't_Goal' es el objetivo del timer.
+    public float t_barrier, barrier_coolDown, d_Nearest, hp; // variable 't' es el tiempo actual del timer, 't_Goal' es el objetivo del timer.
     public Quaternion rot = new Quaternion(270, 0, 0, 0);
     // Start is called before the first frame update
     void Start()
@@ -87,7 +87,7 @@ public class ZM_AI : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.AddPoints(10);
+            GameManager.Instance.AddPoints(GameManager.Instance.pointsOnHit);
         }
 
     }
@@ -98,7 +98,7 @@ public class ZM_AI : MonoBehaviour
         GameManager.Instance.zm_alive--;
         if (headShot)
         {
-            GameManager.Instance.AddPoints(130);
+            GameManager.Instance.AddPoints(GameManager.Instance.pointsOnHead);
             GetComponent<Animator>().Play("Zombie_Headshot");
             agent.speed = 0f;
             agent.isStopped = true;
@@ -110,7 +110,7 @@ public class ZM_AI : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.AddPoints(90);
+            GameManager.Instance.AddPoints(GameManager.Instance.pointsOnKill);
             GetComponent<Animator>().Play("Zombie_Death");
             agent.speed = 0f;
             agent.isStopped = true;
@@ -174,14 +174,14 @@ public class ZM_AI : MonoBehaviour
     {
         if (other.CompareTag("DestroyBarrier"))
         {
-            if (t < t_Goal)
+            if (t_barrier < barrier_coolDown)
             {
-                t += Time.deltaTime;
+                t_barrier += Time.deltaTime;
             }
-            else if (t >= t_Goal && other.transform.parent.GetComponent<BarrierLogic>().hitPoints > 0)
+            else if (t_barrier >= barrier_coolDown && other.transform.parent.GetComponent<BarrierLogic>().hitPoints > 0)
             {
                 zm_Animator.SetBool("isAttacking", true);
-                t = 0f;
+                t_barrier = 0f;
                 other.transform.parent.GetComponent<BarrierLogic>().ReduceHitPoints();
             }
 

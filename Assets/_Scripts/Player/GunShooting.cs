@@ -24,7 +24,7 @@ public class GunShooting : MonoBehaviour
     [Header("Firing")]
     public ParticleSystem muzzleFX;
     public ParticleSystem[] bloodFX;
-    private float rof, fireDelay;
+    private float firing_coolDown, t_fire;
     private bool headShot;
     public float rateOfFire, damage = 25f, damagePellet, headshotMultiplier, range;
     enum FiringMode { semi, full, buckshot }
@@ -62,7 +62,7 @@ public class GunShooting : MonoBehaviour
         ammo = ammoCapacity;
         reserveAmmo = ammoCapacity * initialMags;
         gunAnimator = GetComponent<Animator>();
-        fireDelay = rof;
+        t_fire = firing_coolDown;
         initialGunPos = transform.localPosition;
         cam = GameObject.Find("fpsCam").GetComponent<Camera>();
 
@@ -78,35 +78,35 @@ public class GunShooting : MonoBehaviour
         cam.transform.localRotation *= Quaternion.Euler(currentRot);
         ReturnToPosition();
 
-        rof = 60 / rateOfFire;
-        if (fireDelay < rof)
+        firing_coolDown = 60 / rateOfFire;
+        if (t_fire < firing_coolDown)
         {
-            fireDelay += Time.deltaTime;
+            t_fire += Time.deltaTime;
         }
 
         if (firingMode.Equals(FiringMode.semi))
         {
-            if (Input.GetButtonDown("Fire1") && ammo > 0 && fireDelay >= rof && !isReloading && GameManager.Instance.isPaused == false)
+            if (Input.GetButtonDown("Fire1") && ammo > 0 && t_fire >= firing_coolDown && !isReloading && GameManager.Instance.isPaused == false)
             {
                 Fire();
             }
         }
         else if (firingMode.Equals(FiringMode.full))
         {
-            if (Input.GetButton("Fire1") && ammo > 0 && fireDelay >= rof && !isReloading && GameManager.Instance.isPaused == false)
+            if (Input.GetButton("Fire1") && ammo > 0 && t_fire >= firing_coolDown && !isReloading && GameManager.Instance.isPaused == false)
             {
                 Fire();
             }
         }
         else if (firingMode.Equals(FiringMode.buckshot))
         {
-            if (Input.GetButtonDown("Fire1") && ammo > 0 && fireDelay >= rof && !isReloading && GameManager.Instance.isPaused == false)
+            if (Input.GetButtonDown("Fire1") && ammo > 0 && t_fire >= firing_coolDown && !isReloading && GameManager.Instance.isPaused == false)
             {
                 BuckShot();
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && reserveAmmo > 0 && ammo < ammoCapacity && fireDelay >= rof || ammo == 0 && !isReloading && GameManager.Instance.isPaused == false && reserveAmmo > 0 && fireDelay >= rof)
+        if (Input.GetKeyDown(KeyCode.R) && reserveAmmo > 0 && ammo < ammoCapacity && t_fire >= firing_coolDown || ammo == 0 && !isReloading && GameManager.Instance.isPaused == false && reserveAmmo > 0 && t_fire >= firing_coolDown)
         {
             isReloading = true;
             StartCoroutine(Reload());
@@ -119,7 +119,7 @@ public class GunShooting : MonoBehaviour
 
     private void Fire()
     {
-        fireDelay = 0f;
+        t_fire = 0f;
         ammo--;
         muzzleFX.Play();
         Recoil();
@@ -128,7 +128,6 @@ public class GunShooting : MonoBehaviour
         spreadX = Random.Range(minX, maxX);
         spreadY = Random.Range(minY, maxY);
         spread = new Vector3(spreadX, spreadY, 0);
-        Debug.Log(spreadX);
         Debug.DrawRay(cam.transform.position, cam.transform.forward + spread, Color.red, 5f);
         if (Physics.Raycast(cam.transform.position, cam.transform.forward + spread, out RaycastHit hit, range))
         {
@@ -240,11 +239,10 @@ public class GunShooting : MonoBehaviour
                 }
             }
         }
-        fireDelay = 0f;
+        t_fire = 0f;
         Recoil();
-        if (ammo == 0 && reserveAmmo > 0 && fireDelay >= rof)
+        if (ammo == 0 && reserveAmmo > 0 && t_fire >= firing_coolDown)
         {
-            Debug.Log(fireDelay);
             StartCoroutine(Reload());
         }
     }

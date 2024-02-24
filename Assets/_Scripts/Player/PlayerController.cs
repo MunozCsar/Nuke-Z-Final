@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
     public GameObject flashLight;
-    private bool _isGrounded, flashOn;
+    private bool _isGrounded, flashOn, end_Game;
     public bool hasKeyCard;
     private void Update()
     {
@@ -37,6 +37,13 @@ public class PlayerController : MonoBehaviour
 
         }
 
+        if (end_Game.Equals(true))
+        {
+            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.score >= 50000)
+            {
+                GameManager.Instance.EndGame();
+            }
+        }
 
         _isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -117,6 +124,19 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.interactText.text = "Picked up a keycard";
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_fadeout");
             Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("EndGamePoints"))
+        {
+            end_Game = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("EndGamePoints"))
+        {
+            end_Game = false;
         }
     }
 

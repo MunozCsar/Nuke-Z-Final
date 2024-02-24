@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+//Tengo que limpiar esto...
 public class WeaponHandler : MonoBehaviour
 {
-    public float meleeDamage, meleeRange;
+    [Header("Melee")]
     bool boolean;
+    public float meleeDamage, meleeRange;
+    float t_melee, melee_coolDown;
+    [Header("Effects")]
     public ParticleSystem[] bloodFX;
     public ParticleSystem wallChipFX;
-
-    public GameObject[] weapons; // Array containing all game weapons (Figure out if possible to incorporate into GameManager)
-    public List<GameObject> weaponList = new(); //List containing weapons currently held by the player.
+    [Header("Weapons")]
+    //public GameObject[] weaponPrefabs; // Array containing all game weapons (Figure out if possible to incorporate into GameManager)
+    public List<GameObject> playerWeapons = new(); //List containing weapons currently held by the player.
     public GameObject cam, knife; //Player camera || Knife GameObject
     public Transform gunPos; //Position data for weapon instancing.
     public TMP_Text ammoCount, maxAmmoCount; //UI text.
-    bool wallWeaponBool, pickupWeapon = false, activeWeapon; //Various booleans to control different interactions.
+    bool pickupWeapon = false, activeWeapon; //Various booleans to control different interactions.
     public int activeSlot, weaponSlots, defaultWeapon; //The currently active slot and the amount of weapon slots the player has.
     int weaponID, weaponCost; //Weapon ID and cost (Data gathered from weapon script)
 
@@ -33,9 +36,16 @@ public class WeaponHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(t_melee < melee_coolDown)
+        {
+            t_melee += Time.deltaTime;
+            Debug.Log("MeleeCooldown");
+        }
+
+
         if (activeWeapon)
         {
-            foreach (GameObject weapon in weaponList) //Loops through the weapon list.
+            foreach (GameObject weapon in playerWeapons) //Loops through the weapon list.
             {
                 if (weapon.activeSelf.Equals(true)) //If the weapon is active, set UI elements to weapon values.
                 {
@@ -47,94 +57,34 @@ public class WeaponHandler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1)) //When pressing '1', activate slot 0 and store the information.
             {
                 activeSlot = 0;
-                weaponList[0].SetActive(true);
-                weaponList[1].SetActive(false);
+                playerWeapons[0].SetActive(true);
+                playerWeapons[1].SetActive(false);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2)) //When pressing '2', activate slot 1 and store the information.
             {
                 activeSlot = 1;
-                weaponList[0].SetActive(false);
-                weaponList[1].SetActive(true);
+                playerWeapons[0].SetActive(false);
+                playerWeapons[1].SetActive(true);
             }
             if (Input.GetKey(KeyCode.W))
             {
-                weaponList[activeSlot].GetComponentInChildren<Animator>().SetBool("isWalking", true);
+                playerWeapons[activeSlot].GetComponentInChildren<Animator>().SetBool("isWalking", true);
             }
             else
             {
-                weaponList[activeSlot].GetComponentInChildren<Animator>().SetBool("isWalking", false);
+                playerWeapons[activeSlot].GetComponentInChildren<Animator>().SetBool("isWalking", false);
             }
             if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.LeftShift))
             {
-                weaponList[activeSlot].GetComponentInChildren<Animator>().SetBool("isRunning", true);
+                playerWeapons[activeSlot].GetComponentInChildren<Animator>().SetBool("isRunning", true);
             }
             else
             {
-                weaponList[activeSlot].GetComponentInChildren<Animator>().SetBool("isRunning", false);
+                playerWeapons[activeSlot].GetComponentInChildren<Animator>().SetBool("isRunning", false);
             }
-        }
+        } //Code blocks that only works when the character has at least a weapon
 
-
-
-
-        if (wallWeaponBool) //If the player triggers a wallbuy interaction, enter this 'if' statement.
-        {
-            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.score >= weaponCost && weaponList[activeSlot].GetComponentInChildren<GunShooting>().id != weaponID) //If the player presses the 'E' key and their score is greater than the cost of the weapon and the weapon the player is currently holding is different, enter the 'if' statement.
-            {
-                if(weaponList.Count > 1) //If the player is holding 2 or more weapons:
-                {
-                    switch (activeSlot) //Send the active slot value to a switch statement
-                    {
-                        case 0:
-                            if(weaponList[1].GetComponentInChildren<GunShooting>().id == weaponID) //Detect whether the weapon stashed in the other slot is the same as the wallweapon
-                            {
-                                BuyAmmo(1); //Call BuyAmmo(int i) function to buy ammo for the stashed weapon
-                                weaponList[0].SetActive(false); //Set the currently held weapon stashed
-                                weaponList[1].SetActive(true); //Activate the currently stashed weapon
-                                activeSlot = 1; //Store this information
-
-                            }
-                            else //If the stashed weapon is different, buy the wallweapon.
-                            {
-                                AddWeapon(weaponID);
-                                GameManager.Instance.interactText.gameObject.SetActive(false);
-                                GameManager.Instance.ReduceScore(weaponCost);
-                            }
-                            break;
-                        case 1:
-                            if (weaponList[0].GetComponentInChildren<GunShooting>().id == weaponID) //Detect whether the weapon stashed in the other slot is the same as the wallweapon
-                            {
-                                BuyAmmo(0); //Call BuyAmmo(int i) function to buy ammo for the stashed weapon
-                                weaponList[0].SetActive(true); //Set the currently held weapon stashed
-                                weaponList[1].SetActive(false); //Activate the currently stashed weapon
-                                activeSlot = 0; //Store this information
-                            }
-                            else //If the stashed weapon is different, buy the wallweapon.
-                            {
-                                AddWeapon(weaponID);
-                                GameManager.Instance.interactText.gameObject.SetActive(false);
-                                GameManager.Instance.ReduceScore(weaponCost);
-                            }
-                            break;
-                    }
-
-                    GameManager.Instance.interactText.gameObject.SetActive(false);
-                    GameManager.Instance.ReduceScore(weaponCost);
-                }
-                else
-                {
-                    AddWeapon(weaponID);
-                    GameManager.Instance.interactText.gameObject.SetActive(false);
-                    GameManager.Instance.ReduceScore(weaponCost);
-                }
-
-            }
-            else if(Input.GetKeyDown(KeyCode.E) && GameManager.Instance.score >= weaponList[activeSlot].GetComponentInChildren<GunShooting>().ammoCost && weaponList[activeSlot].GetComponentInChildren<GunShooting>().id == weaponID)
-            {
-                BuyAmmo(activeSlot);
-            }
-        }
-        else if (pickupWeapon)
+        if (pickupWeapon) //Enters this 'if' statement if the character is colliding with a pickup weapon
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -144,7 +94,7 @@ public class WeaponHandler : MonoBehaviour
 
 
 
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V) && t_melee >= melee_coolDown) //Melee codeblock
         {
             knife.SetActive(true);
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, meleeRange))
@@ -167,12 +117,13 @@ public class WeaponHandler : MonoBehaviour
 
                 }
             }
-            }
+            t_melee = 0f;
+        }
     }
 
     public void MaxAmmo()
     {
-        foreach (GameObject weapon in weaponList)
+        foreach (GameObject weapon in playerWeapons)
         {
             weapon.GetComponentInChildren<GunShooting>().reserveAmmo = weapon.GetComponentInChildren<GunShooting>().ammoCapacity * weapon.GetComponentInChildren<GunShooting>().extraMags;
         }
@@ -190,59 +141,57 @@ public class WeaponHandler : MonoBehaviour
 
     public void AddWeapon(int weaponID)
     {
-        if (pickupWeapon)
+
+        if (playerWeapons.Count == 0)
         {
-            Debug.Log("PICKUP");
-            weaponList.Add(Instantiate(weapons[weaponID], gunPos.position, gunPos.rotation, cam.transform));
-            weaponList[0].SetActive(true);
+            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+            playerWeapons[0].SetActive(true);
             activeSlot = 0;
             activeWeapon = true;
-            pickupWeapon = false;
+            return;
         }
 
-        if (weaponList.Count == 1)
+        if (playerWeapons.Count == 1)
         {
-            weaponList.Add(Instantiate(weapons[weaponID], gunPos.position, gunPos.rotation, cam.transform));
-            weaponList[0].SetActive(false);
-            weaponList[1].SetActive(true);
+            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+            playerWeapons[0].SetActive(false);
+            playerWeapons[1].SetActive(true);
             activeSlot = 1;
         }
 
-        else if (!weaponList[0].GetComponent<GunShooting>().id.Equals(weaponID) || !weaponList[1].GetComponent<GunShooting>().id.Equals(weaponID))
+        else if (!playerWeapons[0].GetComponentInChildren<GunShooting>().id.Equals(weaponID) || !playerWeapons[1].GetComponentInChildren<GunShooting>().id.Equals(weaponID))
         {
 
             if (activeSlot == 0)
             {
-                Debug.Log(weaponID);
-                Destroy(weaponList[activeSlot]);
-                weaponList.RemoveAt(activeSlot);
-                weaponList.Insert(0, Instantiate(weapons[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+                Destroy(playerWeapons[activeSlot]);
+                playerWeapons.RemoveAt(activeSlot);
+                playerWeapons.Insert(0, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
             }
             else if (activeSlot == 1)
             {
-                Debug.Log(weaponID + 1);
-                Destroy(weaponList[activeSlot]);
-                weaponList.RemoveAt(activeSlot);
-                weaponList.Insert(1, Instantiate(weapons[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+                Destroy(playerWeapons[activeSlot]);
+                playerWeapons.RemoveAt(activeSlot);
+                playerWeapons.Insert(1, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
             }
         }
-
-
-        wallWeaponBool = false;
+        else
+        {
+            Debug.Log("Corresponde");
+        }
     }
-
 
     public void BuyAmmo(int i)
     {
-        weaponList[i].GetComponentInChildren<GunShooting>().reserveAmmo = weaponList[i].GetComponentInChildren<GunShooting>().ammoCapacity * weaponList[i].GetComponentInChildren<GunShooting>().extraMags;
-        GameManager.Instance.ReduceScore(weaponList[i].GetComponentInChildren<GunShooting>().ammoCost);
-        wallWeaponBool = false;
+        playerWeapons[i].GetComponentInChildren<GunShooting>().reserveAmmo = playerWeapons[i].GetComponentInChildren<GunShooting>().ammoCapacity * playerWeapons[i].GetComponentInChildren<GunShooting>().extraMags;
+        GameManager.Instance.ReduceScore(playerWeapons[i].GetComponentInChildren<GunShooting>().ammoCost);
     }
     public void ShowWeapon()
     {
         if (activeWeapon)
         {
-            weaponList[activeSlot].SetActive(true);
+
+            playerWeapons[activeSlot].SetActive(true);
         }
 
         knife.SetActive(false);
@@ -252,7 +201,7 @@ public class WeaponHandler : MonoBehaviour
     {
         if (activeWeapon)
         {
-            weaponList[activeSlot].SetActive(false);
+            playerWeapons[activeSlot].SetActive(false);
         }
 
         knife.SetActive(true);
@@ -266,28 +215,30 @@ public class WeaponHandler : MonoBehaviour
             {
                 GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
                 weaponID = other.GetComponent<WeaponChalk>().gunID;
-                weaponCost = weapons[weaponID].GetComponentInChildren<GunShooting>().gunCost;
+                weaponCost = GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunCost;
 
+                //Eliminar codigo residual de wallbuys e incorporar codigo de ammobox 
+                //Eliminar assets relacionados con wallbuys 
 
-                if (!weaponList[activeSlot].GetComponentInChildren<GunShooting>().id.Equals(weaponID))
+                if (!playerWeapons[activeSlot].GetComponentInChildren<GunShooting>().id.Equals(weaponID))
                 {
-                    GameManager.Instance.interactText.text = "Press 'E' to buy " + weapons[weaponID].GetComponentInChildren<GunShooting>().gunName + "(" + weaponCost + ")";
+                    GameManager.Instance.interactText.text = "Press 'E' to buy " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName + "(" + weaponCost + ")";
                 }
                 else
                 {
-                    GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + weapons[weaponID].GetComponentInChildren<GunShooting>().gunName + "(" + weaponList[activeSlot].GetComponentInChildren<GunShooting>().ammoCost + ")";
+                    GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName + "(" + playerWeapons[activeSlot].GetComponentInChildren<GunShooting>().ammoCost + ")";
                     Debug.Log("Buyammo");
                 }
 
-                if (weaponList.Count > 1)
+                if (playerWeapons.Count > 1)
                 {
                     switch (activeSlot)
                     {
                         case 0:
-                            if (weaponList[1].GetComponent<GunShooting>().id == weaponID)
+                            if (playerWeapons[1].GetComponent<GunShooting>().id == weaponID)
                             {
-                                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + weaponList[1].GetComponentInChildren<GunShooting>().gunName + "(" + weaponList[1].GetComponentInChildren<GunShooting>().ammoCost + ")";
-                                Debug.Log(weaponList[1].GetComponent<GunShooting>().gunName);
+                                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + playerWeapons[1].GetComponentInChildren<GunShooting>().gunName + "(" + playerWeapons[1].GetComponentInChildren<GunShooting>().ammoCost + ")";
+                                Debug.Log(playerWeapons[1].GetComponent<GunShooting>().gunName);
                             }
                             else
                             {
@@ -295,17 +246,16 @@ public class WeaponHandler : MonoBehaviour
                             }
                             break;
                         case 1:
-                            if (weaponList[0].GetComponentInChildren<GunShooting>().id == weaponID)
+                            if (playerWeapons[0].GetComponentInChildren<GunShooting>().id == weaponID)
                             {
-                                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + weaponList[0].GetComponentInChildren<GunShooting>().gunName + "(" + weaponList[0].GetComponentInChildren<GunShooting>().ammoCost + ")";
-                                Debug.Log(weaponList[0].GetComponentInChildren<GunShooting>().gunName);
+                                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + playerWeapons[0].GetComponentInChildren<GunShooting>().gunName + "(" + playerWeapons[0].GetComponentInChildren<GunShooting>().ammoCost + ")";
+                                Debug.Log(playerWeapons[0].GetComponentInChildren<GunShooting>().gunName);
                             }
                             break;
                     }
                 }
 
                 GameManager.Instance.interactText.gameObject.SetActive(true);
-                wallWeaponBool = true;
             }
 
             else
@@ -313,14 +263,20 @@ public class WeaponHandler : MonoBehaviour
                 GameManager.Instance.interactText.gameObject.SetActive(true);
                 GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
                 weaponID = other.GetComponent<WeaponChalk>().gunID;
-                GameManager.Instance.interactText.text = "Press 'E' to pickup " + weapons[weaponID].GetComponentInChildren<GunShooting>().gunName;
+                GameManager.Instance.interactText.text = "Press 'E' to pickup " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName;
                 pickupWeapon = true;
             }
 
 
         }
 
-        if (other.CompareTag("AmmoBox"))
+        if (other.CompareTag("PickupWeapon"))
+        {
+            pickupWeapon = true;
+            weaponID = other.GetComponent<WeaponChalk>().gunID;
+        }
+
+        if (other.CompareTag("MaxAmmo"))
         {
             MaxAmmo();
             Destroy(other.gameObject);
@@ -343,7 +299,6 @@ public class WeaponHandler : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         GameManager.Instance.interactText.gameObject.SetActive(false);
-        wallWeaponBool = false;
     }
 }
 

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Inicio.unity
     guid: 63c7f077ce9aa224aa3457751033a896
   - enabled: 1
-    path: Assets/Scenes/ZM_Playtest.unity
-    guid: 38c6cc80ad67d9246aeee46990b0a61a
+    path: Assets/Scenes/Game.unity
+    guid: d2d8a8182d660b74981f79680bb9498e
+  - enabled: 1
+    path: Assets/Scenes/EndScene.unity
+    guid: aa98e3cbdb48f3d43a24fbf0db88864b
   m_configObjects: {}

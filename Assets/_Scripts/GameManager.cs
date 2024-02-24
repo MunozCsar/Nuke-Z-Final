@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject[] weaponPrefabs;
     public GameObject[] DamageIndicators;
     public GameObject[] powerUpArray = new GameObject[3];
     public int powerUp_max, powerUp_current;
@@ -258,6 +260,11 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         pauseCanvas.SetActive(false);
 
+    }
+
+    public void EndGame()
+    {
+        SceneManager.LoadScene(2);
     }
 
     public float IncreaseHP(int wave)

@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
         if (end_Game.Equals(true))
         {
-            if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.score >= 50000)
+            if (Input.GetKeyDown(KeyCode.F) && GameManager.Instance.score >= 50000)
             {
                 GameManager.Instance.EndGame();
             }
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Damage_Trigger"))
         {
             GameManager.Instance.DamageIndicator(playerHP);
-            takeDamage(other.transform.root.GetComponent<ZM_AI>().zm_Hitpoints);
+            takeDamage(GameManager.Instance.zm_Damage);
         }
 
         if (other.CompareTag("EntryCard"))
@@ -128,6 +128,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("EndGamePoints"))
         {
+            GameManager.Instance.interactText.gameObject.SetActive(true);
+            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
+            GameManager.Instance.interactText.text = "Press \"F\" to end game (Cost: 50000)";
             end_Game = true;
         }
     }
@@ -147,7 +150,8 @@ public class PlayerController : MonoBehaviour
             if (other.transform.parent.GetComponent<BarrierLogic>().hitPoints < 9)
             {
                 GameManager.Instance.interactText.gameObject.SetActive(true);
-                GameManager.Instance.interactText.text = "Press 'F' to repair barrier";
+                GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
+                GameManager.Instance.interactText.text = "Press \"F\" to repair barrier";
                 if (Input.GetKey(KeyCode.F))
                 {
                     if (t < t_Goal)
@@ -173,6 +177,11 @@ public class PlayerController : MonoBehaviour
     {
         regenT = 0f;
         playerHP = playerHP - Mathf.RoundToInt(damage);
+        if(playerHP <= 0)
+        {
+            GameManager.Instance.GameOver(this.gameObject);
+            GameManager.Instance.playerCam.GetComponent<Animator>().SetTrigger("onDeath");
+        }
     }
 
     public void RegenHP()

@@ -23,7 +23,6 @@ public class GunShooting : MonoBehaviour
     public bool instaKill;
     [Header("Firing")]
     public ParticleSystem muzzleFX;
-    public ParticleSystem[] bloodFX;
     private float firing_coolDown, t_fire;
     private bool headShot;
     public float rateOfFire, damage = 25f, damagePellet, headshotMultiplier, range;
@@ -136,7 +135,7 @@ public class GunShooting : MonoBehaviour
             {
 
                 int rnd = Random.Range(0, 4);
-                Instantiate(transform.root.GetComponent<WeaponHandler>().bloodFX[rnd], hit.point, transform.rotation);               
+                Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
 
                 if (GameManager.Instance.instaKill)
                 {
@@ -152,8 +151,8 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Head_Collider"))
             {
-                int rnd = Random.Range(0, 5);
-                Instantiate(transform.root.GetComponent<WeaponHandler>().bloodFX[rnd], hit.point, transform.rotation);
+                int rnd = Random.Range(0, 4);
+                Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
 
                 if (GameManager.Instance.instaKill)
                 {
@@ -170,7 +169,7 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Wall"))
             {
-                Instantiate(transform.root.GetComponent<WeaponHandler>().wallChipFX, hit.point, Quaternion.identity);
+                Instantiate(GameManager.Instance.wallChipFX, hit.point, Quaternion.identity);
             }
 
 
@@ -198,11 +197,9 @@ public class GunShooting : MonoBehaviour
 
                 if (hit.transform.CompareTag("Body_Collider"))
                 {
-                    Debug.DrawRay(cam.transform.position, cam.transform.forward * 20 + spread, Color.green, 5f);
                     int rnd = Random.Range(0, 4);
-                    Instantiate(transform.root.GetComponent<WeaponHandler>().bloodFX[rnd], hit.point, transform.rotation);
-
-
+                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
+                    Debug.DrawRay(cam.transform.position, cam.transform.forward * 20 + spread, Color.green, 5f);
                     if (GameManager.Instance.instaKill)
                     {
                         hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(headShot);
@@ -217,9 +214,8 @@ public class GunShooting : MonoBehaviour
 
                 if (hit.transform.CompareTag("Head_Collider"))
                 {
-                    int rnd = Random.Range(0, 5);
-                    Instantiate(transform.root.GetComponent<WeaponHandler>().bloodFX[rnd], hit.point, transform.rotation);
-
+                    int rnd = Random.Range(0, 4);
+                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
                     if (GameManager.Instance.instaKill)
                     {
 
@@ -235,7 +231,7 @@ public class GunShooting : MonoBehaviour
 
                 if (hit.transform.CompareTag("Wall"))
                 {
-                    Instantiate(transform.root.GetComponent<WeaponHandler>().wallChipFX, hit.point, Quaternion.identity);
+                    Instantiate(GameManager.Instance.wallChipFX, hit.point, Quaternion.identity);
                 }
             }
         }

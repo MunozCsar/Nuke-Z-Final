@@ -12,9 +12,13 @@ public class CameraMovement : MonoBehaviour
     float xRotation;
     float yRotation;
     // Start is called before the first frame update
-
+    private void Awake()
+    {
+        transform.rotation = Quaternion.Euler(0, 180, 0);
+        cam.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensitivityX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensitivityY;

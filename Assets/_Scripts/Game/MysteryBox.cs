@@ -37,7 +37,8 @@ public class MysteryBox : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             GameManager.Instance.interactText.gameObject.SetActive(true);
-            GameManager.Instance.interactText.text = "Press 'F' to roll a random weapon (Cost: 950)";
+            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
+            GameManager.Instance.interactText.text = "Press \"F\" to roll a random weapon (Cost: 950)";
             boxActive = true;
             weapon = other.GetComponent<WeaponHandler>();
         }

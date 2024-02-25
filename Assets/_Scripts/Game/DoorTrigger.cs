@@ -27,7 +27,7 @@ public class DoorTrigger : MonoBehaviour
             {
                 triggerOn = true;
                 doorText.SetActive(true);
-                doorText.GetComponent<TMP_Text>().text = ("Press \"E\" to insert Keycard");
+                doorText.GetComponent<TMP_Text>().text = ("Press \"F\" to insert Keycard");
             }
             else
             {
@@ -52,7 +52,7 @@ public class DoorTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && triggerOn)
+        if (Input.GetKeyDown(KeyCode.F) && triggerOn)
         {
             doorText.SetActive(false);
             doorAnim.SetTrigger("Fold");

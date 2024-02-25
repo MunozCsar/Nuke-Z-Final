@@ -3,28 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject[] weaponPrefabs;
     public GameObject[] DamageIndicators;
     public GameObject[] powerUpArray = new GameObject[3];
+    public GameObject[] mysteryBox;
+    public ParticleSystem[] bloodFX;
+    public ParticleSystem wallChipFX;
+    public Camera playerCam;
     public int powerUp_max, powerUp_current;
     public ParticleSystem powerUp_fx;
 
+    [SerializeField] GameObject options;
+    [SerializeField] GameObject graphics;
+    [SerializeField] GameObject controls;
+    [SerializeField] GameObject volume;
+    [SerializeField] GameObject credits;
+    public Image loadingBar;
+    public GameObject loadingScreen;
+
+    public bool findzombies;
+
     public TMP_Text scoreText;
-    public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead;
+    public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead, pointsOnNuke;
     public int playerScore, killScore;
     public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer;
     public TMP_Text totalScore, totalKills, interactText;
-    public bool isPaused = false, doublePoints, instaKill;
+    public bool isPaused = false, doublePoints, instaKill, gameOver;
     public float instaKillTimer, doublePointsTimer;
+    public Slider slider;
+    public float slidervalue;
+
     public static GameManager Instance { get; private set; }
     #region Zombie Spawn Variables
 
     [Header("Zombie prefabs")]
     public GameObject[] zombie;
     public float zm_HP;
+    public int zm_Damage;
+    public List<GameObject> zombieList;
 
     [Header("Waves")]
     public int wave = 1, powerUps;
@@ -65,12 +85,24 @@ public class GameManager : MonoBehaviour
         IncreaseHP(wave);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        options.gameObject.SetActive(false);
+        graphics.gameObject.SetActive(false);
+        controls.gameObject.SetActive(false);
+        volume.gameObject.SetActive(false);
+        credits.gameObject.SetActive(false);
+        slider.value = PlayerPrefs.GetFloat("volumenAudio", 0.5f);
+        AudioListener.volume = slidervalue;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.N) && zm_alive >= 1)
+        {
+            Nuke();
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) && !isPaused)
         {
@@ -110,7 +142,7 @@ public class GameManager : MonoBehaviour
         {
             scoreBoard.SetActive(true);
         }
-        else
+        else if(!gameOver)
         {
             scoreBoard.SetActive(false);
         }
@@ -125,64 +157,19 @@ public class GameManager : MonoBehaviour
     }
 
     #region PointManager
-    public void KillPoints(bool headShot)
-    {
-        if (headShot.Equals(true))
-        {
-            if (!doublePoints)
-            {
-                score += pointsOnHead;
-                playerScore += pointsOnHead;
-            }
-            else
-            {
-                score += pointsOnHead * 2;
-                playerScore += pointsOnHead * 2;
-            }
-            UpdateScoreText();
-        }
-        else if (headShot.Equals(false))
-        {
-            if (!doublePoints)
-            {
-                score += pointsOnKill;
-                playerScore += pointsOnKill;
-            }
-            else
-            {
-                score += pointsOnKill * 2;
-                playerScore += pointsOnKill * 2;
-            }
-            UpdateScoreText();
-        }
-    }
-
-    public void HitmarkerPoints()
-    {
-        if (!doublePoints)
-        {
-            score += pointsOnHit;
-            playerScore += pointsOnHit;
-        }
-        else
-        {
-            score += pointsOnHit * 2;
-            playerScore += pointsOnHit * 2;
-        }
-        UpdateScoreText();
-    }
-
     public void AddPoints(int points)
     {
         if (!doublePoints)
         {
             score += points;
+            playerScore += points;
             pointsInstance.GetComponent<TMP_Text>().color = new Color32(255, 174, 0, 255);
             pointsInstance.GetComponent<TMP_Text>().text = points.ToString();
         }
         else
         {
             score += points * 2;
+            playerScore += points;
             pointsInstance.GetComponent<TMP_Text>().color = new Color32(255, 174, 0, 255);
             pointsInstance.GetComponent<TMP_Text>().text = (points * 2).ToString();
         }
@@ -200,6 +187,19 @@ public class GameManager : MonoBehaviour
         UpdateScoreText();
     }
     #endregion
+
+    public void Nuke()
+    {
+        score += pointsOnNuke;
+        UpdateScoreText();
+        UpdateScoreBoard();
+        foreach (GameObject zombie in zombieList)
+        {
+            zombie.GetComponent<ZM_AI>().zm_Nuke();
+        }
+        zombieList.Clear();
+
+    }
 
     public float RandomNumberGenerator(float minIndex, float maxIndex)
     {
@@ -243,7 +243,72 @@ public class GameManager : MonoBehaviour
         totalKills.text = killScore.ToString();
     }
 
+    public void Play(int sceneID)
+    {
+        StartCoroutine(LoadSceneAsync(sceneID));
+    }
 
+    IEnumerator LoadSceneAsync(int sceneID)
+    {
+        loadingScreen.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneID);
+        while (!operation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+
+            loadingBar.fillAmount = progressValue;
+
+            yield return null;
+        }
+    }
+    public void Options()
+    {
+        options.gameObject.SetActive(true);
+    }
+    public void Exit()
+    {
+        Application.Quit();
+    }
+    public void BackOptions()
+    {
+        options.gameObject.SetActive(false);
+    }
+    public void BackGraphisAndVolumeAndControlsAndCredits()
+    {
+        graphics.gameObject.SetActive(false);
+        volume.gameObject.SetActive(false);
+        controls.gameObject.SetActive(false);
+        credits.gameObject.SetActive(false);
+    }
+
+    public void Credits()
+    {
+        credits.gameObject.SetActive(true);
+    }
+    public void Graphics()
+    {
+        graphics.gameObject.SetActive(true);
+    }
+    public void Volume()
+    {
+        volume.gameObject.SetActive(true);
+    }
+    public void Controls()
+    {
+        controls.gameObject.SetActive(true);
+    }
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ChangeSlider(float valor)
+    {
+        slider.value = valor;
+        PlayerPrefs.SetFloat("volumenAudio", slidervalue);
+        AudioListener.volume = slidervalue;
+    }
 
     public void PauseMenu()
     {
@@ -265,6 +330,23 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         SceneManager.LoadScene(2);
+    }
+
+    public void GameOver(GameObject player)
+    {
+        gameOver = true;
+        player.GetComponent<CameraMovement>().enabled = false;
+        player.GetComponent<PlayerController>().enabled = false;
+        UpdateScoreBoard();
+        UpdateScoreText();
+        scoreBoard.SetActive(true);
+        StartCoroutine(ReturnToMenu(15));
+    }
+
+    public IEnumerator ReturnToMenu(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene(0);
     }
 
     public float IncreaseHP(int wave)

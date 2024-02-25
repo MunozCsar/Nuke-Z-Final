@@ -7,18 +7,16 @@ public class WeaponHandler : MonoBehaviour
 {
     [Header("Melee")]
     bool boolean;
-    public float meleeDamage, meleeRange;
-    float t_melee, melee_coolDown;
+    public float meleeDamage, meleeRange; 
+    public float t_melee, melee_coolDown;
     [Header("Effects")]
-    public ParticleSystem[] bloodFX;
-    public ParticleSystem wallChipFX;
     [Header("Weapons")]
     //public GameObject[] weaponPrefabs; // Array containing all game weapons (Figure out if possible to incorporate into GameManager)
     public List<GameObject> playerWeapons = new(); //List containing weapons currently held by the player.
-    public GameObject cam, knife; //Player camera || Knife GameObject
+    public GameObject knife; //Player camera || Knife GameObject
     public Transform gunPos; //Position data for weapon instancing.
     public TMP_Text ammoCount, maxAmmoCount; //UI text.
-    bool pickupWeapon = false, activeWeapon; //Various booleans to control different interactions.
+    bool pickupWeapon = false, activeWeapon, ammoBox; //Various booleans to control different interactions.
     public int activeSlot, weaponSlots, defaultWeapon; //The currently active slot and the amount of weapon slots the player has.
     int weaponID, weaponCost; //Weapon ID and cost (Data gathered from weapon script)
 
@@ -54,18 +52,30 @@ public class WeaponHandler : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1)) //When pressing '1', activate slot 0 and store the information.
+            if(playerWeapons.Count > 1)
             {
-                activeSlot = 0;
-                playerWeapons[0].SetActive(true);
-                playerWeapons[1].SetActive(false);
+                if (Input.GetKeyDown(KeyCode.Alpha1)) //When pressing '1', activate slot 0 and store the information.
+                {
+                    activeSlot = 0;
+                    playerWeapons[0].SetActive(true);
+                    playerWeapons[1].SetActive(false);
+                }
+                else if (Input.GetKeyDown(KeyCode.Alpha2)) //When pressing '2', activate slot 1 and store the information.
+                {
+                    activeSlot = 1;
+                    playerWeapons[0].SetActive(false);
+                    playerWeapons[1].SetActive(true);
+                }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) //When pressing '2', activate slot 1 and store the information.
+
+            if (ammoBox)
             {
-                activeSlot = 1;
-                playerWeapons[0].SetActive(false);
-                playerWeapons[1].SetActive(true);
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    BuyAmmo(activeSlot);
+                }
             }
+
             if (Input.GetKey(KeyCode.W))
             {
                 playerWeapons[activeSlot].GetComponentInChildren<Animator>().SetBool("isWalking", true);
@@ -86,32 +96,34 @@ public class WeaponHandler : MonoBehaviour
 
         if (pickupWeapon) //Enters this 'if' statement if the character is colliding with a pickup weapon
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 AddWeapon(weaponID);
+                pickupWeapon = false;
+
             }
         }
 
 
 
-        if (Input.GetKeyDown(KeyCode.V) && t_melee >= melee_coolDown) //Melee codeblock
+        if (Input.GetKeyDown(KeyCode.E) && t_melee >= melee_coolDown) //Melee codeblock
         {
             knife.SetActive(true);
-            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, meleeRange))
+            if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange))
             {
 
                 if (hit.transform.CompareTag("Body_Collider"))
                 {
 
                     int rnd = Random.Range(0, 4);
-                    Instantiate(bloodFX[rnd], hit.point, transform.rotation);
+                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
                     if (GameManager.Instance.instaKill)
                     {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(boolean);
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(true);
                     }
                     else
                     {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage, boolean);
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage, true);
                         boolean = false;
                     }
 
@@ -144,7 +156,7 @@ public class WeaponHandler : MonoBehaviour
 
         if (playerWeapons.Count == 0)
         {
-            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
             playerWeapons[0].SetActive(true);
             activeSlot = 0;
             activeWeapon = true;
@@ -153,7 +165,7 @@ public class WeaponHandler : MonoBehaviour
 
         if (playerWeapons.Count == 1)
         {
-            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
             playerWeapons[0].SetActive(false);
             playerWeapons[1].SetActive(true);
             activeSlot = 1;
@@ -166,13 +178,13 @@ public class WeaponHandler : MonoBehaviour
             {
                 Destroy(playerWeapons[activeSlot]);
                 playerWeapons.RemoveAt(activeSlot);
-                playerWeapons.Insert(0, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+                playerWeapons.Insert(0, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
             }
             else if (activeSlot == 1)
             {
                 Destroy(playerWeapons[activeSlot]);
                 playerWeapons.RemoveAt(activeSlot);
-                playerWeapons.Insert(1, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, cam.transform));
+                playerWeapons.Insert(1, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
             }
         }
         else
@@ -274,6 +286,18 @@ public class WeaponHandler : MonoBehaviour
         {
             pickupWeapon = true;
             weaponID = other.GetComponent<WeaponChalk>().gunID;
+            GameManager.Instance.interactText.gameObject.SetActive(true);
+            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
+            GameManager.Instance.interactText.text = "Press \"F\" to pick up " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName;
+
+        }
+
+        if (other.CompareTag("AmmoBox"))
+        {
+            GameManager.Instance.interactText.gameObject.SetActive(true);
+            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
+            GameManager.Instance.interactText.text = "Press \"F\" to buy ammo (Cost: 500)";
+            ammoBox = true;
         }
 
         if (other.CompareTag("MaxAmmo"))

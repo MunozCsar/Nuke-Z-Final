@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 277699203141699863}
   - component: {fileID: 1984791954102398924}
   - component: {fileID: 7381937618218072015}
+  - component: {fileID: -4713271978670812046}
   m_Layer: 0
   m_Name: WallChipFX
   m_TagString: Untagged
@@ -4815,3 +4816,16 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-4713271978670812046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8767088465619200834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025afcbc0b1139a459808870246c9690, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 1

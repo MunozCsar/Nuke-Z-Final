@@ -680,11 +680,11 @@ MonoBehaviour:
   targetBarrier: []
   focusBarrier: 1
   isAlive: 1
-  zm_Hitpoints: 0
-  t: 0
-  t_Goal: 2
+  zm_Damage: 35
+  t_barrier: 0
+  barrier_coolDown: 1.5
   d_Nearest: 0
-  hp: 450
+  hp: 250
   rot: {x: 270, y: 0, z: 0, w: 0}
 --- !u!135 &7430697140566598852
 SphereCollider:

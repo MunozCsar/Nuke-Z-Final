@@ -8217,10 +8217,9 @@ MonoBehaviour:
   snappiness: 0
   instaKill: 0
   muzzleFX: {fileID: 8703212916004057881}
-  bloodFX: []
   rateOfFire: 350
   damage: 350
-  damagePellet: 75
+  damagePellet: 150
   headshotMultiplier: 1.5
   range: 45
   firingMode: 2

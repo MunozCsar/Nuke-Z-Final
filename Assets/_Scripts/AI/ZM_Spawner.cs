@@ -10,7 +10,7 @@ public class ZM_Spawner : MonoBehaviour
     [Header("Spawners")]
     public Transform[] zmSpawners;
 
-    public bool activeSpawner, barrierSpawner;
+    public bool activeSpawner;
     // Start is called before the first frame update
     void Start()
     {
@@ -119,11 +119,11 @@ public class ZM_Spawner : MonoBehaviour
                 int rnd = Random.Range(0, zmSpawners.Length);
                 if (zmSpawners[rnd].CompareTag("BarrierSpawner"))
                 {
-                    Instantiate(GameManager.Instance.zombie[0], zmSpawners[rnd].transform.position, Quaternion.identity);
+                    GameManager.Instance.zombieList.Add(Instantiate(GameManager.Instance.zombie[0], zmSpawners[rnd].transform.position, Quaternion.identity));
                 }
                 else if (zmSpawners[rnd].CompareTag("NormalSpawner"))
                 {
-                    Instantiate(GameManager.Instance.zombie[1], zmSpawners[rnd].transform.position, Quaternion.identity);
+                    GameManager.Instance.zombieList.Add(Instantiate(GameManager.Instance.zombie[1], zmSpawners[rnd].transform.position, Quaternion.identity));
                 }
                 GameManager.Instance.timer = 0;
             }
@@ -146,6 +146,11 @@ public class ZM_Spawner : MonoBehaviour
         GameManager.Instance.waveText.text = GameManager.Instance.wave.ToString();
         GameManager.Instance.timer = 0;
         GameManager.Instance.roundEnd = false;
+        for(int i = 0; i < GameManager.Instance.mysteryBox.Length; i++)
+        {
+            GameManager.Instance.mysteryBox[i].GetComponent<MysteryBox>().currentUses = 0;
+        }
+
 
     }
 

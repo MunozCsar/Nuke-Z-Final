@@ -10,7 +10,6 @@ public class ZM_AI : MonoBehaviour
     private Transform target;
     public GameObject[] targetBarrier;
     public bool focusBarrier, isAlive;
-    public int zm_Hitpoints;
     public float t_barrier, barrier_coolDown, d_Nearest, hp; // variable 't' es el tiempo actual del timer, 't_Goal' es el objetivo del timer.
     public Quaternion rot = new Quaternion(270, 0, 0, 0);
     // Start is called before the first frame update
@@ -46,14 +45,17 @@ public class ZM_AI : MonoBehaviour
         {
             default:
                 agent.speed = 2f; zm_Animator.SetBool("zombie_Walk", true); zm_Animator.SetBool("zombie_Run", false);
+                GameManager.Instance.zm_Damage = 35;
                 break;
 
             case 10:
                 agent.speed = 3f; zm_Animator.SetBool("zombie_Walk", true); zm_Animator.SetBool("zombie_Run", false);
+                GameManager.Instance.zm_Damage = 50;
                 break;
 
             case 20:
                 agent.speed = 4f; zm_Animator.SetBool("zombie_Walk", true); zm_Animator.SetBool("zombie_Run", true);
+                GameManager.Instance.zm_Damage = 75;
                 break;
         }
 
@@ -125,7 +127,7 @@ public class ZM_AI : MonoBehaviour
             float rnd = GameManager.Instance.RandomNumberGenerator(0, 1);
             if (rnd > .45f && rnd < .50f)
             {
-                Vector3 pos = new Vector3(this.transform.position.x, 2f, this.transform.position.z);
+                Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 2, this.transform.position.z);
                 GameManager.Instance.InstancePowerUp(0, pos, rot);
                 GameManager.Instance.powerUp_current++;
             }
@@ -145,6 +147,21 @@ public class ZM_AI : MonoBehaviour
             }
         }
 
+        Destroy(this.gameObject, 15f);
+        GameManager.Instance.zombieList.Remove(this.gameObject);
+    }
+
+    public void zm_Nuke()
+    {
+        Instantiate(GameManager.Instance.bloodFX[4], transform.position, GameManager.Instance.bloodFX[4].transform.rotation);
+        GameManager.Instance.killScore++;
+        GameManager.Instance.zm_alive--;
+        GetComponent<Animator>().Play("Zombie_Death");
+        agent.speed = 0f;
+        agent.isStopped = true;
+        isAlive = false;
+        headCollider.SetActive(false);
+        bodyCollider.SetActive(false);
         Destroy(this.gameObject, 15f);
     }
 

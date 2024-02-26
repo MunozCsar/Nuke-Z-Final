@@ -20,6 +20,9 @@ TagManager:
   - Damage_Trigger
   - BarrierSpawner
   - NormalSpawner
+  - SoulZone
+  - SoulBox
+  - Soul
   layers:
   - Default
   - TransparentFX

@@ -116,7 +116,7 @@ public class GunShooting : MonoBehaviour
             if (hit.transform.CompareTag("Body_Collider"))
             {
 
-                int rnd = Random.Range(0, 5);
+                int rnd = Random.Range(0, 4);
                 Instantiate(bloodFX[rnd], hit.point, transform.rotation);
 
                 if (GameManager.Instance.instaKill)
@@ -133,7 +133,7 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Head_Collider"))
             {
-                int rnd = Random.Range(0, 5);
+                int rnd = Random.Range(0, 4);
                 Instantiate(bloodFX[rnd], hit.point, transform.rotation);
 
                 if (GameManager.Instance.instaKill)
@@ -143,7 +143,6 @@ public class GunShooting : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Headshot!");
                     hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(internalDamage * headshotMultiplier, headShot);
                     headShot = true;
                 }

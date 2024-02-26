@@ -4,8 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 public class ZM_AI : MonoBehaviour
 {
+    public bool isInZone = false;
+
+
     public Animator zm_Animator;
-    public GameObject damageTrigger, nearestObject, bodyCollider, headCollider;
+    public GameObject damageTrigger, nearestObject, bodyCollider, headCollider,soul;
     private NavMeshAgent agent = null;
     private Transform target;
     public GameObject[] targetBarrier;
@@ -35,7 +38,7 @@ public class ZM_AI : MonoBehaviour
         target = GameObject.Find("Player").transform;
         //targetBarrier = GameObject.FindGameObjectWithTag("Barrier_Trigger").transform;
         agent = GetComponent<NavMeshAgent>();
-        damageTrigger.SetActive(false);
+        //damageTrigger.SetActive(false);
         agent.speed = 2f;
 
     }
@@ -43,6 +46,8 @@ public class ZM_AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         switch (GameManager.Instance.wave)
         {
             default:
@@ -95,6 +100,7 @@ public class ZM_AI : MonoBehaviour
 
     public void zm_Death(bool headShot)
     {
+        HarvestSoul();
         GameManager.Instance.killScore++;
         GameManager.Instance.zm_alive--;
         if (headShot)
@@ -149,11 +155,20 @@ public class ZM_AI : MonoBehaviour
         Destroy(this.gameObject, 15f);
     }
 
+    public void HarvestSoul()
+    {
+        if (isInZone)
+        {
+            Debug.Log("Instanciar alma");
+            Instantiate(soul,this.gameObject.transform.position, this.gameObject.transform.rotation);
+
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Enter");
             //damageTrigger.SetActive(true);
             int rnd = Random.Range(0, 2);
             if(rnd == 0)
@@ -172,7 +187,6 @@ public class ZM_AI : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Exit");
             agent.speed = 2f;
             //damageTrigger.SetActive(false);
             //zm_Animator.SetBool("isAttacking", false);
@@ -202,6 +216,11 @@ public class ZM_AI : MonoBehaviour
             {
                 focusBarrier = false;
             }
+        }
+
+        if (other.CompareTag("SoulZone") && isAlive)
+        {
+            isInZone = true;
         }
     }
 }

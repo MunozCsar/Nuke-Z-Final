@@ -1339,7 +1339,7 @@ MonoBehaviour:
   headShot: 0
   instaKill: 0
   rateOfFire: 750
-  damage: 35
+  damage: 795.9
   rof: 0
   fireDelay: 0
   headshotMultiplier: 2

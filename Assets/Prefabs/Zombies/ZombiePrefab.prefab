@@ -673,11 +673,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffa0289b3bbf3b45aeb2c816f67d520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInZone: 0
+  dPos: {fileID: 0}
   zm_Animator: {fileID: 2573459363259464062}
   damageTrigger: {fileID: 0}
   nearestObject: {fileID: 0}
   bodyCollider: {fileID: 1948733170216988249}
   headCollider: {fileID: 8746129156638314316}
+  soul: {fileID: 2608084956685398998, guid: adf5239dac209f144bb83403b12c0351, type: 3}
   targetBarrier: []
   focusBarrier: 0
   isAlive: 1

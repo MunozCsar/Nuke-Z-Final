@@ -145,6 +145,13 @@ public class ZM_AI : MonoBehaviour
                 GameManager.Instance.InstancePowerUp(2, pos, rot);
                 GameManager.Instance.powerUp_current++;
             }
+            if (rnd > .25f && rnd < .35f)
+            {
+                Debug.Log("BOOOOM~~!");
+                Vector3 pos = new Vector3(this.transform.position.x, 2f, this.transform.position.z);
+                GameManager.Instance.InstancePowerUp(3, pos, rot);
+                GameManager.Instance.powerUp_current++;
+            }
         }
 
         Destroy(this.gameObject, 15f);

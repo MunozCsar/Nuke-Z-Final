@@ -7834,6 +7834,9 @@ MonoBehaviour:
   kickback: 1.5
   returnTime: 50
   snappiness: 50
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 2048
   instaKill: 0
   muzzleFX: {fileID: 2973179661431444557}
   rateOfFire: 550
@@ -7843,10 +7846,10 @@ MonoBehaviour:
   range: 100
   firingMode: 1
   cam: {fileID: 0}
-  minX: -0.15
-  maxX: 0.15
-  minY: -0.2
-  maxY: 0.25
+  minX: 0
+  maxX: 0
+  minY: 0
+  maxY: 0
   ammo: 30
   reserveAmmo: 0
   ammoCapacity: 30

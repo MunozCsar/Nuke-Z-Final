@@ -7225,6 +7225,9 @@ MonoBehaviour:
   kickback: 0.2
   returnTime: 50
   snappiness: 50
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 2048
   instaKill: 0
   muzzleFX: {fileID: 8281584199040606441}
   rateOfFire: 600

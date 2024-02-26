@@ -16,7 +16,7 @@ public class GunShooting : MonoBehaviour
 
     public static GunShooting GunInstance { get; private set; }
 
-
+    public LayerMask enemyMask;
 
 
     [HideInInspector]
@@ -127,13 +127,13 @@ public class GunShooting : MonoBehaviour
         spreadX = Random.Range(minX, maxX);
         spreadY = Random.Range(minY, maxY);
         spread = new Vector3(spreadX, spreadY, 0);
-        Debug.DrawRay(cam.transform.position, cam.transform.forward + spread, Color.red, 5f);
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward + spread, out RaycastHit hit, range))
+        Debug.DrawRay(cam.transform.position, (cam.transform.forward + spread) * range , Color.red, 5f);
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward + spread, out RaycastHit hit, range, enemyMask))
         {
 
             if (hit.transform.CompareTag("Body_Collider"))
             {
-
+                Debug.Log("Hit");
                 int rnd = Random.Range(0, 4);
                 Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
 
@@ -192,7 +192,7 @@ public class GunShooting : MonoBehaviour
             spreadY = Random.Range(minY, maxY);
             spread = new Vector3(spreadX, spreadY, 0);
             Debug.DrawRay(cam.transform.position, cam.transform.forward + spread, Color.red, 5f);
-            if (Physics.Raycast(cam.transform.position, cam.transform.forward + spread, out RaycastHit hit, range))
+            if (Physics.Raycast(cam.transform.position, cam.transform.forward + spread, out RaycastHit hit, range, enemyMask))
             {
 
                 if (hit.transform.CompareTag("Body_Collider"))

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] mysteryBox;
     public ParticleSystem[] bloodFX;
     public ParticleSystem wallChipFX;
+    public ParticleSystem groundFX;
     public Camera playerCam;
     public int powerUp_max, powerUp_current;
     public ParticleSystem powerUp_fx;
@@ -98,11 +99,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyDown(KeyCode.N) && zm_alive >= 1)
-        {
-            Nuke();
-        }
 
         if (Input.GetKeyDown(KeyCode.Escape) && !isPaused)
         {

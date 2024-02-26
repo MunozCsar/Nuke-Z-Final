@@ -120,10 +120,12 @@ public class ZM_Spawner : MonoBehaviour
                 if (zmSpawners[rnd].CompareTag("BarrierSpawner"))
                 {
                     GameManager.Instance.zombieList.Add(Instantiate(GameManager.Instance.zombie[0], zmSpawners[rnd].transform.position, Quaternion.identity));
+                    Instantiate(GameManager.Instance.groundFX, zmSpawners[rnd].transform.position, Quaternion.identity);
                 }
                 else if (zmSpawners[rnd].CompareTag("NormalSpawner"))
                 {
                     GameManager.Instance.zombieList.Add(Instantiate(GameManager.Instance.zombie[1], zmSpawners[rnd].transform.position, Quaternion.identity));
+                    Instantiate(GameManager.Instance.groundFX, zmSpawners[rnd].transform.position, Quaternion.identity);
                 }
                 GameManager.Instance.timer = 0;
             }

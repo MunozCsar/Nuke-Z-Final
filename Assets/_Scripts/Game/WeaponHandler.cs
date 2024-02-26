@@ -9,6 +9,7 @@ public class WeaponHandler : MonoBehaviour
     bool boolean;
     public float meleeDamage, meleeRange; 
     public float t_melee, melee_coolDown;
+    public LayerMask enemyMask;
     [Header("Effects")]
     [Header("Weapons")]
     //public GameObject[] weaponPrefabs; // Array containing all game weapons (Figure out if possible to incorporate into GameManager)
@@ -109,7 +110,7 @@ public class WeaponHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && t_melee >= melee_coolDown) //Melee codeblock
         {
             knife.SetActive(true);
-            if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange))
+            if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange, enemyMask))
             {
 
                 if (hit.transform.CompareTag("Body_Collider"))
@@ -318,11 +319,27 @@ public class WeaponHandler : MonoBehaviour
             Destroy(other.gameObject);
             Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation);
         }
+        if (other.CompareTag("NukePowerup"))
+        {
+            GameManager.Instance.Nuke();
+            Destroy(other.gameObject);
+            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         GameManager.Instance.interactText.gameObject.SetActive(false);
+
+        if (other.CompareTag("AmmoBox"))
+        {
+            ammoBox = false;
+        }
+
+        if (other.CompareTag("PickupWeapon"))
+        {
+            pickupWeapon = false;
+        }
     }
 }
 

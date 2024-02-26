@@ -20,12 +20,12 @@ public class MysteryBox : MonoBehaviour
             {
                 if (GameManager.Instance.score >= 950 && currentUses < maxUses)
                 {
-                    RollWeapon();
                     boxActive = false;
                     currentUses++;
                     //boxAnimator.Play("tapa2");
                     GameManager.Instance.ReduceScore(950);
                     GameManager.Instance.UpdateScoreText();
+                    RollWeapon();
                 }
             }
         }

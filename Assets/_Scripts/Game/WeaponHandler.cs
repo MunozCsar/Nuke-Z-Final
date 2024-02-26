@@ -6,7 +6,6 @@ using TMPro;
 public class WeaponHandler : MonoBehaviour
 {
     [Header("Melee")]
-    bool boolean;
     public float meleeDamage, meleeRange; 
     public float t_melee, melee_coolDown;
     public LayerMask enemyMask;
@@ -125,7 +124,6 @@ public class WeaponHandler : MonoBehaviour
                     else
                     {
                         hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage, true);
-                        boolean = false;
                     }
 
                 }

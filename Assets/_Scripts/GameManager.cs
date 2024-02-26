@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] weaponPrefabs;
     public GameObject[] DamageIndicators;
     public GameObject[] powerUpArray = new GameObject[3];
+    public GameObject[] soulBoxes;
     public GameObject[] mysteryBox;
     public ParticleSystem[] bloodFX;
     public ParticleSystem wallChipFX;
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
     public Camera playerCam;
     public int powerUp_max, powerUp_current;
     public ParticleSystem powerUp_fx;
-
+    public bool[] soulCompletion;
     [SerializeField] GameObject options;
     [SerializeField] GameObject graphics;
     [SerializeField] GameObject controls;
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviour
     public int playerScore, killScore;
     public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer;
     public TMP_Text totalScore, totalKills, interactText;
-    public bool isPaused = false, doublePoints, instaKill, gameOver;
+    public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger;
     public float instaKillTimer, doublePointsTimer;
     public Slider slider;
     public float slidervalue;
@@ -226,6 +227,22 @@ public class GameManager : MonoBehaviour
 
         DamageIndicators[5].GetComponent<Animator>().Play("RedScreenDamage");
 
+    }
+
+    public void CheckSoulCompletion(int i)
+    {
+        if (soulBoxes[i].GetComponent<SoulHarvest>().actualSouls >= 20)
+        {
+            soulCompletion[i] = true;
+        }
+        else
+        {
+        }
+
+        if (soulCompletion[0].Equals(true) && soulCompletion[1].Equals(true) && soulCompletion[2].Equals(true))
+        {
+            endGameTrigger = true;
+        }
     }
 
     public void UpdateScoreText()

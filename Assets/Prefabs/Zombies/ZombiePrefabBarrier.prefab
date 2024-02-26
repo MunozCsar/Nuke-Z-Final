@@ -424,9 +424,11 @@ MonoBehaviour:
   nearestObject: {fileID: 0}
   bodyCollider: {fileID: 3327484805469684185}
   headCollider: {fileID: 3327484805528465839}
+  soulPrefab: {fileID: 7034444048118889058, guid: 719120dfaabfb0e40a8f1545c10bddfb, type: 3}
   targetBarrier: []
   focusBarrier: 1
   isAlive: 1
+  isInZone: 0
   t_barrier: 0
   barrier_coolDown: 2
   d_Nearest: 0

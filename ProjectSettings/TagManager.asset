@@ -26,6 +26,9 @@ TagManager:
   - EndGamePoints
   - PickupWeapon
   - MaxAmmo
+  - NukePowerup
+  - SoulBox
+  - SoulZone
   layers:
   - Default
   - TransparentFX

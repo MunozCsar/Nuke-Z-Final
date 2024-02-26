@@ -5,11 +5,11 @@ using UnityEngine.AI;
 public class ZM_AI : MonoBehaviour
 {
     public Animator zm_Animator;
-    public GameObject nearestObject, bodyCollider, headCollider;
+    public GameObject nearestObject, bodyCollider, headCollider, soulPrefab;
     private NavMeshAgent agent = null;
     private Transform target;
     public GameObject[] targetBarrier;
-    public bool focusBarrier, isAlive;
+    public bool focusBarrier, isAlive, isInZone;
     public float t_barrier, barrier_coolDown, d_Nearest, hp; // variable 't' es el tiempo actual del timer, 't_Goal' es el objetivo del timer.
     public Quaternion rot = new Quaternion(270, 0, 0, 0);
     // Start is called before the first frame update
@@ -154,6 +154,7 @@ public class ZM_AI : MonoBehaviour
             }
         }
 
+        HarvestSoul();
         Destroy(this.gameObject, 15f);
         GameManager.Instance.zombieList.Remove(this.gameObject);
     }
@@ -169,7 +170,17 @@ public class ZM_AI : MonoBehaviour
         isAlive = false;
         headCollider.SetActive(false);
         bodyCollider.SetActive(false);
+        HarvestSoul();
         Destroy(this.gameObject, 15f);
+    }
+
+    public void HarvestSoul()
+    {
+        if (isInZone)
+        {
+            Instantiate(soulPrefab, this.gameObject.transform.position, this.gameObject.transform.rotation);
+
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -177,6 +188,10 @@ public class ZM_AI : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             zm_Animator.SetBool("isAttacking", true);
+        }
+        if (other.CompareTag("SoulZone"))
+        {
+            isInZone = true;
         }
 
     }
@@ -191,6 +206,10 @@ public class ZM_AI : MonoBehaviour
         {
             focusBarrier = false;
             zm_Animator.SetBool("isAttacking", false);
+        }
+        if (other.CompareTag("SoulZone"))
+        {
+            isInZone = false;
         }
     }
 

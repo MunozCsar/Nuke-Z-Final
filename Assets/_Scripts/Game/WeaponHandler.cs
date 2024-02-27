@@ -5,62 +5,55 @@ using TMPro;
 //Tengo que limpiar esto...
 public class WeaponHandler : MonoBehaviour
 {
+    public LayerMask enemyMask;
+
     [Header("Melee")]
+    public GameObject knife;
     public float meleeDamage, meleeRange; 
     public float t_melee, melee_coolDown;
-    public LayerMask enemyMask;
-    [Header("Effects")]
-    [Header("Weapons")]
-    //public GameObject[] weaponPrefabs; // Array containing all game weapons (Figure out if possible to incorporate into GameManager)
-    public List<GameObject> playerWeapons = new(); //List containing weapons currently held by the player.
-    public GameObject knife; //Player camera || Knife GameObject
-    public Transform gunPos; //Position data for weapon instancing.
-    public TMP_Text ammoCount, maxAmmoCount; //UI text.
-    bool pickupWeapon = false, activeWeapon, ammoBox; //Various booleans to control different interactions.
-    public int activeSlot, weaponSlots, defaultWeapon; //The currently active slot and the amount of weapon slots the player has.
-    int weaponID, weaponCost; //Weapon ID and cost (Data gathered from weapon script)
 
-    // Start is called before the first frame update
+    [Header("Weapons")]
+    public Transform gunPos; //Posición en la que se instanciará el arma
+    public List<GameObject> playerWeapons = new(); //Lista que contiene todas las armas que el jugador posee
+    public TMP_Text ammoCount, maxAmmoCount; //Texto de UI
+    bool pickupWeapon = false, activeWeapon, ammoBox; //Booleanos que controlan diferentes interacciones
+    public int activeSlot, weaponSlots; //El slot de arma activo y los slots totales que tiene el jugador
+    int weaponID; //ID del arma
+
     void Start()
     {
-        //GameObject instantiatedWeapon = Instantiate(weapons[defaultWeapon], gunPos.position, gunPos.rotation, cam.transform); //When starting the game, the base weapon is instanced.
-        //weaponList.Add(instantiatedWeapon); //Weapon is added to the list.
-        //activeSlot = 0; //Set the active slot to 0.
-        //weaponList[0].SetActive(true); //Activate the slot.
-        knife.SetActive(false);
-
+        knife.SetActive(false); //Al iniciar la partida se esconde el cuchillo
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(t_melee < melee_coolDown)
+        if(t_melee < melee_coolDown) //Timer que controla cada cuanto se puede acuchillar
         {
             t_melee += Time.deltaTime;
-            Debug.Log("MeleeCooldown");
         }
 
 
         if (activeWeapon)
         {
-            foreach (GameObject weapon in playerWeapons) //Loops through the weapon list.
+            foreach (GameObject weapon in playerWeapons) //Recorre las armas que el jugador posea
             {
-                if (weapon.activeSelf.Equals(true)) //If the weapon is active, set UI elements to weapon values.
+                if (weapon.activeSelf.Equals(true)) //Detecta si el arma está activa y asigna sus datos de munición a los valores de la UI correspondientes
                 {
                     ammoCount.text = weapon.GetComponentInChildren<GunShooting>().ammo.ToString();
                     maxAmmoCount.text = ("/ " + weapon.GetComponentInChildren<GunShooting>().reserveAmmo.ToString());
                 }
             }
 
-            if(playerWeapons.Count > 1)
+            if(playerWeapons.Count > 1) //Si el jugador posee más de un arma
             {
-                if (Input.GetKeyDown(KeyCode.Alpha1)) //When pressing '1', activate slot 0 and store the information.
+                if (Input.GetKeyDown(KeyCode.Alpha1)) //Al presionar 1 se activa el slot 0 y se esconde el slot 1
                 {
                     activeSlot = 0;
                     playerWeapons[0].SetActive(true);
                     playerWeapons[1].SetActive(false);
                 }
-                else if (Input.GetKeyDown(KeyCode.Alpha2)) //When pressing '2', activate slot 1 and store the information.
+                else if (Input.GetKeyDown(KeyCode.Alpha2)) //Al presionar 2 se activa el slot 1 y se esconde el slot 0
                 {
                     activeSlot = 1;
                     playerWeapons[0].SetActive(false);
@@ -68,13 +61,15 @@ public class WeaponHandler : MonoBehaviour
                 }
             }
 
-            if (ammoBox)
+            if (ammoBox) 
             {
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    BuyAmmo(activeSlot);
+                    BuyAmmo(activeSlot); //LLama a la funcion de compra de municion si el jugador está en un trigger correspondiente
                 }
             }
+
+            // Animaciones arma
 
             if (Input.GetKey(KeyCode.W))
             {
@@ -92,9 +87,11 @@ public class WeaponHandler : MonoBehaviour
             {
                 playerWeapons[activeSlot].GetComponentInChildren<Animator>().SetBool("isRunning", false);
             }
-        } //Code blocks that only works when the character has at least a weapon
 
-        if (pickupWeapon) //Enters this 'if' statement if the character is colliding with a pickup weapon
+            //Fin Animaciones arma
+        }
+
+        if (pickupWeapon) //Permite recoger el arma si estás en el trigger correspondiente
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
@@ -106,54 +103,60 @@ public class WeaponHandler : MonoBehaviour
 
 
 
-        if (Input.GetKeyDown(KeyCode.E) && t_melee >= melee_coolDown) //Melee codeblock
+        if (Input.GetKeyDown(KeyCode.E) && t_melee >= melee_coolDown) //Gestión de ataque melee
         {
-            knife.SetActive(true);
-            if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange, enemyMask))
+            knife.SetActive(true); //Activa el cuchillo
+            playerWeapons[activeSlot].SetActive(false);
+            if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange, enemyMask)) //Lanza un raycast desde la cámara hacia delante y recoge la información de impacto
             {
 
-                if (hit.transform.CompareTag("Body_Collider"))
+                if (hit.transform.CompareTag("Body_Collider") || hit.transform.CompareTag("Head_Collider")) //Si el raycast impacta al cuerpo o cabeza del enemigo entra en este bloque de código
                 {
 
-                    int rnd = Random.Range(0, 4);
-                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
+                    int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
                     if (GameManager.Instance.instaKill)
                     {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(true);
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(true); //Si el jugador ha obtenido un instakill, mata al enemigo
                     }
                     else
                     {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage, true);
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage, true); //De forma normal, reduce la vida del enemigo.
                     }
 
                 }
             }
-            t_melee = 0f;
+            t_melee = 0f; //Reseta el timer
         }
     }
 
-    public void MaxAmmo()
+    #region Powerups
+
+    public void MaxAmmo() //Municion maxima
     {
-        foreach (GameObject weapon in playerWeapons)
+        foreach (GameObject weapon in playerWeapons) //Recorre la lista y da al jugador la municion maxima de todas sus armas
         {
             weapon.GetComponentInChildren<GunShooting>().reserveAmmo = weapon.GetComponentInChildren<GunShooting>().ammoCapacity * weapon.GetComponentInChildren<GunShooting>().extraMags;
         }
     }
 
-    public void InstaKill()
+    public void InstaKill() //Baja Instantanea
     {
             GameManager.Instance.instaKill = true;
     }
 
-    public void DoublePoints()
+    public void DoublePoints() //Puntos Dobles 
     {
         GameManager.Instance.doublePoints = true;
     }
 
+    #endregion
+
+    #region Armas y munición
     public void AddWeapon(int weaponID)
     {
 
-        if (playerWeapons.Count == 0)
+        if (playerWeapons.Count == 0) //Si el jugador no tiene armas, añade el arma, la activa y sale de la función
         {
             playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
             playerWeapons[0].SetActive(true);
@@ -162,7 +165,7 @@ public class WeaponHandler : MonoBehaviour
             return;
         }
 
-        if (playerWeapons.Count == 1)
+        if (playerWeapons.Count == 1) //Si el jugador tiene un arma, añade el arma y la activa.
         {
             playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
             playerWeapons[0].SetActive(false);
@@ -170,34 +173,32 @@ public class WeaponHandler : MonoBehaviour
             activeSlot = 1;
         }
 
+        //Si el jugador tiene 2 armas, detecta la posición en la que tiene el arma actualmente y la sustituye por la nueva
         else if (!playerWeapons[0].GetComponentInChildren<GunShooting>().id.Equals(weaponID) || !playerWeapons[1].GetComponentInChildren<GunShooting>().id.Equals(weaponID))
         {
 
             if (activeSlot == 0)
             {
-                Destroy(playerWeapons[activeSlot]);
-                playerWeapons.RemoveAt(activeSlot);
-                playerWeapons.Insert(0, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
+                Destroy(playerWeapons[activeSlot]); //Destruye el GameObject viejo del arma
+                playerWeapons.RemoveAt(activeSlot); //Destruye el valor de la lista en la posición del arma activa
+                playerWeapons.Insert(0, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform)); //Inserta el nuevo arma en la posición dada
             }
             else if (activeSlot == 1)
             {
-                Destroy(playerWeapons[activeSlot]);
-                playerWeapons.RemoveAt(activeSlot);
-                playerWeapons.Insert(1, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
+                Destroy(playerWeapons[activeSlot]); //Destruye el GameObject viejo del arma
+                playerWeapons.RemoveAt(activeSlot); //Destruye el valor de la lista en la posición del arma activa
+                playerWeapons.Insert(1, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform)); //Inserta el nuevo arma en la posición dada
             }
-        }
-        else
-        {
-            Debug.Log("Corresponde");
         }
     }
 
-    public void BuyAmmo(int i)
+    public void BuyAmmo(int i) //Compra de munición
     {
+        //Similar a MaxAmmo, pero solo se ejecuta en el arma que el jugador tiene activa
         playerWeapons[i].GetComponentInChildren<GunShooting>().reserveAmmo = playerWeapons[i].GetComponentInChildren<GunShooting>().ammoCapacity * playerWeapons[i].GetComponentInChildren<GunShooting>().extraMags;
-        GameManager.Instance.ReduceScore(playerWeapons[i].GetComponentInChildren<GunShooting>().ammoCost);
+        GameManager.Instance.ReduceScore(playerWeapons[i].GetComponentInChildren<GunShooting>().ammoCost); //Reduce la puntuación.
     }
-    public void ShowWeapon()
+    public void ShowWeapon() //Muestra el arma una vez el ataque melee ha acabado
     {
         if (activeWeapon)
         {
@@ -207,136 +208,66 @@ public class WeaponHandler : MonoBehaviour
 
         knife.SetActive(false);
     }
+    #endregion
 
-    public void Melee()
+    private void OnTriggerEnter(Collider other) //Detección de triggers
     {
-        if (activeWeapon)
+        if (other.CompareTag("PickupWeapon")) //Si el trigger se llama "PickupWeapon"
         {
-            playerWeapons[activeSlot].SetActive(false);
-        }
-
-        knife.SetActive(true);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("WeaponChalk"))
-        {
-            if (activeWeapon)
-            {
-                GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
-                weaponID = other.GetComponent<WeaponChalk>().gunID;
-                weaponCost = GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunCost;
-
-                //Eliminar codigo residual de wallbuys e incorporar codigo de ammobox 
-                //Eliminar assets relacionados con wallbuys 
-
-                if (!playerWeapons[activeSlot].GetComponentInChildren<GunShooting>().id.Equals(weaponID))
-                {
-                    GameManager.Instance.interactText.text = "Press 'E' to buy " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName + "(" + weaponCost + ")";
-                }
-                else
-                {
-                    GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName + "(" + playerWeapons[activeSlot].GetComponentInChildren<GunShooting>().ammoCost + ")";
-                    Debug.Log("Buyammo");
-                }
-
-                if (playerWeapons.Count > 1)
-                {
-                    switch (activeSlot)
-                    {
-                        case 0:
-                            if (playerWeapons[1].GetComponent<GunShooting>().id == weaponID)
-                            {
-                                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + playerWeapons[1].GetComponentInChildren<GunShooting>().gunName + "(" + playerWeapons[1].GetComponentInChildren<GunShooting>().ammoCost + ")";
-                                Debug.Log(playerWeapons[1].GetComponent<GunShooting>().gunName);
-                            }
-                            else
-                            {
-
-                            }
-                            break;
-                        case 1:
-                            if (playerWeapons[0].GetComponentInChildren<GunShooting>().id == weaponID)
-                            {
-                                GameManager.Instance.interactText.text = "Press 'E' to buy ammunition for " + playerWeapons[0].GetComponentInChildren<GunShooting>().gunName + "(" + playerWeapons[0].GetComponentInChildren<GunShooting>().ammoCost + ")";
-                                Debug.Log(playerWeapons[0].GetComponentInChildren<GunShooting>().gunName);
-                            }
-                            break;
-                    }
-                }
-
-                GameManager.Instance.interactText.gameObject.SetActive(true);
-            }
-
-            else
-            {
-                GameManager.Instance.interactText.gameObject.SetActive(true);
-                GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
-                weaponID = other.GetComponent<WeaponChalk>().gunID;
-                GameManager.Instance.interactText.text = "Press 'E' to pickup " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName;
-                pickupWeapon = true;
-            }
-
-
-        }
-
-        if (other.CompareTag("PickupWeapon"))
-        {
-            pickupWeapon = true;
-            weaponID = other.GetComponent<WeaponChalk>().gunID;
-            GameManager.Instance.interactText.gameObject.SetActive(true);
-            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
-            GameManager.Instance.interactText.text = "Press \"F\" to pick up " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName;
+            pickupWeapon = true; //Da el valor true a la variable
+            weaponID = other.GetComponent<WeaponChalk>().gunID; //Almacena el ID del arma en una variable local
+            GameManager.Instance.interactText.gameObject.SetActive(true); //Activa el texto de interacción
+            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle"); //Activa la animación idle del texto de interacción
+            GameManager.Instance.interactText.text = "Press \"F\" to pick up " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName; //Le da información al jugador sobre la acción que va a realizar
 
         }
 
         if (other.CompareTag("AmmoBox"))
         {
-            GameManager.Instance.interactText.gameObject.SetActive(true);
-            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
-            GameManager.Instance.interactText.text = "Press \"F\" to buy ammo (Cost: 500)";
-            ammoBox = true;
+            ammoBox = true; //Da el valor true a la variable
+            GameManager.Instance.interactText.gameObject.SetActive(true); //Activa el texto de interacción
+            GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle"); //Activa la animación idle del texto de interacción
+            GameManager.Instance.interactText.text = "Press \"F\" to buy ammo (Cost: 500)"; //Le da información al jugador sobre la acción que va a realizar y su coste
         }
 
         if (other.CompareTag("MaxAmmo"))
         {
-            MaxAmmo();
-            Destroy(other.gameObject);
-            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation);
+            MaxAmmo(); //LLama a la funcion de MaxAmmo
+            Destroy(other.gameObject); //Destruye el objeto trigger
+            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation); //Instancia las particulas del pickup
         }
         if (other.CompareTag("Instakill"))
         {
-            InstaKill();
-            Destroy(other.gameObject);
-            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation);
+            InstaKill(); //LLama a la funcion de InstaKill
+            Destroy(other.gameObject); //Destruye el objeto trigger
+            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation); //Instancia las particulas del pickup
         }
         if (other.CompareTag("DoublePoints"))
         {
-            DoublePoints();
-            Destroy(other.gameObject);
-            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation);
+            DoublePoints(); //LLama a la funcion de DoublePoints
+            Destroy(other.gameObject); //Destruye el objeto trigger
+            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation); //Instancia las particulas del pickup
         }
         if (other.CompareTag("NukePowerup"))
         {
-            GameManager.Instance.Nuke();
-            Destroy(other.gameObject);
-            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation);
+            GameManager.Instance.Nuke(); //LLama a la funcion de NukePowerup
+            Destroy(other.gameObject); //Destruye el objeto trigger
+            Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation); //Instancia las particulas del pickup
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        GameManager.Instance.interactText.gameObject.SetActive(false);
+        GameManager.Instance.interactText.gameObject.SetActive(false); //Desactiva el texto de interacción
 
         if (other.CompareTag("AmmoBox"))
         {
-            ammoBox = false;
+            ammoBox = false; //Da el valor falase a la variable
         }
 
         if (other.CompareTag("PickupWeapon"))
         {
-            pickupWeapon = false;
+            pickupWeapon = false; //Da el valor false a la variable
         }
     }
 }

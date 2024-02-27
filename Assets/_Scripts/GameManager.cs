@@ -7,6 +7,18 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    public bool recogido = false;
+    public bool tecla = false;
+    public bool llaveIsActive = false, llaveRecogida = false;
+    public GameObject llaves;
+    public int piezaSeleccionada = 4;
+    public ColocarObjeto colocar;
+    public GameObject[] piezas;
+
+    public GameObject[] lights;
+
+
     public GameObject[] weaponPrefabs;
     public GameObject[] DamageIndicators;
     public GameObject[] powerUpArray = new GameObject[3];
@@ -201,6 +213,13 @@ public class GameManager : MonoBehaviour
     public float RandomNumberGenerator(float minIndex, float maxIndex)
     {
         float rnd = Random.Range(minIndex, maxIndex);
+        Debug.Log(rnd);
+        return rnd;
+    }
+
+    public int RandomNumberGeneratorINT(int minIndex, int maxIndex)
+    {
+        int rnd = Random.Range(minIndex, maxIndex);
         Debug.Log(rnd);
         return rnd;
     }

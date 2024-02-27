@@ -6,15 +6,9 @@ using TMPro;
 public class GunShooting : MonoBehaviour
 {
     [Header("GunData")]
-    public string gunName;
-    public int id, gunCost, ammoCost, pellets;
-
-    private Vector3 initialGunPos, currentGunPos, currentRot, targetGunRot, targetGunPos;
-    [Header("Recoil")]
+    public string gunName; //Nombre del arma
+    public int id, ammoCost, pellets, damagePellet, damage; //id, coste de la municion, perdigones (Escopeta), daño por perdigón (Escopeta) y daño del arma.
     public Animator gunAnimator;
-    public float recoilX, recoilY, recoilZ, kickback, returnTime, snappiness;
-
-    public static GunShooting GunInstance { get; private set; }
 
     public LayerMask enemyMask;
 
@@ -25,7 +19,7 @@ public class GunShooting : MonoBehaviour
     public ParticleSystem muzzleFX;
     private float firing_coolDown, t_fire;
     private bool headShot;
-    public float rateOfFire, damage = 25f, damagePellet, headshotMultiplier, range;
+    public float rateOfFire, headshotMultiplier, range;
     enum FiringMode { semi, full, buckshot }
     [SerializeField] FiringMode firingMode;
 
@@ -46,15 +40,6 @@ public class GunShooting : MonoBehaviour
     public bool isReloading;
     public float reloadTime, emptyReloadTime;
 
-    private void Awake()
-    {
-        if (GunInstance == null)
-        {
-            GunInstance = this;
-        }
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
         //Se asignan los valores de las variables
@@ -62,20 +47,13 @@ public class GunShooting : MonoBehaviour
         reserveAmmo = ammoCapacity * initialMags;
         gunAnimator = GetComponent<Animator>();
         t_fire = firing_coolDown;
-        initialGunPos = transform.localPosition;
         cam = GameObject.Find("fpsCam").GetComponent<Camera>();
-
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        targetGunRot = Vector3.Lerp(targetGunRot, Vector3.zero, Time.deltaTime * returnTime);
-        currentRot = Vector3.Slerp(currentRot, targetGunRot, Time.deltaTime * snappiness);
-        transform.localRotation = Quaternion.Euler(currentRot);
-        cam.transform.localRotation *= Quaternion.Euler(currentRot);
-        ReturnToPosition();
 
         firing_coolDown = 60 / rateOfFire;
         if (t_fire < firing_coolDown)
@@ -121,7 +99,6 @@ public class GunShooting : MonoBehaviour
         t_fire = 0f;
         ammo--;
         muzzleFX.Play();
-        Recoil();
         gunAnimator.Play("Gun_Fire");
         gunAnimator.Play("Arms_Fire");
         spreadX = Random.Range(minX, maxX);
@@ -133,9 +110,8 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Body_Collider"))
             {
-                Debug.Log("Hit");
-                int rnd = Random.Range(0, 4);
-                Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
+                int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
 
                 if (GameManager.Instance.instaKill)
                 {
@@ -151,8 +127,8 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Head_Collider"))
             {
-                int rnd = Random.Range(0, 4);
-                Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
+                int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
 
                 if (GameManager.Instance.instaKill)
                 {
@@ -161,7 +137,6 @@ public class GunShooting : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Headshot!");
                     hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(damage * headshotMultiplier, headShot);
                     headShot = true;
                 }
@@ -197,8 +172,8 @@ public class GunShooting : MonoBehaviour
 
                 if (hit.transform.CompareTag("Body_Collider"))
                 {
-                    int rnd = Random.Range(0, 4);
-                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
+                    int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
                     Debug.DrawRay(cam.transform.position, cam.transform.forward * 20 + spread, Color.green, 5f);
                     if (GameManager.Instance.instaKill)
                     {
@@ -214,8 +189,8 @@ public class GunShooting : MonoBehaviour
 
                 if (hit.transform.CompareTag("Head_Collider"))
                 {
-                    int rnd = Random.Range(0, 4);
-                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
+                    int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
                     if (GameManager.Instance.instaKill)
                     {
 
@@ -223,7 +198,6 @@ public class GunShooting : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("Headshot!");
                         hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(damagePellet * headshotMultiplier, headShot);
                         headShot = true;
                     }
@@ -236,7 +210,6 @@ public class GunShooting : MonoBehaviour
             }
         }
         t_fire = 0f;
-        Recoil();
         if (ammo == 0 && reserveAmmo > 0 && t_fire >= firing_coolDown)
         {
             StartCoroutine(Reload());
@@ -275,15 +248,4 @@ public class GunShooting : MonoBehaviour
 
     }
 
-    public void Recoil()
-    {
-        targetGunPos -= new Vector3(0, 0, kickback);
-        targetGunRot += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
-    }
-    public void ReturnToPosition()
-    {
-        targetGunPos = Vector3.Lerp(targetGunPos, initialGunPos, Time.deltaTime * returnTime);
-        currentGunPos = Vector3.Lerp(currentGunPos, targetGunPos, Time.fixedDeltaTime * snappiness);
-        transform.localPosition = currentGunPos;
-    }
 }

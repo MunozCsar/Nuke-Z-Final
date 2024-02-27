@@ -29,6 +29,7 @@ TagManager:
   - NukePowerup
   - SoulBox
   - SoulZone
+  - EndGameTrigger
   layers:
   - Default
   - TransparentFX
@@ -41,7 +42,7 @@ TagManager:
   - Roof
   - MuzzleFlash
   - Fence
-  - 
+  - Enemy
   - 
   - 
   - 

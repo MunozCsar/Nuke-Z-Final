@@ -17,9 +17,4 @@ public class KnifeTrigger : MonoBehaviour
     {
         weaponHandler.ShowWeapon();
     }
-
-    public void Melee()
-    {
-        weaponHandler.Melee();
-    }
 }

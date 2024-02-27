@@ -4,33 +4,37 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public CharacterController controller;
 
-    public float playerHP, regenSpeed;
-    public Vector3 velocity;
-    public float gravity = -9.81f;
-    public WeaponHandler weaponHandler;
-    public float walkSpeed, strafeSpeed;
-    public float sprintMultiplier;
-    public float jumpHeight;
 
-    public float t, t_Goal, regenT, regenGoal; // variable 't' es el tiempo actual del timer, 't_Goal' es el objetivo del timer.
 
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
-    public GameObject flashLight;
-    private bool _isGrounded, flashOn, end_Game;
-    public bool hasKeyCard;
+    public CharacterController controller; //Toma referencia del componente "CharacterController"
+
+    public float playerHP, regenSpeed; //Variables de vida y regeneración de vida
+    Vector3 velocity; //Control de la dirección de la gravedad
+    public float gravity = -9.81f; //Valor de la gravedad
+    public float walkSpeed, strafeSpeed; //Velocidad de movimiento hacia delante y hacia los lados
+    public float sprintMultiplier; //Multiplicador de sprint
+    public float jumpHeight; //Fuerza de salto
+
+    public float t_barrier, barrier_Cooldown, t_regen, regen_Cooldown; // Timers para la reparación de la barrera y la regeneración de vida
+
+    public Transform groundCheck; //Transform usado para la detección de suelo
+    public float groundDistance = 0.4f; //Radio de la esfera de detección
+    public LayerMask groundMask; //Máscara del suelo
+    public GameObject flashLight; //Gameobject linterna
+    private bool _isGrounded, flashOn, end_Game; //Booleanos varios que almacenan si ele jugador está en el suelo, si la linterna está encendida y si el jugador puede acabar la partida
+    public bool hasKeyCard; //Booleano que almacena si el jugador ha obtenido la keycard
     private void Update()
     {
-        if (regenT < regenGoal)
+        Agarrar();
+
+        if (t_regen < regen_Cooldown) //Timer de la regeneración de vida: si el valor del cooldown es mayor que el valor del timer, se suma al timer Time.deltaTime
         {
-            regenT += Time.deltaTime;
+            t_regen += Time.deltaTime;
         }
         else
         {
-            if (playerHP < 150)
+            if (playerHP < 150) //Si el jugador está por debajo de 150 de vida, se llama a la función RegenHP()
             {
                 RegenHP();
             }
@@ -39,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
         if (end_Game.Equals(true))
         {
-            if (Input.GetKeyDown(KeyCode.F) && GameManager.Instance.score >= 50000)
+            if (Input.GetKeyDown(KeyCode.F) && GameManager.Instance.endGameTrigger)
             {
                 GameManager.Instance.EndGame();
             }
@@ -109,6 +113,27 @@ public class PlayerController : MonoBehaviour
         controller.Move(move.normalized * speed * Time.deltaTime);
     }
 
+    private void Agarrar()
+    {
+        if (GameManager.Instance.tecla == true && GameManager.Instance.recogido == false)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                if(GameManager.Instance.piezaSeleccionada == 3)
+                {
+                    GameManager.Instance.llaveRecogida = true;
+                    GameManager.Instance.llaves.SetActive(false);
+                }
+                else if(GameManager.Instance.piezaSeleccionada == 0 || GameManager.Instance.piezaSeleccionada == 1 || GameManager.Instance.piezaSeleccionada == 2)
+                {
+                    GameManager.Instance.piezas[GameManager.Instance.piezaSeleccionada].SetActive(false);
+                    GameManager.Instance.recogido = true;
+                }
+
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Damage_Trigger"))
@@ -126,20 +151,38 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        if (other.CompareTag("EndGamePoints"))
+        if (other.CompareTag("EndGameTrigger"))
         {
             GameManager.Instance.interactText.gameObject.SetActive(true);
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
-            GameManager.Instance.interactText.text = "Press \"F\" to end game (Cost: 50000)";
-            end_Game = true;
+            if (GameManager.Instance.endGameTrigger)
+            {
+                GameManager.Instance.interactText.text = "Press \"F\" to turn on reactor";
+                end_Game = true;
+            }
+            else
+            {
+                GameManager.Instance.interactText.text = "Fill up the containers to turn on the reactor";
+            }
+
+
+        }
+
+        if (other.CompareTag("Llave"))
+        {
+            GameManager.Instance.tecla = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("EndGamePoints"))
+        if (other.CompareTag("EndGameTrigger"))
         {
             end_Game = false;
+        }
+        if (other.CompareTag("Llave"))
+        {
+            GameManager.Instance.tecla = false;
         }
     }
 
@@ -154,13 +197,13 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.interactText.text = "Press \"F\" to repair barrier";
                 if (Input.GetKey(KeyCode.F))
                 {
-                    if (t < t_Goal)
+                    if (t_barrier < barrier_Cooldown)
                     {
-                        t += Time.deltaTime;
+                        t_barrier += Time.deltaTime;
                     }
-                    else if (t >= t_Goal)
+                    else if (t_barrier >= barrier_Cooldown)
                     {
-                        t = 0f;
+                        t_barrier = 0f;
                         other.transform.parent.GetComponent<BarrierLogic>().RepairBarrier();
                     }
                 }
@@ -171,11 +214,48 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.interactText.gameObject.SetActive(false);
             }
         }
+
+        if (other.CompareTag("Pieza1"))
+        {
+            Debug.Log("Presiona F para agarrar");
+
+            GameManager.Instance.tecla = true;
+            GameManager.Instance.piezaSeleccionada = 0;
+            GameManager.Instance.colocar.puedeColocar = false;
+        }
+        else if (other.tag == "Pieza2" && GameManager.Instance.recogido == false && GameManager.Instance.llaveIsActive == true)
+        {
+            Debug.Log("Presiona F para agarrar");
+
+            GameManager.Instance.tecla = true;
+            GameManager.Instance.piezaSeleccionada = 1;
+            GameManager.Instance.colocar.puedeColocar = false;
+        }
+        else if (other.tag == "Pieza3" && GameManager.Instance.recogido == false && GameManager.Instance.llaveIsActive == true)
+        {
+            Debug.Log("Presiona F para agarrar");
+
+            GameManager.Instance.tecla = true;
+            GameManager.Instance.piezaSeleccionada = 2;
+            GameManager.Instance.colocar.puedeColocar = false;
+
+        }
+        else if (other.tag == "Llave" && GameManager.Instance.llaveRecogida == false)
+        {
+            Debug.Log("Presiona F para agarrar");
+
+            GameManager.Instance.tecla = true;
+            GameManager.Instance.piezaSeleccionada = 3;
+        }
+        if ((other.tag == "Pieza3" || other.tag == "Pieza2" || other.tag == "Pieza1" || other.tag == "Llave") && GameManager.Instance.recogido == true)
+        {
+            Debug.Log("Coloca la pieza antes de agarrar otra");
+        }
     }
 
     public void takeDamage(float damage)
     {
-        regenT = 0f;
+        t_regen = 0f;
         playerHP = playerHP - Mathf.RoundToInt(damage);
         if(playerHP <= 0)
         {

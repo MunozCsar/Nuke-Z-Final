@@ -23,8 +23,6 @@ public class MysteryBox : MonoBehaviour
                     boxActive = false;
                     currentUses++;
                     //boxAnimator.Play("tapa2");
-                    GameManager.Instance.ReduceScore(950);
-                    GameManager.Instance.UpdateScoreText();
                     RollWeapon();
                 }
             }
@@ -67,6 +65,8 @@ public class MysteryBox : MonoBehaviour
             while (weapon.playerWeapons[0].GetComponentInChildren<GunShooting>().id.Equals(randomWeapon))
             {
                 randomWeapon = weapons[Random.Range(0, weapons.Length)];
+                GameManager.Instance.ReduceScore(950);
+                GameManager.Instance.UpdateScoreText();
             }
         }
         else if (weapon.playerWeapons.Count == 2)
@@ -74,6 +74,8 @@ public class MysteryBox : MonoBehaviour
             while (weapon.playerWeapons[0].GetComponentInChildren<GunShooting>().id.Equals(randomWeapon) || weapon.playerWeapons[1].GetComponentInChildren<GunShooting>().id.Equals(randomWeapon))
             {
                 randomWeapon = weapons[Random.Range(0, weapons.Length)];
+                GameManager.Instance.ReduceScore(950);
+                GameManager.Instance.UpdateScoreText();
             }
         }
 

@@ -1111,8 +1111,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3047177163102598713}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.081, y: -2.83, z: 14.171}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.081, y: -2.8299992, z: 14.170995}
   m_LocalScale: {x: 0.26882, y: 0.26882002, z: 0.26882}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -7210,7 +7210,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6327572005737399173}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd6f16213d7a0f45b0f0335c53251b5, type: 3}
+  m_Script: {fileID: 11500000, guid: b0899f207e1e1b6418f6eb6cfba67471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: DP28
@@ -7218,30 +7218,29 @@ MonoBehaviour:
   ammoCost: 500
   pellets: 0
   damagePellet: 0
-  damage: 225
-  gunAnimator: {fileID: 0}
+  damage: 375
+  gunAnimator: {fileID: 6244876710085251132}
   enemyMask:
     serializedVersion: 2
     m_Bits: 2048
-  instaKill: 0
   muzzleFX: {fileID: 8281584199040606441}
-  rateOfFire: 600
-  headshotMultiplier: 2.5
-  range: 150
+  rateOfFire: 550
+  headshotMultiplier: 0
+  range: 0
   firingMode: 1
   cam: {fileID: 0}
   minX: -0.05
   maxX: 0.05
-  minY: -0.05
-  maxY: 0.05
+  minY: -0.075
+  maxY: 0.075
   ammo: 0
   reserveAmmo: 0
   ammoCapacity: 47
   extraMags: 5
   initialMags: 2
   isReloading: 0
-  reloadTime: 1.75
-  emptyReloadTime: 2.25
+  reloadTime: 2.25
+  emptyReloadTime: 2.75
 --- !u!1 &6498560331242994278
 GameObject:
   m_ObjectHideFlags: 0

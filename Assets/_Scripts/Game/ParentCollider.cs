@@ -6,16 +6,11 @@ public class ParentCollider : MonoBehaviour
 {
 
     public GameObject bone;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
+    // Actualiza la posición del GO a la posición del hueso indicado
     void Update()
     {
-        this.gameObject.transform.rotation = bone.transform.rotation;
-        this.gameObject.transform.position = bone.transform.position;
+        gameObject.transform.rotation = bone.transform.rotation;
+        gameObject.transform.position = bone.transform.position;
     }
 }

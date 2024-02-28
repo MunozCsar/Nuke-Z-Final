@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -465,19 +465,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GraphicsSettings, Assembly-CSharp
-        m_MethodName: SetQualitylevel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_AlphaFadeSpeed: 0.15
 --- !u!1 &144980841
 GameObject:
@@ -726,8 +714,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Graphics
         m_Mode: 1
         m_Arguments:
@@ -859,8 +847,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Credits
         m_Mode: 1
         m_Arguments:
@@ -992,7 +980,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 777347003}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: BackGraphisAndVolumeAndControlsAndCredits
         m_Mode: 1
@@ -1511,8 +1499,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Exit
         m_Mode: 1
         m_Arguments:
@@ -1644,8 +1632,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Volume
         m_Mode: 1
         m_Arguments:
@@ -1832,19 +1820,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GraphicsSettings, Assembly-CSharp
-        m_MethodName: changeTextureQuality
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_AlphaFadeSpeed: 0.15
 --- !u!1 &386066033
 GameObject:
@@ -2410,8 +2386,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Play
         m_Mode: 3
         m_Arguments:
@@ -2754,8 +2730,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: BackGraphisAndVolumeAndControlsAndCredits
         m_Mode: 1
         m_Arguments:
@@ -3996,8 +3972,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: BackOptions
         m_Mode: 1
         m_Arguments:
@@ -4092,7 +4068,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 777347002}
-  - component: {fileID: 777347001}
+  - component: {fileID: 777347003}
   m_Layer: 0
   m_Name: --UI/UX_MANAGER--
   m_TagString: Untagged
@@ -4100,25 +4076,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &777347001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777347000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05c0128d7c195364aac67e5015a54690, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  options: {fileID: 1396872570}
-  graphics: {fileID: 599382880}
-  controls: {fileID: 1230431511}
-  volume: {fileID: 1319328692}
-  credits: {fileID: 735978617}
-  loadingBar: {fileID: 742741000}
-  loadingScreen: {fileID: 1742393047}
 --- !u!4 &777347002
 Transform:
   m_ObjectHideFlags: 0
@@ -4134,6 +4091,91 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &777347003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777347000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b373b80cd09a646a14e9eccb815e25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isKeyActive: 0
+  isKeyObtained: 0
+  allowPickup: 0
+  obtainedPickup: 0
+  placeablePart: 0
+  truckKey: {fileID: 0}
+  electricDoor: {fileID: 0}
+  selectedPart: 4
+  powerParts: []
+  lights: []
+  lightMaterial: {fileID: 0}
+  weaponPrefabs: []
+  DamageIndicators: []
+  powerUpArray: []
+  radiationContainers: []
+  mysteryBox: []
+  bloodFX: []
+  wallChipFX: {fileID: 0}
+  groundFX: {fileID: 0}
+  playerCam: {fileID: 0}
+  powerUp_max: 0
+  powerUp_current: 0
+  powerUpChance: 0
+  powerUp_fx: {fileID: 0}
+  radContainerFull: 
+  options: {fileID: 1396872570}
+  graphics: {fileID: 599382880}
+  controls: {fileID: 1230431511}
+  volume: {fileID: 1319328692}
+  credits: {fileID: 735978617}
+  loadingBar: {fileID: 742741000}
+  loadingScreen: {fileID: 1742393047}
+  scoreText: {fileID: 0}
+  score: 0
+  kills: 0
+  pointsOnHit: 0
+  pointsOnKill: 0
+  pointsOnHead: 0
+  pointsOnNuke: 0
+  killScore: 0
+  playerScore: 0
+  scoreBoard: {fileID: 0}
+  pauseCanvas: {fileID: 0}
+  pointsInstance: {fileID: 0}
+  damageIndicatorsContainer: {fileID: 0}
+  totalScore: {fileID: 0}
+  totalKills: {fileID: 0}
+  interactText: {fileID: 0}
+  isPaused: 0
+  doublePoints: 0
+  instaKill: 0
+  gameOver: 0
+  endGameTrigger: 0
+  instaKillTimer: 0
+  doublePointsTimer: 0
+  volumeSlider: {fileID: 0}
+  slidervalue: 0
+  zombie: []
+  zm_HP: 0
+  zm_Damage: 0
+  zombieList: []
+  wave: 1
+  powerUps: 0
+  roundEnd: 0
+  waveText: {fileID: 0}
+  zm_Delay: 0
+  zm_Count: 0
+  zm_maxHorde: 24
+  zm_spawned: 0
+  zm_alive: 0
+  timer: 0
+  timerGoal: 25
+  spawnZM: 0
 --- !u!1 &798716485
 GameObject:
   m_ObjectHideFlags: 0
@@ -5582,8 +5624,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Controls
         m_Mode: 1
         m_Arguments:
@@ -6906,8 +6948,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: BackGraphisAndVolumeAndControlsAndCredits
         m_Mode: 1
         m_Arguments:
@@ -7121,19 +7163,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GraphicsSettings, Assembly-CSharp
-        m_MethodName: changeShadowQuality
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_AlphaFadeSpeed: 0.15
 --- !u!224 &1721686619
 RectTransform:
@@ -8064,8 +8094,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: Options
         m_Mode: 1
         m_Arguments:
@@ -8999,8 +9029,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 777347001}
-        m_TargetAssemblyTypeName: UI_UX, Assembly-CSharp
+      - m_Target: {fileID: 777347003}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: BackGraphisAndVolumeAndControlsAndCredits
         m_Mode: 1
         m_Arguments:

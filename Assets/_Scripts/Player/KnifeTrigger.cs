@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class KnifeTrigger : MonoBehaviour
 {
-    public WeaponHandler weaponHandler;
-    public BoxCollider knifeCollider;
-    public float damage;
-    public bool filler = false;
-    //public void HideWeapon()
-    //{
-    //    weaponHandler.HideWeapon();
-    //}
-
+    public WeaponHandler weaponHandler; // Referencia al script de control de armas
+    // Muestra el arma
     public void ShowWeapon()
     {
         weaponHandler.ShowWeapon();

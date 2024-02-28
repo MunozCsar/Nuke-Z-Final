@@ -18,6 +18,7 @@ public class SoulHarvest : MonoBehaviour
         soulZone.enabled = true;
     }
 
+    // Comprueba si la cantidad de almas es igual o superior a las requeridas y activar la animación de cerrar
     private void Update()
     {
         if(actualSouls >= soulsRequired)
@@ -31,7 +32,7 @@ public class SoulHarvest : MonoBehaviour
             soulZone.enabled = false;
         }
     }
-
+    // Activa la animación de abrir
     public void OpenContainer()
     {
         containerAnimator.SetBool("isOpened", true);

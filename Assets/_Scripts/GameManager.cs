@@ -5,40 +5,46 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/*
+    Este script controla las funciones y variables del juego que son usadas por otras partes del juego.
+*/
+
 public class GameManager : MonoBehaviour
 {
-
-    public bool isKeyActive = false, isKeyObtained = false, allowPickup, obtainedPickup, placeablePart;  //Booleano de llave activa, llave obtenida, permitir pickups y pickup obtenido
-    public GameObject truckKey, electricDoor; //Gameobject de la llave y la puerta que se activa con electricidad
-    public int selectedPart = 4; //Parte actualmente seleccionada
-    public GameObject[] powerParts; //Array que almacena todas las piezas de la electricidad
-    public GameObject[] lights; //Array que almacena todas las luces a activar
-    public Material lightMaterial;
-    public GameObject[] weaponPrefabs; //Array que almacena todas las armas del juego
-    public GameObject[] DamageIndicators; //Array que almacena los  diferentes elementos que componen los indicadores de daño
-    public GameObject[] powerUpArray; //Array que almacena los powerups
-    public GameObject[] radiationContainers; //Array que almacena los contenedores de radiacion
-    public GameObject[] mysteryBox; //Array que contiene las cajas misteriosas
-    public ParticleSystem[] bloodFX; //Array que contiene los diferentes sistemas de particulas de sangre
-    public ParticleSystem wallChipFX; //Sistema de particulas de impacto en pared
-    public ParticleSystem groundFX; //Sistema de partículas de zombie saliendo de la tierra
-    public Camera playerCam; //Cámara del jugador
-    public int powerUp_max, powerUp_current; //Cantidad máxima de powerups y cantidad actual
-    public ParticleSystem powerUp_fx; //Sistema de particulas de los powerups
-    public bool[] radContainerFull; //Array de bools que almacena si los contenedores están llenos
-    [SerializeField] GameObject options, graphics, controls, volume, credits; //Elementos de la UI
-    public Image loadingBar; //Barra de carga
-    public GameObject loadingScreen; //Pantalla de carga
-    public TMP_Text scoreText; //Elemento de UI de puntuación
-    public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead, pointsOnNuke, killScore, playerScore; //Valores de puntuación, bajas, puntos por baja, cantidad de bajas y cantidad de puntuacion
-    public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer; //Contenedor de la pantalla de puntuacion y pantalla de pausa, objeto desde el que se instancia la animación de puntos y el contenedor de los indicadores de daño
-    public TMP_Text totalScore, totalKills, interactText; //Elemento de UI de la puntuacion total, la cantidad total de bajas y el texto de interacción
-    public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger; //Booleano de pausa, puntos dobles, baja instantanea, partida acabada, trigger de acabar partida y partes sueltas
-    public float instaKillTimer, doublePointsTimer; //Timers de los powerups
-    public Slider volumeSlider; //Slider del volumen
-    public float slidervalue; //Valor del slider
-
     public static GameManager Instance { get; private set; } //La instancia del GameManager, usada para acceder a los métodos y variables de esta script desde cualquier otra script.
+
+    public bool isKeyActive = false, isKeyObtained = false, allowPickup, obtainedPickup, placeablePart;
+    public GameObject truckKey, electricDoor;
+    public int selectedPart = 4;
+    public GameObject[] powerParts;
+    public GameObject[] lights;
+    public Material lightMaterial;
+    public GameObject[] weaponPrefabs;
+    public GameObject[] DamageIndicators;
+    public GameObject[] powerUpArray;
+    public GameObject[] radiationContainers;
+    public GameObject[] mysteryBox;
+    public ParticleSystem[] bloodFX;
+    public ParticleSystem wallChipFX;
+    public ParticleSystem groundFX;
+    public Camera playerCam;
+    public int powerUp_max, powerUp_current;
+    public float powerUpChance;
+    public ParticleSystem powerUp_fx;
+    public bool[] radContainerFull;
+    [SerializeField] GameObject options, graphics, controls, volume, credits;
+    public Image loadingBar;
+    public GameObject loadingScreen;
+    public TMP_Text scoreText;
+    public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead, pointsOnNuke, killScore, playerScore;
+    public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer;
+    public TMP_Text totalScore, totalKills, interactText;
+    public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger;
+    public float instaKillTimer, doublePointsTimer;
+    public Slider volumeSlider;
+    public float slidervalue;
+
+
     #region Zombie Spawn Variables
 
     [Header("Zombie prefabs")]
@@ -58,7 +64,6 @@ public class GameManager : MonoBehaviour
     public int zm_maxHorde = 24;
     public int zm_spawned = 0;
     public int zm_alive;
-    public TMP_Text zombieCount;
 
     [Header("Timer")]
     public int timer = 0;
@@ -79,19 +84,77 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        AssignVariables();
+
+    }
+
+    private void AssignVariables()
+    {
+        try
+        {
         lightMaterial.SetColor("_EmissionColor", Color.black);
-        scoreText.text = score.ToString(); //Asigna el valor en string de la variable score al elemento de UI de la puntuación
-        scoreBoard.SetActive(false); //Desactiva la pantalla de puntuación
-        IncreaseHP(wave); //Llama a la funcion y le asigna la variable 
-        Cursor.visible = false; //Desactiva la visibilidad del cursor
-        Cursor.lockState = CursorLockMode.Locked; //Bloquea el cursor
+        }
+        catch { }
+
+        try
+        {
+        scoreText.text = score.ToString();
+        }
+        catch { }
+
+        try
+        {
+        scoreBoard.SetActive(false);
+        }
+        catch { }
+
+        try
+        {
+        IncreaseZombieHP(wave);
+        }
+        catch { }
+
+        try
+        {
         volumeSlider.value = PlayerPrefs.GetFloat("volumenAudio", 0.5f);
+        }
+        catch { }
+
+        try
+        {
         AudioListener.volume = slidervalue;
-        options.SetActive(false); //Desactiva el gameobject de opciones
-        graphics.SetActive(false); //Desactiva el gameobject de graficos
-        controls.SetActive(false); //Desactiva el gameobject de controles
-        volume.SetActive(false); //Desactiva el gameobject de volumen
-        credits.SetActive(false); //Desactiva el gameobject de creditos
+        }
+        catch { }
+
+        try
+        {
+        options.SetActive(false);
+        }
+        catch { }
+
+        try
+        {
+        graphics.SetActive(false);
+        }
+        catch { }
+
+        try
+        {
+        controls.SetActive(false);
+        }
+        catch { }
+
+        try
+        {
+        volume.SetActive(false);
+        }
+        catch { }
+
+        try
+        {
+        credits.SetActive(false);
+        }
+        catch { }
 
     }
 
@@ -185,7 +248,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public void Nuke() //Funcion del powerup de bomba nuclear
+    public void NukePowerUp() //Funcion del powerup de bomba nuclear
     {
         AddPoints(pointsOnNuke); //Añade los puntos que otorga el powerup
         UpdateScoreText(); //Actualiza la puntuacion
@@ -218,7 +281,7 @@ public class GameManager : MonoBehaviour
         Instantiate(powerUpArray[i], pos, rot);
     }
 
-    public void DamageIndicator(float hp) //Al recibir daño, activa el contenedor de las animaciones de daño y las ejecuta en base a la cantidad de vida del jugador
+    public void ShowDamageIndicators(float hp) //Al recibir daño, activa el contenedor de las animaciones de daño y las ejecuta en base a la cantidad de vida del jugador
     {
         damageIndicatorsContainer.SetActive(true);
         if (hp > 100)
@@ -265,10 +328,7 @@ public class GameManager : MonoBehaviour
     {
         options.SetActive(true);
     }
-    public void Exit() //Sale del juego
-    {
-        Application.Quit();
-    }
+
     public void BackOptions() //Vuelve al menu de pausa
     {
         options.SetActive(false);
@@ -328,6 +388,27 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region SceneLoading
+    IEnumerator LoadSceneAsync(int sceneID)
+    {
+        loadingScreen.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneID);
+        while (!operation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+
+            loadingBar.fillAmount = progressValue;
+
+            yield return null;
+        }
+    }
+    public void Play(int sceneID)
+    {
+        StartCoroutine(LoadSceneAsync(sceneID));
+        AssignVariables();
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
     public void EndGame() //Carga la escena con la cinemática final
     {
         SceneManager.LoadScene(2);
@@ -348,9 +429,14 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         SceneManager.LoadScene(0);
+        AssignVariables();
+    }
+    public void Exit() //Sale del juego
+    {
+        Application.Quit();
     }
     #endregion
-    public float IncreaseHP(int wave) //Aumenta la vida de los enemigos en un valor fijo hasta la ronda 9, y tras la ronda 10 lo multiplica for 1.1
+    public float IncreaseZombieHP(int wave) //Aumenta la vida de los enemigos en un valor fijo hasta la ronda 9, y tras la ronda 10 lo multiplica for 1.1
     {
         switch (wave)
         {

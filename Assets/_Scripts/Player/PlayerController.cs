@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Este script controla el movimiento, vida y varias interacciones del jugador con el juego y su entorno.
+*/
+
 public class PlayerController : MonoBehaviour
 {
-
-
-
     public CharacterController controller; //Toma referencia del componente "CharacterController"
 
     public float playerHP, regenSpeed; //Variables de vida y regeneración de vida
@@ -140,7 +141,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Damage_Trigger")) //Recibe daño al ser golpeado
         {
-            GameManager.Instance.DamageIndicator(playerHP);
+            GameManager.Instance.ShowDamageIndicators(playerHP);
             TakeDamage(GameManager.Instance.zm_Damage);
         }
 

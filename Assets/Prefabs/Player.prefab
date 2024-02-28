@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &704126696
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 704126697}
-  m_Layer: 7
-  m_Name: ADSPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &704126697
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704126696}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.212, y: -0.124, z: -0.097}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 3373595159905509098}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1956274651
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +29,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3373595159905509098}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3373595159905509093
 GameObject:
@@ -93,11 +62,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3373595161021739138}
   - {fileID: 3373595160831047055}
   - {fileID: 3373595161618769739}
   - {fileID: 1956274652}
-  - {fileID: 704126697}
   m_Father: {fileID: 3373595160708061156}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -394,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7117b9cc2770c964b8e5bfdc1a1fd677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 3373595159905509099}
+  playerCam: {fileID: 0}
   sensitivityX: 12
   clampMin: -5
   clampMax: 5
@@ -414,22 +381,22 @@ MonoBehaviour:
   controller: {fileID: 3373595160708061159}
   playerHP: 150
   regenSpeed: 15
-  velocity: {x: 0, y: 0, z: 0}
   gravity: -9.81
-  weaponHandler: {fileID: 1936774281}
-  sprintSpeed: 10
-  defaultSpeed: 7.5
+  walkSpeed: 0
+  strafeSpeed: 0
+  sprintMultiplier: 0
   jumpHeight: 1.5
-  t: 0
-  t_Goal: 1
-  regenT: 0
-  regenGoal: 2
+  t_barrier: 0
+  barrier_Cooldown: 0
+  t_regen: 0
+  regen_Cooldown: 0
   groundCheck: {fileID: 3373595160237809682}
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
     m_Bits: 64
   flashLight: {fileID: 3373595161618769732}
+  hasKeyCard: 0
 --- !u!114 &1936774281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,18 +409,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25024f84ca65fd4e880567ac918efe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 3642951605812598899, guid: 68e9dfeeb1711234182d8059fcede6ad, type: 3}
-  - {fileID: 7195073838783392544, guid: 602dd1e89883afa4db53c4dc28142682, type: 3}
-  - {fileID: 6208087771089303132, guid: 92cda9d237f0ad64fa447680f17843e9, type: 3}
-  - {fileID: 6376966681126640318, guid: 051e8f37b5d0b424f8be4a14e1b099dc, type: 3}
-  weaponList: []
-  cam: {fileID: 3373595159905509093}
-  gunPos: {fileID: 1956274652}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
+  knife: {fileID: 0}
+  pickUpWeaponGameObject: {fileID: 0}
+  meleeDamage: 0
+  meleeRange: 0
+  t_melee: 0
+  melee_coolDown: 0
+  gunInstancePosition: {fileID: 0}
+  playerWeapons: []
   ammoCount: {fileID: 0}
   maxAmmoCount: {fileID: 0}
-  wallWeaponBool: 0
-  buyWeapon: 0
   activeSlot: 0
   weaponSlots: 2
 --- !u!1 &3373595160831047054
@@ -487,7 +455,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3373595159905509098}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &3373595160831047058
 Camera:
@@ -540,85 +508,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3373595160831047054}
   m_Enabled: 0
---- !u!1 &3373595161021739261
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3373595161021739138}
-  - component: {fileID: 3373595161021739139}
-  - component: {fileID: 1189764795}
-  m_Layer: 7
-  m_Name: WeaponHolder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &3373595161021739138
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3373595161021739261}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3373595159905509098}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3373595161021739139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3373595161021739261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 924373a32a4cb3648b8dfaf20f71f194, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  step: 0.01
-  maxStepDistance: 0.06
-  rotationStep: 4
-  maxRotationStep: 5
-  smooth: 10
-  speedCurve: 0
-  travelLimit: {x: 0.025, y: 0.025, z: 0.025}
-  bobLimit: {x: 0.01, y: 0.01, z: 0.01}
-  bobExaggeration: 0
-  multiplier: {x: 0, y: 0, z: 0}
---- !u!114 &1189764795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3373595161021739261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c25024f84ca65fd4e880567ac918efe1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 3642951605812598899, guid: 68e9dfeeb1711234182d8059fcede6ad, type: 3}
-  - {fileID: 0}
-  weaponList: []
-  cam: {fileID: 0}
-  gunPos: {fileID: 1956274652}
-  ammoCount: {fileID: 0}
-  maxAmmoCount: {fileID: 0}
-  wallWeaponBool: 0
-  buyWeapon: 0
-  activeSlot: 0
-  weaponSlots: 0
 --- !u!1 &3373595161618769732
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +539,7 @@ Transform:
   m_Children:
   - {fileID: 2879965284371404437}
   m_Father: {fileID: 3373595159905509098}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!108 &3373595161618769738
 Light:

@@ -7819,7 +7819,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5847219072697858978}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd6f16213d7a0f45b0f0335c53251b5, type: 3}
+  m_Script: {fileID: 11500000, guid: b0899f207e1e1b6418f6eb6cfba67471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: MP40
@@ -7828,29 +7828,28 @@ MonoBehaviour:
   pellets: 0
   damagePellet: 0
   damage: 175
-  gunAnimator: {fileID: 0}
+  gunAnimator: {fileID: 551078476070870045}
   enemyMask:
     serializedVersion: 2
     m_Bits: 2048
-  instaKill: 0
   muzzleFX: {fileID: 2973179661431444557}
-  rateOfFire: 550
-  headshotMultiplier: 2
-  range: 100
+  rateOfFire: 750
+  headshotMultiplier: 1.75
+  range: 65
   firingMode: 1
   cam: {fileID: 0}
   minX: 0
   maxX: 0
   minY: 0
   maxY: 0
-  ammo: 30
+  ammo: 0
   reserveAmmo: 0
   ammoCapacity: 30
   extraMags: 6
   initialMags: 2
   isReloading: 0
   reloadTime: 1.5
-  emptyReloadTime: 2.25
+  emptyReloadTime: 2.5
 --- !u!95 &551078476070870045
 Animator:
   serializedVersion: 5

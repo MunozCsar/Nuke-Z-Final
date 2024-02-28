@@ -2,23 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-//Tengo que limpiar esto...
+using System;
+
+/*
+    Este script gestiona las armas del jugador y varias interacciones con diferentes powerups y objetos interactuables, así como el ataque cuerpo a cuerpo.
+*/
+
 public class WeaponHandler : MonoBehaviour
 {
     public LayerMask enemyMask;
 
     [Header("Melee")]
-    public GameObject knife, pickUpWeaponGO;
+    public GameObject knife, pickUpWeaponGameObject;
     public float meleeDamage, meleeRange; 
     public float t_melee, melee_coolDown;
 
     [Header("Weapons")]
-    public Transform gunPos; //Posición en la que se instanciará el arma
-    public List<GameObject> playerWeapons = new(); //Lista que contiene todas las armas que el jugador posee
-    public TMP_Text ammoCount, maxAmmoCount; //Texto de UI
-    bool pickupWeapon = false, activeWeapon, ammoBox; //Booleanos que controlan diferentes interacciones
-    public int activeSlot, weaponSlots; //El slot de arma activo y los slots totales que tiene el jugador
-    int weaponID; //ID del arma
+    public Transform gunInstancePosition;
+    public List<GameObject> playerWeapons = new();
+    public TMP_Text ammoCount, maxAmmoCount;
+    bool pickupWeapon = false, activeWeapon, ammoBox;
+    public int activeSlot, weaponSlots;
+    int weaponID;
 
     void Start()
     {
@@ -40,8 +45,8 @@ public class WeaponHandler : MonoBehaviour
             {
                 if (weapon.activeSelf.Equals(true)) //Detecta si el arma está activa y asigna sus datos de munición a los valores de la UI correspondientes
                 {
-                    ammoCount.text = weapon.GetComponentInChildren<GunShooting>().ammo.ToString();
-                    maxAmmoCount.text = ("/ " + weapon.GetComponentInChildren<GunShooting>().reserveAmmo.ToString());
+                    ammoCount.text = weapon.GetComponentInChildren<GunController>().ammo.ToString();
+                    maxAmmoCount.text = ("/ " + weapon.GetComponentInChildren<GunController>().reserveAmmo.ToString());
                 }
             }
 
@@ -97,7 +102,7 @@ public class WeaponHandler : MonoBehaviour
             {
                 AddWeapon(weaponID);
                 pickupWeapon = false;
-                Destroy(pickUpWeaponGO);
+                Destroy(pickUpWeaponGameObject);
                 pickupWeapon = false; //Da el valor false a la variable
                 GameManager.Instance.interactText.gameObject.SetActive(false);
 
@@ -108,32 +113,38 @@ public class WeaponHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && t_melee >= melee_coolDown) //Gestión de ataque melee
         {
-            knife.SetActive(true); //Activa el cuchillo
-            if(playerWeapons.Count > 0)
-            {
-                playerWeapons[activeSlot].SetActive(false);
-            }
-            if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange, enemyMask)) //Lanza un raycast desde la cámara hacia delante y recoge la información de impacto
-            {
-
-                if (hit.transform.CompareTag("Body_Collider") || hit.transform.CompareTag("Head_Collider")) //Si el raycast impacta al cuerpo o cabeza del enemigo entra en este bloque de código
-                {
-
-                    int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
-                    Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
-                    if (GameManager.Instance.instaKill)
-                    {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ZM_Death(); //Si el jugador ha obtenido un instakill, mata al enemigo
-                    }
-                    else
-                    {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage); //De forma normal, reduce la vida del enemigo.
-                    }
-
-                }
-            }
-            t_melee = 0f; //Reseta el timer
+            MeleeAttack();
         }
+    }
+
+    private void MeleeAttack()
+    {
+        knife.SetActive(true); //Activa el cuchillo
+        if (playerWeapons.Count > 0)
+        {
+            playerWeapons[activeSlot].SetActive(false);
+            playerWeapons[activeSlot].GetComponentInChildren<GunController>().isReloading = false;
+        }
+        if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange, enemyMask)) //Lanza un raycast desde la cámara hacia delante y recoge la información de impacto
+        {
+
+            if (hit.transform.CompareTag("Body_Collider") || hit.transform.CompareTag("Head_Collider")) //Si el raycast impacta al cuerpo o cabeza del enemigo entra en este bloque de código
+            {
+
+                int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
+                if (GameManager.Instance.instaKill)
+                {
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ZM_Death(); //Si el jugador ha obtenido un instakill, mata al enemigo
+                }
+                else
+                {
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage); //De forma normal, reduce la vida del enemigo.
+                }
+
+            }
+        }
+        t_melee = 0f; //Reseta el timer
     }
 
     #region Powerups
@@ -142,7 +153,7 @@ public class WeaponHandler : MonoBehaviour
     {
         foreach (GameObject weapon in playerWeapons) //Recorre la lista y da al jugador la municion maxima de todas sus armas
         {
-            weapon.GetComponentInChildren<GunShooting>().reserveAmmo = weapon.GetComponentInChildren<GunShooting>().ammoCapacity * weapon.GetComponentInChildren<GunShooting>().extraMags;
+            weapon.GetComponentInChildren<GunController>().reserveAmmo = weapon.GetComponentInChildren<GunController>().ammoCapacity * weapon.GetComponentInChildren<GunController>().extraMags;
         }
     }
 
@@ -164,7 +175,7 @@ public class WeaponHandler : MonoBehaviour
 
         if (playerWeapons.Count == 0) //Si el jugador no tiene armas, añade el arma, la activa y sale de la función
         {
-            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
+            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunInstancePosition.position, gunInstancePosition.rotation, GameManager.Instance.playerCam.transform));
             playerWeapons[0].SetActive(true);
             activeSlot = 0;
             activeWeapon = true;
@@ -173,27 +184,27 @@ public class WeaponHandler : MonoBehaviour
 
         if (playerWeapons.Count == 1) //Si el jugador tiene un arma, añade el arma y la activa.
         {
-            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform));
+            playerWeapons.Add(Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunInstancePosition.position, gunInstancePosition.rotation, GameManager.Instance.playerCam.transform));
             playerWeapons[0].SetActive(false);
             playerWeapons[1].SetActive(true);
             activeSlot = 1;
         }
 
         //Si el jugador tiene 2 armas, detecta la posición en la que tiene el arma actualmente y la sustituye por la nueva
-        else if (!playerWeapons[0].GetComponentInChildren<GunShooting>().id.Equals(weaponID) || !playerWeapons[1].GetComponentInChildren<GunShooting>().id.Equals(weaponID))
+        else if (!playerWeapons[0].GetComponentInChildren<GunController>().id.Equals(weaponID) || !playerWeapons[1].GetComponentInChildren<GunController>().id.Equals(weaponID))
         {
 
             if (activeSlot == 0)
             {
                 Destroy(playerWeapons[activeSlot]); //Destruye el GameObject viejo del arma
                 playerWeapons.RemoveAt(activeSlot); //Destruye el valor de la lista en la posición del arma activa
-                playerWeapons.Insert(0, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform)); //Inserta el nuevo arma en la posición dada
+                playerWeapons.Insert(0, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunInstancePosition.position, gunInstancePosition.rotation, GameManager.Instance.playerCam.transform)); //Inserta el nuevo arma en la posición dada
             }
             else if (activeSlot == 1)
             {
                 Destroy(playerWeapons[activeSlot]); //Destruye el GameObject viejo del arma
                 playerWeapons.RemoveAt(activeSlot); //Destruye el valor de la lista en la posición del arma activa
-                playerWeapons.Insert(1, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunPos.position, gunPos.rotation, GameManager.Instance.playerCam.transform)); //Inserta el nuevo arma en la posición dada
+                playerWeapons.Insert(1, Instantiate(GameManager.Instance.weaponPrefabs[weaponID], gunInstancePosition.position, gunInstancePosition.rotation, GameManager.Instance.playerCam.transform)); //Inserta el nuevo arma en la posición dada
             }
         }
     }
@@ -201,8 +212,8 @@ public class WeaponHandler : MonoBehaviour
     public void BuyAmmo(int i) //Compra de munición
     {
         //Similar a MaxAmmo, pero solo se ejecuta en el arma que el jugador tiene activa
-        playerWeapons[i].GetComponentInChildren<GunShooting>().reserveAmmo = playerWeapons[i].GetComponentInChildren<GunShooting>().ammoCapacity * playerWeapons[i].GetComponentInChildren<GunShooting>().extraMags;
-        GameManager.Instance.ReduceScore(playerWeapons[i].GetComponentInChildren<GunShooting>().ammoCost); //Reduce la puntuación.
+        playerWeapons[i].GetComponentInChildren<GunController>().reserveAmmo = playerWeapons[i].GetComponentInChildren<GunController>().ammoCapacity * playerWeapons[i].GetComponentInChildren<GunController>().extraMags;
+        GameManager.Instance.ReduceScore(playerWeapons[i].GetComponentInChildren<GunController>().ammoCost); //Reduce la puntuación.
     }
     public void ShowWeapon() //Muestra el arma una vez el ataque melee ha acabado
     {
@@ -220,12 +231,12 @@ public class WeaponHandler : MonoBehaviour
     {
         if (other.CompareTag("PickupWeapon")) //Si el trigger se llama "PickupWeapon"
         {
-            pickUpWeaponGO = other.gameObject;
+            pickUpWeaponGameObject = other.gameObject;
             pickupWeapon = true; //Da el valor true a la variable
-            weaponID = other.GetComponent<WeaponChalk>().gunID; //Almacena el ID del arma en una variable local
+            weaponID = other.GetComponent<WeaponID>().gunID; //Almacena el ID del arma en una variable local
             GameManager.Instance.interactText.gameObject.SetActive(true); //Activa el texto de interacción
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle"); //Activa la animación idle del texto de interacción
-            GameManager.Instance.interactText.text = "Press \"F\" to pick up " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunShooting>().gunName; //Le da información al jugador sobre la acción que va a realizar
+            GameManager.Instance.interactText.text = "Press \"F\" to pick up " + GameManager.Instance.weaponPrefabs[weaponID].GetComponentInChildren<GunController>().gunName; //Le da información al jugador sobre la acción que va a realizar
 
         }
 
@@ -257,7 +268,7 @@ public class WeaponHandler : MonoBehaviour
         }
         if (other.CompareTag("NukePowerup"))
         {
-            GameManager.Instance.Nuke(); //LLama a la funcion de NukePowerup
+            GameManager.Instance.NukePowerUp(); //LLama a la funcion de NukePowerup
             Destroy(other.gameObject); //Destruye el objeto trigger
             Instantiate(GameManager.Instance.powerUp_fx, other.transform.position, other.transform.rotation); //Instancia las particulas del pickup
         }

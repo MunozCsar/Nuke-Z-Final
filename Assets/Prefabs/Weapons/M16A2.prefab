@@ -2329,45 +2329,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 5527535263829307318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd6f16213d7a0f45b0f0335c53251b5, type: 3}
+  m_Script: {fileID: 11500000, guid: b0899f207e1e1b6418f6eb6cfba67471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: M16A2
   id: 2
-  gunCost: 1200
   ammoCost: 500
   pellets: 0
-  gunAnimator: {fileID: 0}
-  recoilX: -0.5
-  recoilY: 1
-  recoilZ: 1
-  kickback: 0.15
-  returnTime: 25
-  snappiness: 25
+  damagePellet: 0
+  damage: 250
+  gunAnimator: {fileID: 4658845992779156311}
   enemyMask:
     serializedVersion: 2
     m_Bits: 2048
-  instaKill: 0
   muzzleFX: {fileID: 6550176961962384643}
   rateOfFire: 800
-  damage: 150
-  damagePellet: 0
   headshotMultiplier: 2
-  range: 150
-  firingMode: 1
+  range: 0
+  firingMode: 0
   cam: {fileID: 0}
-  minX: 0
-  maxX: 0
-  minY: 0
-  maxY: 0
+  minX: -0.025
+  maxX: 0.025
+  minY: -0.05
+  maxY: 0.05
   ammo: 0
   reserveAmmo: 0
   ammoCapacity: 30
   extraMags: 6
   initialMags: 2
   isReloading: 0
-  reloadTime: 2.5
-  emptyReloadTime: 0
+  reloadTime: 1.75
+  emptyReloadTime: 2.5
 --- !u!95 &4658845992779156311
 Animator:
   serializedVersion: 5

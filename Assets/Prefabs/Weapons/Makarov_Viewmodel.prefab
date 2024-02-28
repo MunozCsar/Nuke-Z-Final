@@ -1481,8 +1481,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4089412415664323013}
-  - component: {fileID: 4089412415664323035}
   - component: {fileID: 4089412415664323012}
+  - component: {fileID: 7505138898848615194}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -1510,47 +1510,6 @@ Transform:
   m_Father: {fileID: 6007312096257503886}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4089412415664323035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4089412415664323014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd6f16213d7a0f45b0f0335c53251b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunName: Makarov
-  id: 0
-  ammoCost: 500
-  pellets: 0
-  damagePellet: 0
-  damage: 45
-  gunAnimator: {fileID: 4089412415664323012}
-  enemyMask:
-    serializedVersion: 2
-    m_Bits: 2048
-  instaKill: 0
-  muzzleFX: {fileID: 7011177401626717584}
-  rateOfFire: 900
-  headshotMultiplier: 2.5
-  range: 100
-  firingMode: 0
-  cam: {fileID: 0}
-  minX: -0.1
-  maxX: 0.1
-  minY: -0.1
-  maxY: 0.1
-  ammo: 0
-  reserveAmmo: 0
-  ammoCapacity: 8
-  extraMags: 7
-  initialMags: 3
-  isReloading: 0
-  reloadTime: 1.75
-  emptyReloadTime: 2
 --- !u!95 &4089412415664323012
 Animator:
   serializedVersion: 5
@@ -1572,6 +1531,46 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7505138898848615194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4089412415664323014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0899f207e1e1b6418f6eb6cfba67471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunName: Makarov
+  id: 0
+  ammoCost: 500
+  pellets: 0
+  damagePellet: 0
+  damage: 35
+  gunAnimator: {fileID: 4089412415664323012}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  muzzleFX: {fileID: 7011177401626717584}
+  rateOfFire: 650
+  headshotMultiplier: 1.75
+  range: 55
+  firingMode: 0
+  cam: {fileID: 0}
+  minX: 0
+  maxX: 0
+  minY: 0
+  maxY: 0
+  ammo: 0
+  reserveAmmo: 0
+  ammoCapacity: 8
+  extraMags: 5
+  initialMags: 2
+  isReloading: 0
+  reloadTime: 1.5
+  emptyReloadTime: 2
 --- !u!1 &4402477356254099866
 GameObject:
   m_ObjectHideFlags: 0

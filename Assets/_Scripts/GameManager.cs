@@ -8,50 +8,37 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 
-    public bool recogido = false;
-    public bool tecla = false;
-    public bool llaveIsActive = false, llaveRecogida = false;
-    public GameObject llaves;
-    public int piezaSeleccionada = 4;
-    public ColocarObjeto colocar;
-    public GameObject[] piezas;
+    public bool isKeyActive = false, isKeyObtained = false, allowPickup, obtainedPickup, placeablePart;  //Booleano de llave activa, llave obtenida, permitir pickups y pickup obtenido
+    public GameObject truckKey, electricDoor; //Gameobject de la llave y la puerta que se activa con electricidad
+    public int selectedPart = 4; //Parte actualmente seleccionada
+    public GameObject[] powerParts; //Array que almacena todas las piezas de la electricidad
+    public GameObject[] lights; //Array que almacena todas las luces a activar
+    public Material lightMaterial;
+    public GameObject[] weaponPrefabs; //Array que almacena todas las armas del juego
+    public GameObject[] DamageIndicators; //Array que almacena los  diferentes elementos que componen los indicadores de daño
+    public GameObject[] powerUpArray; //Array que almacena los powerups
+    public GameObject[] radiationContainers; //Array que almacena los contenedores de radiacion
+    public GameObject[] mysteryBox; //Array que contiene las cajas misteriosas
+    public ParticleSystem[] bloodFX; //Array que contiene los diferentes sistemas de particulas de sangre
+    public ParticleSystem wallChipFX; //Sistema de particulas de impacto en pared
+    public ParticleSystem groundFX; //Sistema de partículas de zombie saliendo de la tierra
+    public Camera playerCam; //Cámara del jugador
+    public int powerUp_max, powerUp_current; //Cantidad máxima de powerups y cantidad actual
+    public ParticleSystem powerUp_fx; //Sistema de particulas de los powerups
+    public bool[] radContainerFull; //Array de bools que almacena si los contenedores están llenos
+    [SerializeField] GameObject options, graphics, controls, volume, credits; //Elementos de la UI
+    public Image loadingBar; //Barra de carga
+    public GameObject loadingScreen; //Pantalla de carga
+    public TMP_Text scoreText; //Elemento de UI de puntuación
+    public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead, pointsOnNuke, killScore, playerScore; //Valores de puntuación, bajas, puntos por baja, cantidad de bajas y cantidad de puntuacion
+    public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer; //Contenedor de la pantalla de puntuacion y pantalla de pausa, objeto desde el que se instancia la animación de puntos y el contenedor de los indicadores de daño
+    public TMP_Text totalScore, totalKills, interactText; //Elemento de UI de la puntuacion total, la cantidad total de bajas y el texto de interacción
+    public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger; //Booleano de pausa, puntos dobles, baja instantanea, partida acabada, trigger de acabar partida y partes sueltas
+    public float instaKillTimer, doublePointsTimer; //Timers de los powerups
+    public Slider volumeSlider; //Slider del volumen
+    public float slidervalue; //Valor del slider
 
-    public GameObject[] lights;
-
-
-    public GameObject[] weaponPrefabs;
-    public GameObject[] DamageIndicators;
-    public GameObject[] powerUpArray = new GameObject[3];
-    public GameObject[] soulBoxes;
-    public GameObject[] mysteryBox;
-    public ParticleSystem[] bloodFX;
-    public ParticleSystem wallChipFX;
-    public ParticleSystem groundFX;
-    public Camera playerCam;
-    public int powerUp_max, powerUp_current;
-    public ParticleSystem powerUp_fx;
-    public bool[] soulCompletion;
-    [SerializeField] GameObject options;
-    [SerializeField] GameObject graphics;
-    [SerializeField] GameObject controls;
-    [SerializeField] GameObject volume;
-    [SerializeField] GameObject credits;
-    public Image loadingBar;
-    public GameObject loadingScreen;
-
-    public bool findzombies;
-
-    public TMP_Text scoreText;
-    public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead, pointsOnNuke;
-    public int playerScore, killScore;
-    public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer;
-    public TMP_Text totalScore, totalKills, interactText;
-    public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger;
-    public float instaKillTimer, doublePointsTimer;
-    public Slider slider;
-    public float slidervalue;
-
-    public static GameManager Instance { get; private set; }
+    public static GameManager Instance { get; private set; } //La instancia del GameManager, usada para acceder a los métodos y variables de esta script desde cualquier otra script.
     #region Zombie Spawn Variables
 
     [Header("Zombie prefabs")]
@@ -78,7 +65,7 @@ public class GameManager : MonoBehaviour
     public int timerGoal = 25;
     public bool spawnZM = false;
     #endregion
-    private void Awake()
+    private void Awake() //Al iniciar el juego, se comprueba si ya existe una instancia del GameManager, si no la hay, este objeto se vuelve la instancia, si la hay, se destruye este objeto.
     {
         if (Instance == null)
         {
@@ -88,24 +75,23 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        //DontDestroyOnLoad(gameObject);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        scoreText.text = score.ToString();
-        scoreBoard.SetActive(false);
-        IncreaseHP(wave);
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        options.gameObject.SetActive(false);
-        graphics.gameObject.SetActive(false);
-        controls.gameObject.SetActive(false);
-        volume.gameObject.SetActive(false);
-        credits.gameObject.SetActive(false);
-        slider.value = PlayerPrefs.GetFloat("volumenAudio", 0.5f);
+        lightMaterial.SetColor("_EmissionColor", Color.black);
+        scoreText.text = score.ToString(); //Asigna el valor en string de la variable score al elemento de UI de la puntuación
+        scoreBoard.SetActive(false); //Desactiva la pantalla de puntuación
+        IncreaseHP(wave); //Llama a la funcion y le asigna la variable 
+        Cursor.visible = false; //Desactiva la visibilidad del cursor
+        Cursor.lockState = CursorLockMode.Locked; //Bloquea el cursor
+        volumeSlider.value = PlayerPrefs.GetFloat("volumenAudio", 0.5f);
         AudioListener.volume = slidervalue;
+        options.SetActive(false); //Desactiva el gameobject de opciones
+        graphics.SetActive(false); //Desactiva el gameobject de graficos
+        controls.SetActive(false); //Desactiva el gameobject de controles
+        volume.SetActive(false); //Desactiva el gameobject de volumen
+        credits.SetActive(false); //Desactiva el gameobject de creditos
 
     }
 
@@ -113,47 +99,16 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Escape) && !isPaused)
-        {
+        #region Pause&Resume
 
+        if (Input.GetKeyDown(KeyCode.Escape) && !isPaused) //Si el juego no está pausado y se presiona la tecla de Escape se activa el menu de pausa
+        {
             PauseMenu();
         }
-        else if (Input.GetKeyDown(KeyCode.Escape) && isPaused)
+        else if (Input.GetKeyDown(KeyCode.Escape) && isPaused) //Si el juego está pausado y se presiona la tecla de Escape se desactiva el menu de pausa
         {
 
             ResumeGame();
-        }
-
-        if (instaKill && instaKillTimer < 30) //Timer de 30 segundos 
-        {
-            instaKillTimer += Time.deltaTime;
-        }
-        else
-        {
-            instaKill = false;
-            instaKillTimer = 0f;
-        }
-
-        if (doublePoints && doublePointsTimer < 30) //Timer de 30 segundos 
-        {
-            doublePointsTimer += Time.deltaTime;
-        }
-        else
-        {
-            doublePoints = false;
-            doublePointsTimer = 0f;
-        }
-
-
-        //DebugMouse();
-        UpdateScoreBoard();
-        if (Input.GetKey(KeyCode.Tab))
-        {
-            scoreBoard.SetActive(true);
-        }
-        else if(!gameOver)
-        {
-            scoreBoard.SetActive(false);
         }
         if (isPaused)
         {
@@ -163,80 +118,112 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 1f;
         }
+        #endregion
+        #region PowerupTimers
+        if (instaKill && instaKillTimer < 30)
+        {
+            instaKillTimer += Time.deltaTime;
+        } //Timer de 30 segundos 
+        else
+        {
+            instaKill = false;
+            instaKillTimer = 0f;
+        }
+
+        if (doublePoints && doublePointsTimer < 30)
+        {
+            doublePointsTimer += Time.deltaTime;
+        } //Timer de 30 segundos 
+        else
+        {
+            doublePoints = false;
+            doublePointsTimer = 0f;
+        }
+        #endregion
+        #region ScoreBoard
+        UpdateScoreBoard();
+        if (Input.GetKey(KeyCode.Tab)) //Al presionar tabulador se activar la pantalla de puntuacion hasta que la tecla se deje de pulsar
+        {
+            scoreBoard.SetActive(true);
+        }
+        else if(!gameOver)
+        {
+            scoreBoard.SetActive(false);
+        }
+        #endregion
     }
 
     #region PointManager
     public void AddPoints(int points)
     {
-        if (!doublePoints)
+        if (!doublePoints) //Si el powerup de doble puntuacion no está activo se suma la cantidad base de puntos
         {
             score += points;
             playerScore += points;
-            pointsInstance.GetComponent<TMP_Text>().color = new Color32(255, 174, 0, 255);
-            pointsInstance.GetComponent<TMP_Text>().text = points.ToString();
+            pointsInstance.GetComponent<TMP_Text>().color = new Color32(255, 174, 0, 255); //Se le da un color dorado a la instancia de puntos
+            pointsInstance.GetComponent<TMP_Text>().text = points.ToString(); //Se le da el valor del coste al texto de la instancia de puntos
         }
-        else
+        else //Si el powerup de doble puntuacion está activo se suma la cantidad base de puntos multiplicado por 2
         {
             score += points * 2;
             playerScore += points;
-            pointsInstance.GetComponent<TMP_Text>().color = new Color32(255, 174, 0, 255);
-            pointsInstance.GetComponent<TMP_Text>().text = (points * 2).ToString();
+            pointsInstance.GetComponent<TMP_Text>().color = new Color32(255, 174, 0, 255); //Se le da un color dorado a la instancia de puntos
+            pointsInstance.GetComponent<TMP_Text>().text = (points * 2).ToString(); //Se le da el valor del coste al texto de la instancia de puntos
         }
 
-        Instantiate(pointsInstance, scoreText.transform);
+        Instantiate(pointsInstance, scoreText.transform); //Se instancia la animación de los puntos
         UpdateScoreText();
     }
 
-    public void ReduceScore(int cost)
+    public void ReduceScore(int cost) //Se reduce la puntuación del jugador por el valor del coste dado
     {
         score -= cost;
-        pointsInstance.GetComponent<TMP_Text>().color = new Color32(200, 0, 0, 255);
-        pointsInstance.GetComponent<TMP_Text>().text = "-" + cost.ToString();
-        Instantiate(pointsInstance, scoreText.transform);
+        pointsInstance.GetComponent<TMP_Text>().color = new Color32(200, 0, 0, 255); //Se le da un color rojo a la instancia de puntos
+        pointsInstance.GetComponent<TMP_Text>().text = "-" + cost.ToString(); //Se le da el valor del coste al texto de la instancia de puntos
+        Instantiate(pointsInstance, scoreText.transform); //Se instancia la animación de los puntos
         UpdateScoreText();
     }
     #endregion
 
-    public void Nuke()
+    public void Nuke() //Funcion del powerup de bomba nuclear
     {
-        score += pointsOnNuke;
-        UpdateScoreText();
+        AddPoints(pointsOnNuke); //Añade los puntos que otorga el powerup
+        UpdateScoreText(); //Actualiza la puntuacion
         UpdateScoreBoard();
-        foreach (GameObject zombie in zombieList)
+        foreach (GameObject zombie in zombieList) //Recorre la lista de zombies y llama a su función de muerte
         {
-            zombie.GetComponent<ZM_AI>().zm_Nuke();
+            zombie.GetComponent<ZM_AI>().ZM_Nuke();
+            zm_alive--;
+            killScore++;
         }
-        zombieList.Clear();
+        zombieList.Clear(); //Limpia la lista entera 
 
     }
 
-    public float RandomNumberGenerator(float minIndex, float maxIndex)
+    public float RandomNumberGenerator(float minIndex, float maxIndex) //Genera un número de tipo float atleatorio entre los dos índices dados y lo devuelve
     {
         float rnd = Random.Range(minIndex, maxIndex);
-        Debug.Log(rnd);
         return rnd;
     }
 
-    public int RandomNumberGeneratorINT(int minIndex, int maxIndex)
+    public int RandomNumberGenerator(int minIndex, int maxIndex) //Genera un número de tipo int atleatorio entre los dos índices dados y lo devuelve
     {
         int rnd = Random.Range(minIndex, maxIndex);
-        Debug.Log(rnd);
         return rnd;
     }
 
-    public void InstancePowerUp(int i, Vector3 pos, Quaternion rot)
+    public void InstancePowerUp(int i, Vector3 pos) //Instancia  el powerup en la posición y rotación dada
     {
-        Quaternion rota = powerUpArray[i].gameObject.transform.rotation;
-        Instantiate(powerUpArray[i], pos, rota);
-        Debug.Log("PowerUp!");
+        Quaternion rot = powerUpArray[i].transform.rotation;
+        Instantiate(powerUpArray[i], pos, rot);
     }
 
-    public void DamageIndicator(float hp)
+    public void DamageIndicator(float hp) //Al recibir daño, activa el contenedor de las animaciones de daño y las ejecuta en base a la cantidad de vida del jugador
     {
         damageIndicatorsContainer.SetActive(true);
         if (hp > 100)
         {
-            int rnd = Random.Range(0, 4);
+            int rnd = RandomNumberGenerator(0, DamageIndicators.Length); //Ejecuta una de las 4 animaciones posibles
             DamageIndicators[rnd].GetComponent<Animator>().Play("Damage_Fadeout");
         }
         else
@@ -248,101 +235,81 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void CheckSoulCompletion(int i)
+    public void CheckContainerCompletion(int i) //Comprueba si los contenedores están llenos, y si lo están, activa el trigger que permite finalizar la partida
     {
-        if (soulBoxes[i].GetComponent<SoulHarvest>().actualSouls >= 20)
+        if (radiationContainers[i].GetComponent<SoulHarvest>().actualSouls >= 20)
         {
-            soulCompletion[i] = true;
+            radContainerFull[i] = true;
         }
         else
         {
         }
 
-        if (soulCompletion[0].Equals(true) && soulCompletion[1].Equals(true) && soulCompletion[2].Equals(true))
+        if (radContainerFull[0].Equals(true) && radContainerFull[1].Equals(true) && radContainerFull[2].Equals(true))
         {
             endGameTrigger = true;
         }
     }
-
-    public void UpdateScoreText()
+    #region UI
+    public void UpdateScoreText() //Actualiza el texto de la puntuacion en pantalla
     {
         scoreText.text = score.ToString();
     }
 
-    public void UpdateScoreBoard()
+    public void UpdateScoreBoard() //Actualiza los textos de puntuacion y bajas de la pantalla de puntuacion
     {
         totalScore.text = playerScore.ToString();
         totalKills.text = killScore.ToString();
     }
-
-    public void Play(int sceneID)
+    public void Options() //Muestra la pantalla de opciones
     {
-        StartCoroutine(LoadSceneAsync(sceneID));
+        options.SetActive(true);
     }
-
-    IEnumerator LoadSceneAsync(int sceneID)
-    {
-        loadingScreen.SetActive(true);
-
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneID);
-        while (!operation.isDone)
-        {
-            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
-
-            loadingBar.fillAmount = progressValue;
-
-            yield return null;
-        }
-    }
-    public void Options()
-    {
-        options.gameObject.SetActive(true);
-    }
-    public void Exit()
+    public void Exit() //Sale del juego
     {
         Application.Quit();
     }
-    public void BackOptions()
+    public void BackOptions() //Vuelve al menu de pausa
     {
-        options.gameObject.SetActive(false);
+        options.SetActive(false);
     }
-    public void BackGraphisAndVolumeAndControlsAndCredits()
+    public void BackGraphisAndVolumeAndControlsAndCredits() //Vuelve al menu de opciones
     {
-        graphics.gameObject.SetActive(false);
-        volume.gameObject.SetActive(false);
-        controls.gameObject.SetActive(false);
-        credits.gameObject.SetActive(false);
+        graphics.SetActive(false);
+        volume.SetActive(false);
+        controls.SetActive(false);
+        credits.SetActive(false);
     }
 
-    public void Credits()
+    public void Credits() //Muestra la pantalla de creditos
     {
-        credits.gameObject.SetActive(true);
+        credits.SetActive(true);
     }
-    public void Graphics()
+    public void Graphics() //Muestra la pantalla de graficos
     {
-        graphics.gameObject.SetActive(true);
+        graphics.SetActive(true);
     }
-    public void Volume()
+    public void Volume() //Muestra la pantalla de volumen
     {
-        volume.gameObject.SetActive(true);
+        volume.SetActive(true);
     }
-    public void Controls()
+    public void Controls() //Muestra la pantalla de controles
     {
-        controls.gameObject.SetActive(true);
+        controls.SetActive(true);
     }
-    public void MainMenu()
+    public void MainMenu() //Vuelve al menu principal
     {
         SceneManager.LoadScene(0);
     }
 
-    public void ChangeSlider(float valor)
+    public void ChangeSlider(float valor) //Cambia el valor del slider del volumen
     {
-        slider.value = valor;
+        volumeSlider.value = valor;
         PlayerPrefs.SetFloat("volumenAudio", slidervalue);
         AudioListener.volume = slidervalue;
     }
 
-    public void PauseMenu()
+    public void PauseMenu() //Pausa la partida
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -350,21 +317,23 @@ public class GameManager : MonoBehaviour
         pauseCanvas.SetActive(true);
     }
 
-    public void ResumeGame()
+    public void ResumeGame() //Continua la partida
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        isPaused = false;
+        isPaused = false; 
         pauseCanvas.SetActive(false);
 
     }
+    #endregion
 
-    public void EndGame()
+    #region SceneLoading
+    public void EndGame() //Carga la escena con la cinemática final
     {
         SceneManager.LoadScene(2);
     }
 
-    public void GameOver(GameObject player)
+    public void GameOver(GameObject player) //Acaba la partida, bloquea el movimiento del jugador y de la cámara, muestra la pantalla de puntuación y, tras 15 segundos, carga el menu principal
     {
         gameOver = true;
         player.GetComponent<CameraMovement>().enabled = false;
@@ -375,13 +344,13 @@ public class GameManager : MonoBehaviour
         StartCoroutine(ReturnToMenu(15));
     }
 
-    public IEnumerator ReturnToMenu(float seconds)
+    public IEnumerator ReturnToMenu(float seconds) //Vuelve al menu principal pasados los segundos indicados
     {
         yield return new WaitForSeconds(seconds);
         SceneManager.LoadScene(0);
     }
-
-    public float IncreaseHP(int wave)
+    #endregion
+    public float IncreaseHP(int wave) //Aumenta la vida de los enemigos en un valor fijo hasta la ronda 9, y tras la ronda 10 lo multiplica for 1.1
     {
         switch (wave)
         {
@@ -418,49 +387,5 @@ public class GameManager : MonoBehaviour
         }
         return zm_HP;
     }
-
-    #region DebugFeatures
-    public GameObject spawner;
-    private bool toggleSpawn = true;
-    public void ResetRounds()
-    {
-        wave = 1;
-    }
-
-    public void ToggleSpawning()
-    {
-        if (toggleSpawn)
-        {
-            spawner.SetActive(true);
-        }
-        else
-        {
-            spawner.SetActive(false);
-        }
-        toggleSpawn = !toggleSpawn;
-    }
-
-    public void IncreaseScore()
-    {
-        score += 10000;
-        UpdateScoreText();
-    }
-
-    //public void DebugMouse()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Backspace))
-    //    {
-    //        Cursor.visible = true;
-    //        Cursor.lockState = CursorLockMode.None;
-    //    }
-    //    else if (Input.GetKeyDown(KeyCode.Return))
-    //    {
-    //        Cursor.visible = false;
-    //        Cursor.lockState = CursorLockMode.Locked;
-    //    }
-    //}
-
-    
-    #endregion
 
 }

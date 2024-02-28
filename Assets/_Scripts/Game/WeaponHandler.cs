@@ -8,7 +8,7 @@ public class WeaponHandler : MonoBehaviour
     public LayerMask enemyMask;
 
     [Header("Melee")]
-    public GameObject knife;
+    public GameObject knife, pickUpWeaponGO;
     public float meleeDamage, meleeRange; 
     public float t_melee, melee_coolDown;
 
@@ -97,6 +97,9 @@ public class WeaponHandler : MonoBehaviour
             {
                 AddWeapon(weaponID);
                 pickupWeapon = false;
+                Destroy(pickUpWeaponGO);
+                pickupWeapon = false; //Da el valor false a la variable
+                GameManager.Instance.interactText.gameObject.SetActive(false);
 
             }
         }
@@ -106,22 +109,25 @@ public class WeaponHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && t_melee >= melee_coolDown) //Gestión de ataque melee
         {
             knife.SetActive(true); //Activa el cuchillo
-            playerWeapons[activeSlot].SetActive(false);
+            if(playerWeapons.Count > 0)
+            {
+                playerWeapons[activeSlot].SetActive(false);
+            }
             if (Physics.Raycast(GameManager.Instance.playerCam.transform.position, GameManager.Instance.playerCam.transform.forward, out RaycastHit hit, meleeRange, enemyMask)) //Lanza un raycast desde la cámara hacia delante y recoge la información de impacto
             {
 
                 if (hit.transform.CompareTag("Body_Collider") || hit.transform.CompareTag("Head_Collider")) //Si el raycast impacta al cuerpo o cabeza del enemigo entra en este bloque de código
                 {
 
-                    int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                    int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
                     Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
                     if (GameManager.Instance.instaKill)
                     {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(true); //Si el jugador ha obtenido un instakill, mata al enemigo
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ZM_Death(); //Si el jugador ha obtenido un instakill, mata al enemigo
                     }
                     else
                     {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage, true); //De forma normal, reduce la vida del enemigo.
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ReduceHP(meleeDamage); //De forma normal, reduce la vida del enemigo.
                     }
 
                 }
@@ -214,6 +220,7 @@ public class WeaponHandler : MonoBehaviour
     {
         if (other.CompareTag("PickupWeapon")) //Si el trigger se llama "PickupWeapon"
         {
+            pickUpWeaponGO = other.gameObject;
             pickupWeapon = true; //Da el valor true a la variable
             weaponID = other.GetComponent<WeaponChalk>().gunID; //Almacena el ID del arma en una variable local
             GameManager.Instance.interactText.gameObject.SetActive(true); //Activa el texto de interacción

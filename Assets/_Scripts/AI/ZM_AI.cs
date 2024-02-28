@@ -11,7 +11,6 @@ public class ZM_AI : MonoBehaviour
     public GameObject[] targetBarrier;
     public bool focusBarrier, isAlive, isInZone;
     public float t_barrier, barrier_coolDown, d_Nearest, hp; // variable 't' es el tiempo actual del timer, 't_Goal' es el objetivo del timer.
-    public Quaternion rot = new Quaternion(270, 0, 0, 0);
     // Start is called before the first frame update
     void Start()
     {
@@ -85,7 +84,7 @@ public class ZM_AI : MonoBehaviour
         hp -= damage;
         if (hp <= 0)
         {
-            zm_Death(headShot);
+            ZM_Death(headShot);
         }
         else
         {
@@ -93,8 +92,20 @@ public class ZM_AI : MonoBehaviour
         }
 
     }
+    public void ReduceHP(float damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            ZM_Death();
+        }
+        else
+        {
+            GameManager.Instance.AddPoints(GameManager.Instance.pointsOnHit);
+        }
+    }
 
-    public void zm_Death(bool headShot)
+    public void ZM_Death(bool headShot)
     {
         GameManager.Instance.killScore++;
         GameManager.Instance.zm_alive--;
@@ -121,47 +132,17 @@ public class ZM_AI : MonoBehaviour
             bodyCollider.SetActive(false);
             GetComponent<SphereCollider>().enabled = false;
         }
-
-        if (GameManager.Instance.powerUp_current < GameManager.Instance.powerUp_max)
+        if (!focusBarrier)
         {
-            float rnd = GameManager.Instance.RandomNumberGenerator(0, 1);
-            if (rnd > .45f && rnd < .50f)
-            {
-                Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 2, this.transform.position.z);
-                GameManager.Instance.InstancePowerUp(0, pos, rot);
-                GameManager.Instance.powerUp_current++;
-            }
-            if (rnd > .65f && rnd < .70f)
-            {
-                Debug.Log("MaxAmmo!");
-                Vector3 pos = new Vector3(this.transform.position.x, 2f, this.transform.position.z);
-                GameManager.Instance.InstancePowerUp(1, pos, rot);
-                GameManager.Instance.powerUp_current++;
-            }
-            if (rnd > .10f && rnd < .175f)
-            {
-                Debug.Log("DoublePoints!");
-                Vector3 pos = new Vector3(this.transform.position.x, 2f, this.transform.position.z);
-                GameManager.Instance.InstancePowerUp(2, pos, rot);
-                GameManager.Instance.powerUp_current++;
-            }
-            if (rnd > .25f && rnd < .35f)
-            {
-                Debug.Log("BOOOOM~~!");
-                Vector3 pos = new Vector3(this.transform.position.x, 2f, this.transform.position.z);
-                GameManager.Instance.InstancePowerUp(3, pos, rot);
-                GameManager.Instance.powerUp_current++;
-            }
+            DropPowerUp();
         }
-
         HarvestSoul();
         Destroy(this.gameObject, 15f);
         GameManager.Instance.zombieList.Remove(this.gameObject);
     }
-
-    public void zm_Nuke()
+    public void ZM_Death()
     {
-        Instantiate(GameManager.Instance.bloodFX[4], transform.position, GameManager.Instance.bloodFX[4].transform.rotation);
+        GameManager.Instance.AddPoints(GameManager.Instance.pointsOnHead);
         GameManager.Instance.killScore++;
         GameManager.Instance.zm_alive--;
         GetComponent<Animator>().Play("Zombie_Death");
@@ -170,6 +151,27 @@ public class ZM_AI : MonoBehaviour
         isAlive = false;
         headCollider.SetActive(false);
         bodyCollider.SetActive(false);
+        if (!focusBarrier)
+        {
+            DropPowerUp();
+        }
+        HarvestSoul();
+        GameManager.Instance.zombieList.Remove(gameObject);
+        Destroy(this.gameObject, 15f);
+    }
+    public void ZM_Nuke()
+    {
+        Instantiate(GameManager.Instance.bloodFX[4], transform.position, GameManager.Instance.bloodFX[4].transform.rotation);
+        GetComponent<Animator>().Play("Zombie_Death");
+        agent.speed = 0f;
+        agent.isStopped = true;
+        isAlive = false;
+        headCollider.SetActive(false);
+        bodyCollider.SetActive(false);
+        if (!focusBarrier)
+        {
+            DropPowerUp();
+        }
         HarvestSoul();
         Destroy(this.gameObject, 15f);
     }
@@ -183,6 +185,38 @@ public class ZM_AI : MonoBehaviour
         }
     }
 
+    public void DropPowerUp()
+    {
+        if (GameManager.Instance.powerUp_current < GameManager.Instance.powerUp_max)
+        {
+            float rnd = GameManager.Instance.RandomNumberGenerator(0f, 1f);
+            if (rnd > .45f && rnd < .50f)
+            {
+                Vector3 pos = new(this.transform.position.x, this.transform.position.y + 2, this.transform.position.z);
+                GameManager.Instance.InstancePowerUp(0, pos);
+                GameManager.Instance.powerUp_current++;
+            }
+            if (rnd > .65f && rnd < .70f)
+            {
+                Vector3 pos = new(this.transform.position.x, this.transform.position.y + 2, this.transform.position.z);
+                GameManager.Instance.InstancePowerUp(1, pos);
+                GameManager.Instance.powerUp_current++;
+            }
+            if (rnd > .10f && rnd < .175f)
+            {
+                Vector3 pos = new(this.transform.position.x, this.transform.position.y + 2, this.transform.position.z);
+                GameManager.Instance.InstancePowerUp(2, pos);
+                GameManager.Instance.powerUp_current++;
+            }
+            if (rnd > .25f && rnd < .35f)
+            {
+                Vector3 pos = new(this.transform.position.x, this.transform.position.y + 2, this.transform.position.z);
+                GameManager.Instance.InstancePowerUp(3, pos);
+                GameManager.Instance.powerUp_current++;
+            }
+        }
+
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

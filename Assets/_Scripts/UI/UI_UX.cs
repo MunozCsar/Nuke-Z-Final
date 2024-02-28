@@ -15,11 +15,13 @@ public class UI_UX : MonoBehaviour
     public GameObject loadingScreen;
     private void Start()
     {
-        options.gameObject.SetActive(false);
-        graphics.gameObject.SetActive(false);
-        controls.gameObject.SetActive(false);
-        volume.gameObject.SetActive(false);
-        credits.gameObject.SetActive(false);
+        Cursor.visible = true; //Activa la visibilidad del cursor
+        Cursor.lockState = CursorLockMode.None; //Habilita el cursor
+        options.SetActive(false);
+        graphics.SetActive(false);
+        controls.SetActive(false);
+        volume.SetActive(false);
+        credits.SetActive(false);
     }
     public void Play(int sceneID)
     {
@@ -42,7 +44,7 @@ public class UI_UX : MonoBehaviour
     }
     public void Options()
     {
-        options.gameObject.SetActive(true);
+        options.SetActive(true);
     }
     public void Exit()
     {
@@ -50,31 +52,31 @@ public class UI_UX : MonoBehaviour
     }
     public void BackOptions()
     {
-        options.gameObject.SetActive(false);
+        options.SetActive(false);
     }
     public void BackGraphisAndVolumeAndControlsAndCredits()
     {
-        graphics.gameObject.SetActive(false);
-        volume.gameObject.SetActive(false);
-        controls.gameObject.SetActive(false);
-        credits.gameObject.SetActive(false);
+        graphics.SetActive(false);
+        volume.SetActive(false);
+        controls.SetActive(false);
+        credits.SetActive(false);
     }
     
     public void Credits()
     {
-        credits.gameObject.SetActive(true);
+        credits.SetActive(true);
     }
     public void Graphics()
     {
-        graphics.gameObject.SetActive(true);
+        graphics.SetActive(true);
     }
     public void Volume()
     {
-        volume.gameObject.SetActive(true);
+        volume.SetActive(true);
     }
     public void Controls()
     {
-       controls.gameObject.SetActive(true);
+       controls.SetActive(true);
     }
     public void MainMenu()
     {

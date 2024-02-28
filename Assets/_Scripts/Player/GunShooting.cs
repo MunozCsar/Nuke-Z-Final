@@ -110,12 +110,12 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Body_Collider"))
             {
-                int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
                 Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
 
                 if (GameManager.Instance.instaKill)
                 {
-                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ZM_Death(headShot);
                 }
                 else
                 {
@@ -127,13 +127,13 @@ public class GunShooting : MonoBehaviour
 
             if (hit.transform.CompareTag("Head_Collider"))
             {
-                int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
                 Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
 
                 if (GameManager.Instance.instaKill)
                 {
 
-                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(headShot);
+                    hit.transform.parent.gameObject.GetComponent<ZM_AI>().ZM_Death(headShot);
                 }
                 else
                 {
@@ -172,12 +172,12 @@ public class GunShooting : MonoBehaviour
 
                 if (hit.transform.CompareTag("Body_Collider"))
                 {
-                    int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                    int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
                     Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
                     Debug.DrawRay(cam.transform.position, cam.transform.forward * 20 + spread, Color.green, 5f);
                     if (GameManager.Instance.instaKill)
                     {
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(headShot);
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ZM_Death(headShot);
                     }
                     else
                     {
@@ -189,12 +189,12 @@ public class GunShooting : MonoBehaviour
 
                 if (hit.transform.CompareTag("Head_Collider"))
                 {
-                    int rnd = GameManager.Instance.RandomNumberGeneratorINT(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
+                    int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1)); //Genera un numero entre 0 y la cantidad de objetos del array
                     Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation); //Instancia el objeto en el index dado por el RNG
                     if (GameManager.Instance.instaKill)
                     {
 
-                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().zm_Death(headShot);
+                        hit.transform.parent.gameObject.GetComponent<ZM_AI>().ZM_Death(headShot);
                     }
                     else
                     {

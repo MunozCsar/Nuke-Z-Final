@@ -123,8 +123,8 @@ ModelImporter:
       name: Gun_Equip
       takeName: Scene
       internalID: 1963079803359675471
-      firstFrame: 250
-      lastFrame: 250
+      firstFrame: 265
+      lastFrame: 280
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

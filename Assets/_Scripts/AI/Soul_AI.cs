@@ -41,7 +41,7 @@ public class Soul_AI : MonoBehaviour
         if (other.CompareTag("SoulBox"))
         {
             other.GetComponentInParent<SoulHarvest>().actualSouls++;
-            GameManager.Instance.CheckSoulCompletion(other.GetComponentInParent<SoulHarvest>().boxID);
+            GameManager.Instance.CheckContainerCompletion(other.GetComponentInParent<SoulHarvest>().boxID);
             other.GetComponentInParent<SoulHarvest>().OpenContainer();
             Destroy(gameObject, 3f);
         }

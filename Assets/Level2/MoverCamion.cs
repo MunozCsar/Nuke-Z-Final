@@ -23,17 +23,16 @@ public class MoverCamion : MonoBehaviour
 
     private void Colocar()
     {
-        if (GameManager.Instance.llaveRecogida == true && GameManager.Instance.tecla == true)
+        if (GameManager.Instance.isKeyObtained == true && GameManager.Instance.allowPickup == true && GameManager.Instance.isKeyActive == false)
         {
             if (Input.GetKeyDown(KeyCode.F) && puedeColocarLlave == true)
             {
                 Debug.Log("Mover");
-                GameManager.Instance.llaveIsActive = true;
-                GameManager.Instance.llaveRecogida = false;
+                GameManager.Instance.isKeyActive = true;
                 boxCollider.enabled = false;
             }
         }
-        if (GameManager.Instance.llaveIsActive)
+        if (GameManager.Instance.isKeyActive)
         {
             MoveCamion();
         }
@@ -49,9 +48,9 @@ public class MoverCamion : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Presiona F para colocar");
-            GameManager.Instance.tecla = true;
+            GameManager.Instance.allowPickup = true;
 
-            if (GameManager.Instance.llaveRecogida == true)
+            if (GameManager.Instance.isKeyObtained == true)
             {
                 puedeColocarLlave = true;
             }
@@ -67,7 +66,7 @@ public class MoverCamion : MonoBehaviour
         if (other.tag == "Player")
         {
             puedeColocarLlave = false;
-            GameManager.Instance.tecla = false;
+            GameManager.Instance.allowPickup = false;
         }
     }
 }

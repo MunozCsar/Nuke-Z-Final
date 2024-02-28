@@ -25,7 +25,7 @@ public class ZM_Spawner : MonoBehaviour
         GameManager.Instance.zombieCount.text = ("Zombies: " + GameManager.Instance.zm_alive.ToString());
         if (GameManager.Instance.timer >= GameManager.Instance.timerGoal && GameManager.Instance.roundEnd == false && activeSpawner)
         {
-            zm_Spawn();
+            ZM_Spawn();
         }
         else if(GameManager.Instance.timer < GameManager.Instance.timerGoal)
         {
@@ -108,7 +108,7 @@ public class ZM_Spawner : MonoBehaviour
         
     }
     
-    private void zm_Spawn()
+    private void ZM_Spawn()
     {
         if (GameManager.Instance.zm_alive < GameManager.Instance.zm_maxHorde && GameManager.Instance.roundEnd == false && GameManager.Instance.isPaused == false) 
         {

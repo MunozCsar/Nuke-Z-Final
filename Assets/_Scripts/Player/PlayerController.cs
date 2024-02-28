@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,39 +23,23 @@ public class PlayerController : MonoBehaviour
     public float groundDistance = 0.4f; //Radio de la esfera de detección
     public LayerMask groundMask; //Máscara del suelo
     public GameObject flashLight; //Gameobject linterna
-    private bool _isGrounded, flashOn, end_Game; //Booleanos varios que almacenan si ele jugador está en el suelo, si la linterna está encendida y si el jugador puede acabar la partida
+    private bool isGrounded, flashOn, end_Game; //Booleanos varios que almacenan si ele jugador está en el suelo, si la linterna está encendida y si el jugador puede acabar la partida
     public bool hasKeyCard; //Booleano que almacena si el jugador ha obtenido la keycard
     private void Update()
     {
-        Agarrar();
-
-        if (t_regen < regen_Cooldown) //Timer de la regeneración de vida: si el valor del cooldown es mayor que el valor del timer, se suma al timer Time.deltaTime
-        {
-            t_regen += Time.deltaTime;
-        }
-        else
-        {
-            if (playerHP < 150) //Si el jugador está por debajo de 150 de vida, se llama a la función RegenHP()
-            {
-                RegenHP();
-            }
-
-        }
-
+        PickUp();
+        CheckGround();
+        ApplyGravity();
+        RegenHP();
+        TurnOnFlashLight();
         if (end_Game.Equals(true))
         {
             if (Input.GetKeyDown(KeyCode.F) && GameManager.Instance.endGameTrigger)
             {
                 GameManager.Instance.EndGame();
             }
-        }
+        } //Si el jugador está en el trigger del boton, presiona F y la variable de endGameTrigger es true acaba la partida
 
-        _isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        if (_isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
         if (Input.GetKey(KeyCode.W))
         {
             if (Input.GetKey(KeyCode.LeftShift))
@@ -66,68 +51,83 @@ public class PlayerController : MonoBehaviour
                 MovePlayer(walkSpeed);
             }
 
-        }
+        } //Movimiento hacia delante
         else if (Input.GetKey(KeyCode.S))
         {
 
             MovePlayer(strafeSpeed);
 
-        }
+        } //Movimiento hacia atras
         else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
 
             MovePlayer(strafeSpeed);
 
-        }
+        } //Movimiento lateral
 
-        if (Input.GetButtonDown("Jump") && _isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
+        } //Salto
 
-        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime); //Se usa el componente CharacterController para hacer saltar al personaje 
 
-        controller.Move(velocity * Time.deltaTime);
+    }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+    private void TurnOnFlashLight()
+    {
+        if (Input.GetKeyDown(KeyCode.Q)) //Al presionar la tecla Q se invierte el bool de la linterna
         {
             flashOn = !flashOn;
         }
-
-        if (flashOn)
+        if (flashOn) //Si el bool es true se activa la linterna
         {
             flashLight.SetActive(true);
         }
-        else
+        else //Si el bool es false se desactiva la linterna
         {
             flashLight.SetActive(false);
         }
+    }
 
+    private void CheckGround()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask); //Se comprueba si el jugador está en tierra usando un CheckSphere
+    }
+    private void ApplyGravity()
+    {
+        if (isGrounded && velocity.y < 0) //Si el jugador está en tierra y velocity.y es menor que 0, se restea velocity.y a 0
+        {
+            velocity.y = 0;
+        }
+        velocity.y += gravity * Time.deltaTime; //Se le da a velocity.y el valor de la gravedad por Time.deltaTime
     }
     private void MovePlayer(float speed)
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
+        float x = Input.GetAxisRaw("Horizontal"); //Se toma la dirección horizontal
+        float z = Input.GetAxisRaw("Vertical"); //Se toma la dirección vertical
 
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move.normalized * speed * Time.deltaTime);
+        Vector3 move = transform.right * x + transform.forward * z; //Se crea la variable local move y multiplicamos los valores anteriores por los ejes x y z
+        controller.Move(speed * Time.deltaTime * move.normalized); //Se llama a la funcion Move del CharacterController y se asigna la velocidad.
     }
 
-    private void Agarrar()
+    private void PickUp()
     {
-        if (GameManager.Instance.tecla == true && GameManager.Instance.recogido == false)
+        //Gestiona la interaccion con la llave y las piezas
+
+        if (GameManager.Instance.allowPickup == true && GameManager.Instance.obtainedPickup == false) 
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F)) //Al presionar F, si la parte seleccionada es la llave, da el valor true al booleano y desactivar el GO de la llave
             {
-                if(GameManager.Instance.piezaSeleccionada == 3)
+                if(GameManager.Instance.selectedPart == 3)
                 {
-                    GameManager.Instance.llaveRecogida = true;
-                    GameManager.Instance.llaves.SetActive(false);
+                    GameManager.Instance.isKeyObtained = true;
+                    GameManager.Instance.truckKey.SetActive(false);
                 }
-                else if(GameManager.Instance.piezaSeleccionada == 0 || GameManager.Instance.piezaSeleccionada == 1 || GameManager.Instance.piezaSeleccionada == 2)
+                else if(GameManager.Instance.selectedPart == 0 || GameManager.Instance.selectedPart == 1 || GameManager.Instance.selectedPart == 2) //Si selecciona una pieza de electricidad, obtiene el pickup y la desactiva
                 {
-                    GameManager.Instance.piezas[GameManager.Instance.piezaSeleccionada].SetActive(false);
-                    GameManager.Instance.recogido = true;
+                    GameManager.Instance.powerParts[GameManager.Instance.selectedPart].SetActive(false);
+                    GameManager.Instance.obtainedPickup = true;
                 }
 
             }
@@ -136,13 +136,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Damage_Trigger"))
+        //Gestión de triggers para activar y desactivar eventos interactivos
+
+        if (other.CompareTag("Damage_Trigger")) //Recibe daño al ser golpeado
         {
             GameManager.Instance.DamageIndicator(playerHP);
-            takeDamage(GameManager.Instance.zm_Damage);
+            TakeDamage(GameManager.Instance.zm_Damage);
         }
 
-        if (other.CompareTag("EntryCard"))
+        if (other.CompareTag("EntryCard")) //Obtención de keycard
         {
             hasKeyCard = true;
             GameManager.Instance.interactText.gameObject.SetActive(true);
@@ -151,7 +153,7 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        if (other.CompareTag("EndGameTrigger"))
+        if (other.CompareTag("EndGameTrigger")) //Comprobación de poder acabar la partida
         {
             GameManager.Instance.interactText.gameObject.SetActive(true);
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
@@ -168,21 +170,23 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (other.CompareTag("Llave"))
+        if (other.CompareTag("Llave")) //Comprueba que el jugador esté tocando la llave
         {
-            GameManager.Instance.tecla = true;
+            GameManager.Instance.allowPickup = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        //Desactiva las bools al dejar de hace contacto con ellas
+
         if (other.CompareTag("EndGameTrigger"))
         {
             end_Game = false;
         }
         if (other.CompareTag("Llave"))
         {
-            GameManager.Instance.tecla = false;
+            GameManager.Instance.allowPickup = false;
         }
     }
 
@@ -215,57 +219,54 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (other.CompareTag("Pieza1"))
+        if (other.CompareTag("Pieza1") && GameManager.Instance.obtainedPickup == false && GameManager.Instance.isKeyObtained == true) //Comprueba si esta tocando la pieza 1 y asigna los valores debidos
         {
-            Debug.Log("Presiona F para agarrar");
-
-            GameManager.Instance.tecla = true;
-            GameManager.Instance.piezaSeleccionada = 0;
-            GameManager.Instance.colocar.puedeColocar = false;
+            GameManager.Instance.allowPickup = true;
+            GameManager.Instance.selectedPart = 0;
         }
-        else if (other.tag == "Pieza2" && GameManager.Instance.recogido == false && GameManager.Instance.llaveIsActive == true)
+        else if (other.CompareTag("Pieza2") && GameManager.Instance.obtainedPickup == false && GameManager.Instance.isKeyObtained == true) //Comprueba si esta tocando la pieza 2 y asigna los valores debidos
         {
-            Debug.Log("Presiona F para agarrar");
-
-            GameManager.Instance.tecla = true;
-            GameManager.Instance.piezaSeleccionada = 1;
-            GameManager.Instance.colocar.puedeColocar = false;
+            GameManager.Instance.allowPickup = true;
+            GameManager.Instance.selectedPart = 1;
         }
-        else if (other.tag == "Pieza3" && GameManager.Instance.recogido == false && GameManager.Instance.llaveIsActive == true)
+        else if (other.CompareTag("Pieza3") && GameManager.Instance.obtainedPickup == false && GameManager.Instance.isKeyObtained == true) //Comprueba si esta tocando la pieza 3 y asigna los valores debidos
         {
-            Debug.Log("Presiona F para agarrar");
-
-            GameManager.Instance.tecla = true;
-            GameManager.Instance.piezaSeleccionada = 2;
-            GameManager.Instance.colocar.puedeColocar = false;
+            GameManager.Instance.allowPickup = true;
+            GameManager.Instance.selectedPart = 2;
 
         }
-        else if (other.tag == "Llave" && GameManager.Instance.llaveRecogida == false)
+        if (other.CompareTag("Llave") && GameManager.Instance.isKeyObtained == false) //Comprueba si esta tocando la llave y asigna los valores debidos
         {
-            Debug.Log("Presiona F para agarrar");
-
-            GameManager.Instance.tecla = true;
-            GameManager.Instance.piezaSeleccionada = 3;
-        }
-        if ((other.tag == "Pieza3" || other.tag == "Pieza2" || other.tag == "Pieza1" || other.tag == "Llave") && GameManager.Instance.recogido == true)
-        {
-            Debug.Log("Coloca la pieza antes de agarrar otra");
+            GameManager.Instance.allowPickup = true;
+            GameManager.Instance.selectedPart = 3;
         }
     }
 
-    public void takeDamage(float damage)
+    public void TakeDamage(float damage) //Recibir daño
     {
-        t_regen = 0f;
-        playerHP = playerHP - Mathf.RoundToInt(damage);
+        t_regen = 0f; //Resetea el timer de regeneración a 0
+        playerHP -= Mathf.RoundToInt(damage); //Reduce la vida del jugador
         if(playerHP <= 0)
         {
             GameManager.Instance.GameOver(this.gameObject);
             GameManager.Instance.playerCam.GetComponent<Animator>().SetTrigger("onDeath");
-        }
+        } //Si la vida del jugador es igual o menor a 0, llama a la función de muerte y activa la animación de muerte
     }
 
     public void RegenHP()
     {
-        playerHP += regenSpeed * Time.deltaTime;
+        if (t_regen < regen_Cooldown) //Timer de la regeneración de vida: si el valor del cooldown es mayor que el valor del timer, se suma al timer Time.deltaTime
+        {
+            t_regen += Time.deltaTime;
+        }
+        else
+        {
+            if (playerHP < 150) //Si el jugador está por debajo de 150 de vida, se regenera la vida()
+            {
+                playerHP += regenSpeed * Time.deltaTime;
+            }
+
+        }
+
     }
 }

@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class ColocarObjeto : MonoBehaviour
 {
-    [SerializeField] GameObject[] piezas;
-    public int piezasActivas = 0;
-    public bool puedeColocar = false;
-    public bool activarElectricidad;
+    [SerializeField] GameObject[] parts;
+    public int activeParts = 0;
+    public bool turnOnPower, powerOn;
     private void Update()
     {
         Colocar();
@@ -16,60 +15,58 @@ public class ColocarObjeto : MonoBehaviour
 
     private void Colocar()
     {
-        if (GameManager.Instance.tecla == true && puedeColocar == true && GameManager.Instance.recogido == true)
+        if (GameManager.Instance.allowPickup == true && GameManager.Instance.placeablePart == true && GameManager.Instance.obtainedPickup == true)
         {
-            if (Input.GetKeyDown(KeyCode.F) && (GameManager.Instance.piezaSeleccionada == 0 || GameManager.Instance.piezaSeleccionada == 1 || GameManager.Instance.piezaSeleccionada == 2))
+            if (Input.GetKeyDown(KeyCode.F) && (GameManager.Instance.selectedPart == 0 || GameManager.Instance.selectedPart == 1 || GameManager.Instance.selectedPart == 2))
             {
-                piezas[GameManager.Instance.piezaSeleccionada].SetActive(true);
-                piezasActivas++;
-                GameManager.Instance.piezaSeleccionada = 4;
-                GameManager.Instance.recogido = false;
+                parts[GameManager.Instance.selectedPart].SetActive(true);
+                activeParts++;
+                GameManager.Instance.selectedPart = 4;
+                GameManager.Instance.obtainedPickup = false;
+                GameManager.Instance.placeablePart = false;
             }
         }
     }
 
     public void ActivarElectricidad()
     {
-        if (activarElectricidad && Input.GetKeyDown(KeyCode.F))
+        if (turnOnPower && Input.GetKeyDown(KeyCode.F))
         {
             foreach (GameObject light in GameManager.Instance.lights)
             {
                 light.SetActive(true);
                 GameManager.Instance.interactText.gameObject.SetActive(false);
             }
+            GameManager.Instance.lightMaterial.SetColor("_EmissionColor", Color.white); //Al activar la electricidad, activa la propiedad de emission del material de las luces
+            GameManager.Instance.electricDoor.GetComponent<Animator>().SetTrigger("Fold");
+            turnOnPower = false;
+            powerOn = true;
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && GameManager.Instance.recogido == true)
+        if (other.CompareTag("Player") && GameManager.Instance.obtainedPickup == true)
         {
-            Debug.Log("Presiona F para colocar");
-
-            puedeColocar = true;
-            GameManager.Instance.tecla = true;
+            GameManager.Instance.placeablePart = true;
+            GameManager.Instance.allowPickup = true;
         }
-        else
-        {
-            Debug.Log("Faltan piezas para poder activar el generador");
-        }
-
-        if (piezasActivas == 3)
+        if (activeParts == 3 && powerOn == false)
         {
             GameManager.Instance.interactText.gameObject.SetActive(true);
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
             GameManager.Instance.interactText.text = "Press \"F\" to turn on electricity";
-            activarElectricidad = true;
+            turnOnPower = true;
 
 
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && GameManager.Instance.recogido == true)
+        if (other.CompareTag("Player") && GameManager.Instance.obtainedPickup == true)
         {
-            puedeColocar = false;
-            GameManager.Instance.tecla = false;
+            GameManager.Instance.placeablePart = false;
+            GameManager.Instance.allowPickup = false;
             GameManager.Instance.interactText.gameObject.SetActive(false);
         }
     }

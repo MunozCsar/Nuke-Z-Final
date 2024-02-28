@@ -6711,7 +6711,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4427784550874237712}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -7824,24 +7824,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunName: MP40
   id: 1
-  gunCost: 1500
   ammoCost: 500
   pellets: 0
+  damagePellet: 0
+  damage: 175
   gunAnimator: {fileID: 0}
-  recoilX: -1
-  recoilY: 0.5
-  recoilZ: 0.5
-  kickback: 1.5
-  returnTime: 50
-  snappiness: 50
   enemyMask:
     serializedVersion: 2
     m_Bits: 2048
   instaKill: 0
   muzzleFX: {fileID: 2973179661431444557}
   rateOfFire: 550
-  damage: 175
-  damagePellet: 0
   headshotMultiplier: 2
   range: 100
   firingMode: 1
@@ -8111,7 +8104,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6418045323364367671}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0

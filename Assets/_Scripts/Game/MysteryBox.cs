@@ -20,9 +20,7 @@ public class MysteryBox : MonoBehaviour
             {
                 if (GameManager.Instance.score >= 950 && currentUses < maxUses)
                 {
-                    boxActive = false;
                     currentUses++;
-                    //boxAnimator.Play("tapa2");
                     RollWeapon();
                 }
             }
@@ -53,20 +51,12 @@ public class MysteryBox : MonoBehaviour
 
     void RollWeapon()
     {
-
-        if(weapon.playerWeapons.Count == 0)
-        {
-            randomWeapon = weapons[Random.Range(0, weapons.Length)];
-        }
-
-        else if(weapon.playerWeapons.Count == 1)
+        if (weapon.playerWeapons.Count == 1)
         {
 
             while (weapon.playerWeapons[0].GetComponentInChildren<GunShooting>().id.Equals(randomWeapon))
             {
                 randomWeapon = weapons[Random.Range(0, weapons.Length)];
-                GameManager.Instance.ReduceScore(950);
-                GameManager.Instance.UpdateScoreText();
             }
         }
         else if (weapon.playerWeapons.Count == 2)
@@ -74,11 +64,16 @@ public class MysteryBox : MonoBehaviour
             while (weapon.playerWeapons[0].GetComponentInChildren<GunShooting>().id.Equals(randomWeapon) || weapon.playerWeapons[1].GetComponentInChildren<GunShooting>().id.Equals(randomWeapon))
             {
                 randomWeapon = weapons[Random.Range(0, weapons.Length)];
-                GameManager.Instance.ReduceScore(950);
-                GameManager.Instance.UpdateScoreText();
             }
         }
 
+        else
+        {
+            randomWeapon = weapons[Random.Range(0, weapons.Length)];
+        }
+
+        GameManager.Instance.ReduceScore(950);
+        GameManager.Instance.UpdateScoreText();
         weapon.AddWeapon(randomWeapon);
     }
 

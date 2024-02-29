@@ -58,15 +58,15 @@ public class GunController : MonoBehaviour
         }
 
         // Inicia la recarga si la munición está agotada
-        if (ammo == 0 && reserveAmmo > 0 && !GameManager.Instance.isPaused)
+        if (ammo == 0 && reserveAmmo > 0 && !GameManager.Instance.isPaused && !isReloading && t_fire >= firing_coolDown)
         {
             StartCoroutine(ReloadWeapon());
+            Debug.Log(ammo);
         }
 
         // Inicia la recarga si se presiona la tecla de recarga y hay munición disponible
         if (Input.GetKeyDown(KeyCode.R) && reserveAmmo > 0 && ammo < ammoCapacity && t_fire >= firing_coolDown)
         {
-            isReloading = true;
             StartCoroutine(ReloadWeapon());
         }
 
@@ -216,8 +216,9 @@ public class GunController : MonoBehaviour
     // Corrutina para recargar el arma
     IEnumerator ReloadWeapon()
     {
+        isReloading = true;
         // Si la munición es 0 o menor, activa la animación de recarga con cargador vacio, si no, activa la animación de recarga normal
-        if(ammo <= 0)
+        if (ammo <= 0)
         {
             gunAnimator.Play("Gun_ReloadEmpty");
             gunAnimator.Play("Arms_ReloadEmpty");

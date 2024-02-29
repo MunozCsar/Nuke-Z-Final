@@ -45,7 +45,8 @@ public class PartManager : MonoBehaviour
                 light.SetActive(true);
                 GameManager.Instance.interactText.gameObject.SetActive(false);
             }
-            GameManager.Instance.lightMaterial.SetColor("_EmissionColor", Color.white); // Al activar la electricidad, activa la propiedad de emission del material de las luces
+            Color32 emissionColor = new Color(1f, .875f, .65f);
+            GameManager.Instance.lightMaterial.SetColor("_EmissionColor", emissionColor) ; // Al activar la electricidad, activa la propiedad de emission del material de las luces
             GameManager.Instance.electricDoor.GetComponent<Animator>().SetTrigger("Fold");
             turnOnPower = false;
             powerOn = true;

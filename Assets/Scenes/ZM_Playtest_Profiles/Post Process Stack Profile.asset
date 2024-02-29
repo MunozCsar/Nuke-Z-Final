@@ -61,9 +61,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - {fileID: 2608644037475009537}
-  - {fileID: 5316754587185120529}
   - {fileID: 8390781793073237882}
   - {fileID: -8183063053950327692}
+  - {fileID: 7308535963522878138}
 --- !u!114 &2608644037475009537
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -113,7 +113,7 @@ MonoBehaviour:
   quality:
     overrideState: 1
     value: 4
---- !u!114 &5316754587185120529
+--- !u!114 &7308535963522878138
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,34 +122,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a34fa72bd4185749832024e9c8010bf, type: 3}
-  m_Name: ScreenSpaceReflections
+  m_Script: {fileID: 11500000, guid: b94fcd11afffcb142908bfcb1e261fba, type: 3}
+  m_Name: MotionBlur
   m_EditorClassIdentifier: 
   active: 1
   enabled:
     overrideState: 1
     value: 1
-  preset:
+  shutterAngle:
     overrideState: 1
-    value: 3
-  maximumIterationCount:
+    value: 270
+  sampleCount:
     overrideState: 1
-    value: 16
-  resolution:
-    overrideState: 1
-    value: 0
-  thickness:
-    overrideState: 1
-    value: 8
-  maximumMarchDistance:
-    overrideState: 1
-    value: 100
-  distanceFade:
-    overrideState: 1
-    value: 0.5
-  vignette:
-    overrideState: 1
-    value: 0.5
+    value: 10
 --- !u!114 &8390781793073237882
 MonoBehaviour:
   m_ObjectHideFlags: 3

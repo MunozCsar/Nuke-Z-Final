@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded && velocity.y < 0) //Si el jugador está en tierra y velocity.y es menor que 0, se restea velocity.y a 0
         {
-            velocity.y = 0;
+            velocity.y = -2;
         }
         velocity.y += gravity * Time.deltaTime; //Se le da a velocity.y el valor de la gravedad por Time.deltaTime
     }

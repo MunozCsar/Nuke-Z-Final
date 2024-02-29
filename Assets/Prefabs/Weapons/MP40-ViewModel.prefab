@@ -1132,7 +1132,7 @@ GameObject:
   - component: {fileID: 8327014639059673292}
   - component: {fileID: 2973179661431444557}
   - component: {fileID: 5616835023815442307}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FireFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8229,7 +8229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 563146201421759714}
   - component: {fileID: 1948379905981226718}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ParticleFlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -18,9 +18,11 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        // Establece la rotación inicial de la cámara y el objeto controlado por la cámara
-        transform.rotation = Quaternion.Euler(0, 180, 0);
-        playerCam.transform.rotation = Quaternion.Euler(0, 0, 0);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        // Establece la rotación inicial
+        xRotation = transform.eulerAngles.x;
+        yRotation = transform.eulerAngles.y;
     }
 
     void LateUpdate()

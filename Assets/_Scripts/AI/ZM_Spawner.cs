@@ -71,7 +71,33 @@ public class ZM_Spawner : MonoBehaviour
             case 2:
                 GameManager.Instance.zm_Count = 9;
                 break;
-                // Otros casos para recuentos específicos de oleadas
+            case 3:
+                GameManager.Instance.zm_Count = 13;
+                break;
+            case 4:
+                GameManager.Instance.zm_Count = 15;
+                break;
+            case 5:
+                GameManager.Instance.zm_Count = 18;
+                break;
+            case 6:
+                GameManager.Instance.zm_Count = 21;
+                break;
+            case 7:
+                GameManager.Instance.zm_Count = 24;
+                break;
+            case 8:
+                GameManager.Instance.zm_Count = 27;
+                break;
+            case 9:
+                GameManager.Instance.zm_Count = 30;
+                break;
+            case 10:
+                GameManager.Instance.zm_Count = 32;
+                break;
+            case 11:
+                GameManager.Instance.zm_Count = 35;
+                break;
         }
 
         // Restablece el recuento actual de potenciadores
@@ -87,7 +113,18 @@ public class ZM_Spawner : MonoBehaviour
                 GameManager.Instance.zm_Delay = 10f;
                 GameManager.Instance.timerGoal = 500;
                 break;
-                // Otros casos para tiempos específicos basados en el número de oleada
+            case 5:
+                GameManager.Instance.zm_Delay = 7.5f;
+                GameManager.Instance.timerGoal = 400;
+                break;
+            case 10:
+                GameManager.Instance.zm_Delay = 5f;
+                GameManager.Instance.timerGoal = 325;
+                break;
+            case 20:
+                GameManager.Instance.zm_Delay = 3.5f;
+                GameManager.Instance.timerGoal = 200;
+                break;
         }
     }
 
@@ -99,12 +136,9 @@ public class ZM_Spawner : MonoBehaviour
         {
             if (GameManager.Instance.zm_spawned < GameManager.Instance.zm_Count)
             {
-                // Incrementa el recuento de apariciones y vivos
                 GameManager.Instance.zm_spawned++;
                 GameManager.Instance.zm_alive++;
-                // Selecciona aleatoriamente un generador
                 int rnd = Random.Range(0, zmSpawners.Length);
-                // Instancia zombies según la etiqueta del generador
                 if (zmSpawners[rnd].CompareTag("BarrierSpawner"))
                 {
                     GameManager.Instance.zombieList.Add(Instantiate(GameManager.Instance.zombie[0], zmSpawners[rnd].transform.position, Quaternion.identity));
@@ -115,7 +149,6 @@ public class ZM_Spawner : MonoBehaviour
                     GameManager.Instance.zombieList.Add(Instantiate(GameManager.Instance.zombie[1], zmSpawners[rnd].transform.position, Quaternion.identity));
                     Instantiate(GameManager.Instance.groundFX, zmSpawners[rnd].transform.position, Quaternion.identity);
                 }
-                // Reinicia el temporizador
                 GameManager.Instance.timer = 0;
             }
         }
@@ -124,32 +157,24 @@ public class ZM_Spawner : MonoBehaviour
     // Corrutina para iniciar una nueva ronda
     private IEnumerator NewRound()
     {
-        // Restablece el recuento de apariciones y espera un tiempo antes de iniciar la próxima ronda
         GameManager.Instance.zm_spawned = 0;
         yield return new WaitForSeconds(GameManager.Instance.zm_Delay);
-        // Incrementa el recuento de oleadas y activa la animación de inicio de ronda en la interfaz de usuario
         GameManager.Instance.wave++;
         GameManager.Instance.waveText.GetComponent<Animator>().SetTrigger("onRoundStart");
-        // Aumenta la salud de los zombies para oleadas hasta 55
         if (GameManager.Instance.wave < 55)
         {
             GameManager.Instance.zombie[0].GetComponent<ZM_AI>().hp = GameManager.Instance.IncreaseZombieHP(GameManager.Instance.wave);
         }
-        // Configura parámetros para la próxima oleada
         NextWave();
         Timings();
-        // Actualiza elementos de la interfaz de usuario y reinicia temporizador y bandera de fin de ronda
         GameManager.Instance.waveText.text = GameManager.Instance.wave.ToString();
         GameManager.Instance.timer = 0;
         GameManager.Instance.roundEnd = false;
-        // Reinicia usos para cajas misteriosas
         for (int i = 0; i < GameManager.Instance.mysteryBox.Length; i++)
         {
             GameManager.Instance.mysteryBox[i].GetComponent<MysteryBox>().currentUses = 0;
         }
     }
-
-    // Activa el generador cuando el jugador entra en la zona de activación
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -157,8 +182,6 @@ public class ZM_Spawner : MonoBehaviour
             activeSpawner = true;
         }
     }
-
-    // Desactiva el generador cuando el jugador sale de la zona de activación
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))

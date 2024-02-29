@@ -151,6 +151,7 @@ public class WeaponHandler : MonoBehaviour
 
     public void MaxAmmo() //Municion maxima
     {
+        GameManager.Instance.maxAmmoUI.GetComponent<Animator>().Play("MaxAmmo");
         foreach (GameObject weapon in playerWeapons) //Recorre la lista y da al jugador la municion maxima de todas sus armas
         {
             weapon.GetComponentInChildren<GunController>().reserveAmmo = weapon.GetComponentInChildren<GunController>().ammoCapacity * weapon.GetComponentInChildren<GunController>().extraMags;
@@ -159,7 +160,7 @@ public class WeaponHandler : MonoBehaviour
 
     public void InstaKill() //Baja Instantanea
     {
-            GameManager.Instance.instaKill = true;
+        GameManager.Instance.instaKill = true;
     }
 
     public void DoublePoints() //Puntos Dobles 

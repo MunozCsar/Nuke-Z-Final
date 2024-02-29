@@ -34,13 +34,13 @@ public class GameManager : MonoBehaviour
     public bool[] radContainerFull;
     [SerializeField] GameObject options, graphics, controls, volume, credits;
     public Image loadingBar;
-    public GameObject loadingScreen;
+    public GameObject loadingScreen, maxAmmoUI, nukeUI, instaKillUI, doublePointsUI;
     public TMP_Text scoreText;
     public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead, pointsOnNuke, killScore, playerScore;
     public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer;
     public TMP_Text totalScore, totalKills, interactText;
     public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger;
-    public float instaKillTimer, doublePointsTimer;
+    public float instaKillTimer, instaKillCountdown, doublePointsTimer, doublePointsCountdown;
     public Slider volumeSlider;
     public float slidervalue;
 
@@ -186,21 +186,31 @@ public class GameManager : MonoBehaviour
         if (instaKill && instaKillTimer < 30)
         {
             instaKillTimer += Time.deltaTime;
+            instaKillCountdown -= Time.deltaTime;
+            instaKillUI.SetActive(true);
+            instaKillUI.GetComponent<TMP_Text>().text = "Instakill: " + Mathf.FloorToInt(instaKillCountdown);
         } //Timer de 30 segundos 
         else
         {
             instaKill = false;
             instaKillTimer = 0f;
+            instaKillUI.SetActive(false);
+            instaKillCountdown = 30f;
         }
 
         if (doublePoints && doublePointsTimer < 30)
         {
             doublePointsTimer += Time.deltaTime;
+            doublePointsCountdown -= Time.deltaTime;
+            doublePointsUI.SetActive(true);
+            doublePointsUI.GetComponent<TMP_Text>().text = "Double Points: " + Mathf.FloorToInt(doublePointsCountdown);
         } //Timer de 30 segundos 
         else
         {
             doublePoints = false;
             doublePointsTimer = 0f;
+            doublePointsUI.SetActive(false);
+            doublePointsCountdown = 30f;
         }
         #endregion
         #region ScoreBoard
@@ -250,6 +260,7 @@ public class GameManager : MonoBehaviour
 
     public void NukePowerUp() //Funcion del powerup de bomba nuclear
     {
+        nukeUI.GetComponent<Animator>().Play("RadDepletion");
         AddPoints(pointsOnNuke); //Añade los puntos que otorga el powerup
         UpdateScoreText(); //Actualiza la puntuacion
         UpdateScoreBoard();

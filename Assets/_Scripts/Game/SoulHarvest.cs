@@ -9,6 +9,7 @@ public class SoulHarvest : MonoBehaviour
     public int soulsRequired,actualSouls=0, boxID;
     public bool isFull = false;
     public Animator containerAnimator;
+    public GameObject fill;
 
     public BoxCollider soulZone;
 

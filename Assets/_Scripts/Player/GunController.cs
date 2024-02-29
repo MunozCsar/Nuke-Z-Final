@@ -103,7 +103,6 @@ public class GunController : MonoBehaviour
         ammo--;
         muzzleFX.Play();
         gunAnimator.Play("Gun_Fire");
-        gunAnimator.Play("Arms_Fire");
         spreadX = Random.Range(minX, maxX);
         spreadY = Random.Range(minY, maxY);
         spread = new Vector3(spreadX, spreadY, 0);

@@ -13,6 +13,7 @@ public class Soul_AI : MonoBehaviour
     public GameObject[] targetContainer;
     float d_Nearest;
     GameObject nearestObject;
+    public ParticleSystem effectParticles;
 
     private void Start()
     {
@@ -52,10 +53,19 @@ public class Soul_AI : MonoBehaviour
         if (other.CompareTag("SoulBox"))
         {
             other.GetComponentInParent<SoulHarvest>().actualSouls++;
+            float fillUp = .9f / other.GetComponentInParent<SoulHarvest>().soulsRequired;
+            other.GetComponentInParent<SoulHarvest>().fill.transform.Translate(0, fillUp, 0f);
             GameManager.Instance.CheckContainerCompletion(other.GetComponentInParent<SoulHarvest>().boxID);
             other.GetComponentInParent<SoulHarvest>().OpenContainer();
+            StartCoroutine(StopParticles());
             Destroy(gameObject, 3f);
         }
+    }
+
+    IEnumerator StopParticles()
+    {
+        yield return new WaitForSeconds(2f);
+        effectParticles.Stop();
     }
 }
 

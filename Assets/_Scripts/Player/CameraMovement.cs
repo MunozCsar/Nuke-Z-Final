@@ -12,12 +12,13 @@ public class CameraMovement : MonoBehaviour
 
     public float sensitivityX, clampMin, clampMax;
     public float sensitivityY;
-
+    public int fps;
     float xRotation;
     float yRotation;
 
     private void Awake()
     {
+        Application.targetFrameRate = 0;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         // Establece la rotación inicial
@@ -27,9 +28,10 @@ public class CameraMovement : MonoBehaviour
 
     void LateUpdate()
     {
+
         // Calcula los movimientos del ratón en los ejes X e Y
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensitivityX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensitivityY;
+        float mouseX = Input.GetAxisRaw("Mouse X") * sensitivityY;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * sensitivityX;
 
         // Actualiza la rotación horizontal
         yRotation += mouseX;
@@ -37,8 +39,8 @@ public class CameraMovement : MonoBehaviour
         xRotation += mouseY;
 
         // Aplica las rotaciones a los objetos controlados por la cámara, con restricciones en el eje vertical
-        transform.rotation = Quaternion.Euler(0, yRotation * 15, 0);
-        playerCam.transform.rotation = Quaternion.Euler(-xRotation * 15, yRotation * 15, 0);
+        transform.rotation = Quaternion.Euler(0, yRotation * sensitivityY, 0);
+        playerCam.transform.rotation = Quaternion.Euler(-xRotation * sensitivityX, yRotation * sensitivityY, 0);
         xRotation = Mathf.Clamp(xRotation, clampMin, clampMax); // Limita la rotación vertical dentro de los límites especificados
     }
 }

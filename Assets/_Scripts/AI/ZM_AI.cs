@@ -49,17 +49,20 @@ public class ZM_AI : MonoBehaviour
         switch (GameManager.Instance.wave)
         {
             default:
-                agent.speed = 2f; zm_Animator.SetBool("zombie_Walk", true); zm_Animator.SetBool("zombie_Run", false);
+                agent.speed = 2f; 
+                zm_Animator.SetBool("zombie_Run", false);
                 GameManager.Instance.zm_Damage = 35;
                 break;
 
             case 10:
-                agent.speed = 3f; zm_Animator.SetBool("zombie_Walk", true); zm_Animator.SetBool("zombie_Run", false);
+                agent.speed = 3f; 
+                zm_Animator.SetBool("zombie_Run", false);
                 GameManager.Instance.zm_Damage = 50;
                 break;
 
             case 20:
-                agent.speed = 4f; zm_Animator.SetBool("zombie_Walk", true); zm_Animator.SetBool("zombie_Run", true);
+                agent.speed = 4f; 
+                zm_Animator.SetBool("zombie_Run", true);
                 GameManager.Instance.zm_Damage = 75;
                 break;
         }
@@ -269,7 +272,7 @@ public class ZM_AI : MonoBehaviour
     // Detecta la permanencia del jugador o el zombie en una zona específica
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("DestroyBarrier"))
+        if (other.CompareTag("DestroyBarrier") && isAlive)
         {
             if (t_barrier < barrier_coolDown)
             {

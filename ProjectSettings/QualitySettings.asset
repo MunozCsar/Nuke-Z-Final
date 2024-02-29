@@ -8,12 +8,12 @@ QualitySettings:
   m_QualitySettings:
   - serializedVersion: 2
     name: High
-    pixelLightCount: 12
+    pixelLightCount: 8
     shadows: 2
-    shadowResolution: 3
+    shadowResolution: 1
     shadowProjection: 1
     shadowCascades: 4
-    shadowDistance: 350
+    shadowDistance: 50
     shadowNearPlaneOffset: 3
     shadowCascade2Split: 0.33333334
     shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
@@ -118,19 +118,5 @@ QualitySettings:
     customRenderPipeline: {fileID: 11400000, guid: c3d5326a32ff6ca478fa442ce62d2d97, type: 2}
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
-    Android: 1
-    GameCoreScarlett: 2
-    GameCoreXboxOne: 2
-    Lumin: 2
-    Nintendo 3DS: 2
-    Nintendo Switch: 2
-    PS4: 2
-    PS5: 2
     Server: 0
-    Stadia: 2
     Standalone: 0
-    WebGL: 2
-    Windows Store Apps: 2
-    XboxOne: 2
-    iPhone: 1
-    tvOS: 1

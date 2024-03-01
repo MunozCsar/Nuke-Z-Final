@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     public int score, kills, pointsOnHit, pointsOnKill, pointsOnHead, pointsOnNuke, killScore, playerScore;
     public GameObject scoreBoard, pauseCanvas, pointsInstance, damageIndicatorsContainer;
     public TMP_Text totalScore, totalKills, interactText;
-    public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger;
+    public bool isPaused = false, doublePoints, instaKill, gameOver, endGameTrigger, powerOn;
     public float instaKillTimer, instaKillCountdown, doublePointsTimer, doublePointsCountdown;
     public Slider volumeSlider;
     public float slidervalue;
@@ -261,8 +261,8 @@ public class GameManager : MonoBehaviour
     public void NukePowerUp() //Funcion del powerup de bomba nuclear
     {
         nukeUI.GetComponent<Animator>().Play("RadDepletion");
-        AddPoints(pointsOnNuke); //Añade los puntos que otorga el powerup
-        UpdateScoreText(); //Actualiza la puntuacion
+        AddPoints(pointsOnNuke);
+        UpdateScoreText();
         UpdateScoreBoard();
         foreach (GameObject zombie in zombieList) //Recorre la lista de zombies y llama a su función de muerte
         {

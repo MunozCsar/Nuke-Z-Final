@@ -106,14 +106,10 @@ public class GunController : MonoBehaviour
         spreadX = Random.Range(minX, maxX);
         spreadY = Random.Range(minY, maxY);
         spread = new Vector3(spreadX, spreadY, 0);
-        // Lanza un raycast desde la posición de la cámara hacia delante, sumándole la dispersión y almacenando la información en una variable
         if (Physics.Raycast(cam.transform.position, cam.transform.forward + spread, out RaycastHit hit, range, enemyMask))
         {
-            // Efecto de impacto en el cuerpo del enemigo
             if (hit.transform.CompareTag("Body_Collider"))
             {
-                // Efecto de impacto en el cuerpo del enemigo
-                // Se reproduce un efecto de sangre y se reduce su salud
                 int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1));
                 Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
                 if (GameManager.Instance.instaKill)
@@ -126,7 +122,6 @@ public class GunController : MonoBehaviour
                     headShot = false;
                 }
             }
-            // Efecto de impacto en la cabeza del enemigo
             if (hit.transform.CompareTag("Head_Collider"))
             {
                 int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1));
@@ -141,7 +136,6 @@ public class GunController : MonoBehaviour
                     headShot = true;
                 }
             }
-            // Efecto de impacto en la pared
             if (hit.transform.CompareTag("Wall"))
             {
                 Instantiate(GameManager.Instance.wallChipFX, hit.point, Quaternion.identity);
@@ -156,20 +150,15 @@ public class GunController : MonoBehaviour
         ammo--;
         muzzleFX.Play();
         gunAnimator.Play("Gun_Fire");
-        // Realiza tantos disparos como perdigones tiene el arma
         for(int i = 0; i <= pellets; i++)
         {
             spreadX = Random.Range(minX, maxX);
             spreadY = Random.Range(minY, maxY);
             spread = new Vector3(spreadX, spreadY, 0);
-            // Lanza un raycast desde la posición de la cámara hacia delante, sumándole la dispersión y almacenando la información en una variable
             if (Physics.Raycast(cam.transform.position, cam.transform.forward + spread, out RaycastHit hit, range, enemyMask))
             {
-                // Efecto de impacto en el cuerpo del enemigo
                 if (hit.transform.CompareTag("Body_Collider"))
                 {
-                    // Efecto de impacto en el cuerpo del enemigo
-                    // Se reproduce un efecto de sangre y se reduce su salud
                     int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1));
                     Instantiate(GameManager.Instance.bloodFX[rnd], hit.point, transform.rotation);
                     if (GameManager.Instance.instaKill)
@@ -182,7 +171,6 @@ public class GunController : MonoBehaviour
                         headShot = false;
                     }
                 }
-                // Efecto de impacto en la cabeza del enemigo
                 if (hit.transform.CompareTag("Head_Collider"))
                 {
                     int rnd = GameManager.Instance.RandomNumberGenerator(0, (GameManager.Instance.bloodFX.Length - 1));
@@ -197,7 +185,6 @@ public class GunController : MonoBehaviour
                         headShot = true;
                     }
                 }
-                // Efecto de impacto en la pared
                 if (hit.transform.CompareTag("Wall"))
                 {
                     Instantiate(GameManager.Instance.wallChipFX, hit.point, Quaternion.identity);
@@ -205,7 +192,6 @@ public class GunController : MonoBehaviour
             }
         }
         t_fire = 0f;
-        // Inicia la recarga si se agota la munición durante el disparo
         if (ammo == 0 && reserveAmmo > 0 && t_fire >= firing_coolDown)
         {
             StartCoroutine(ReloadWeapon());

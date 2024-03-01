@@ -9,23 +9,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public CharacterController controller; //Toma referencia del componente "CharacterController"
+    public CharacterController controller;
 
-    public float playerHP, regenSpeed; //Variables de vida y regeneración de vida
-    Vector3 velocity; //Control de la dirección de la gravedad
-    public float gravity = -9.81f; //Valor de la gravedad
-    public float walkSpeed, strafeSpeed; //Velocidad de movimiento hacia delante y hacia los lados
-    public float sprintMultiplier; //Multiplicador de sprint
-    public float jumpHeight; //Fuerza de salto
+    public float playerHP, maxHP, regenSpeed;
+    Vector3 velocity;
+    public float gravity = -9.81f;
+    public float walkSpeed, strafeSpeed;
+    public float sprintMultiplier;
+    public float jumpHeight;
 
-    public float t_barrier, barrier_Cooldown, t_regen, regen_Cooldown; // Timers para la reparación de la barrera y la regeneración de vida
+    public float t_barrier, barrier_Cooldown, t_regen, regen_Cooldown;
 
-    public Transform groundCheck; //Transform usado para la detección de suelo
-    public float groundDistance = 0.4f; //Radio de la esfera de detección
-    public LayerMask groundMask; //Máscara del suelo
-    public GameObject flashLight; //Gameobject linterna
-    private bool isGrounded, flashOn, end_Game; //Booleanos varios que almacenan si ele jugador está en el suelo, si la linterna está encendida y si el jugador puede acabar la partida
-    public bool hasKeyCard; //Booleano que almacena si el jugador ha obtenido la keycard
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+    public GameObject flashLight;
+    private bool isGrounded, flashOn, end_Game;
+    public bool hasKeyCard;
     private void Update()
     {
         PickUp();
@@ -71,21 +71,21 @@ public class PlayerController : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         } //Salto
 
-        controller.Move(velocity * Time.deltaTime); //Se usa el componente CharacterController para hacer saltar al personaje 
+        controller.Move(velocity * Time.deltaTime);
 
     }
 
     private void TurnOnFlashLight()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) //Al presionar la tecla Q se invierte el bool de la linterna
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             flashOn = !flashOn;
         }
-        if (flashOn) //Si el bool es true se activa la linterna
+        if (flashOn)
         {
             flashLight.SetActive(true);
         }
-        else //Si el bool es false se desactiva la linterna
+        else
         {
             flashLight.SetActive(false);
         }
@@ -97,19 +97,20 @@ public class PlayerController : MonoBehaviour
     }
     private void ApplyGravity()
     {
-        if (isGrounded && velocity.y < 0) //Si el jugador está en tierra y velocity.y es menor que 0, se restea velocity.y a 0
+        if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2;
+            velocity.y = -5;
         }
-        velocity.y += gravity * Time.deltaTime; //Se le da a velocity.y el valor de la gravedad por Time.deltaTime
+        velocity.y += gravity * Time.deltaTime;
     }
+    //Función de movimiento del jugador
     private void MovePlayer(float speed)
     {
-        float x = Input.GetAxisRaw("Horizontal"); //Se toma la dirección horizontal
-        float z = Input.GetAxisRaw("Vertical"); //Se toma la dirección vertical
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z; //Se crea la variable local move y multiplicamos los valores anteriores por los ejes x y z
-        controller.Move(speed * Time.deltaTime * move.normalized); //Se llama a la funcion Move del CharacterController y se asigna la velocidad.
+        Vector3 move = transform.right * x + transform.forward * z;
+        controller.Move(speed * Time.deltaTime * move.normalized);
     }
 
     private void PickUp()
@@ -191,6 +192,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Gestión de triggers de tipo stay
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Barrier_Trigger"))
@@ -245,24 +247,24 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage) //Recibir daño
     {
-        t_regen = 0f; //Resetea el timer de regeneración a 0
-        playerHP -= Mathf.RoundToInt(damage); //Reduce la vida del jugador
+        t_regen = 0f;
+        playerHP -= Mathf.RoundToInt(damage);
         if(playerHP <= 0)
         {
             GameManager.Instance.GameOver(this.gameObject);
             GameManager.Instance.playerCam.GetComponent<Animator>().SetTrigger("onDeath");
-        } //Si la vida del jugador es igual o menor a 0, llama a la función de muerte y activa la animación de muerte
+        }
     }
 
-    public void RegenHP()
+    public void RegenHP() //Regeneración de vida
     {
-        if (t_regen < regen_Cooldown) //Timer de la regeneración de vida: si el valor del cooldown es mayor que el valor del timer, se suma al timer Time.deltaTime
+        if (t_regen < regen_Cooldown)
         {
             t_regen += Time.deltaTime;
         }
         else
         {
-            if (playerHP < 150) //Si el jugador está por debajo de 150 de vida, se regenera la vida()
+            if (playerHP < maxHP) //Si el jugador está por debajo del valor máximo de vida, se regenera la vida()
             {
                 playerHP += regenSpeed * Time.deltaTime;
             }

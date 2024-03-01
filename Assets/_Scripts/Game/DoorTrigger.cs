@@ -11,14 +11,11 @@ using TMPro;
 
 public class DoorTrigger : MonoBehaviour
 {
-    [SerializeField] private GameObject doorText; // Texto de la puerta para interacción
-    public bool triggerOn = false; // Estado de activación del disparador
-    public Animator doorAnim; // Animator de la puerta
+    public bool triggerOn = false;
+    public Animator doorAnim;
 
-    // Se llama al inicio
     private void Start()
     {
-        doorText.SetActive(false); // Desactiva el texto de la puerta al inicio
     }
 
     // Se llama cuando un objeto entra en el área de colisión del disparador
@@ -26,19 +23,19 @@ public class DoorTrigger : MonoBehaviour
     {
         if (other.CompareTag(("Player")))
         {
-            // Muestra el texto de interacción y la acción necesaria para abrir la puerta
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
             if (other.GetComponent<PlayerController>().hasKeyCard.Equals(true))
             {
                 triggerOn = true;
-                doorText.SetActive(true);
-                doorText.GetComponent<TMP_Text>().text = ("Presiona \"F\" para insertar la tarjeta clave");
+                GameManager.Instance.interactText.gameObject.SetActive(true);
+                GameManager.Instance.interactText.gameObject.GetComponent<Animator>().Play("interact_text_idle");
+                GameManager.Instance.interactText.text = ("Press \"F\" to insert Keycard");
             }
             else
             {
-                // Muestra un mensaje indicando que se necesita una tarjeta clave para abrir la puerta
-                doorText.SetActive(true);
-                doorText.GetComponent<TMP_Text>().text = ("Necesitas una tarjeta clave para abrir esta puerta");
+                GameManager.Instance.interactText.gameObject.SetActive(true);
+                GameManager.Instance.interactText.gameObject.GetComponent<Animator>().Play("interact_text_idle");
+                GameManager.Instance.interactText.text = ("You need a keycard to open this door");
             }
         }
     }
@@ -48,21 +45,19 @@ public class DoorTrigger : MonoBehaviour
     {
         if (other.CompareTag(("Player")))
         {
-            // Desactiva el estado de activación y oculta el texto de la puerta
             triggerOn = false;
-            doorText.SetActive(false);
+            GameManager.Instance.interactText.gameObject.SetActive(false);
         }
     }
 
-    // Se llama en cada frame
     private void Update()
     {
         // Verifica si se presiona la tecla correspondiente para abrir la puerta y si el disparador está activado
         if (Input.GetKeyDown(KeyCode.F) && triggerOn)
         {
-            doorText.SetActive(false); // Oculta el texto de la puerta
-            doorAnim.SetTrigger("Fold"); // Activa la animación de la puerta para abrirla
-            GetComponent<BoxCollider>().enabled = false; // Desactiva el collider del disparador para evitar que se active nuevamente
+            GameManager.Instance.interactText.gameObject.SetActive(false);
+            doorAnim.SetTrigger("Fold");
+            GetComponent<BoxCollider>().enabled = false;
         }
     }
 }

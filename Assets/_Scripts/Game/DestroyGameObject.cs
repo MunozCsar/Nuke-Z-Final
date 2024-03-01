@@ -8,9 +8,8 @@ using UnityEngine;
 
 public class DestroyGameObject : MonoBehaviour
 {
-    public int time; // Tiempo en segundos antes de destruir el GameObject
+    public int time;
 
-    // Se llama al inicio antes del primer frame
     void Start()
     {
         // Destruye el GameObject después del tiempo especificado

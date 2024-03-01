@@ -9,20 +9,19 @@ using UnityEngine.AI;
 
 public class ZM_AI : MonoBehaviour
 {
-    public Animator zm_Animator; // Animator del zombie
-    public GameObject nearestObject, bodyCollider, headCollider, soulPrefab; // Objetos y colliders asociados al zombie
-    private NavMeshAgent agent = null; // Agente de navegación del zombie
-    private Transform target; // Objetivo del zombie
-    public GameObject[] targetBarrier; // Array de barreras a las que se dirige el zombie
-    public bool focusBarrier, isAlive, isInZone; // Variables de estado del zombie
-    public float t_barrier, barrier_coolDown, d_Nearest, hp; // Variables de tiempo y salud del zombie
+    public Animator zm_Animator;
+    public GameObject nearestObject, bodyCollider, headCollider, soulPrefab;
+    private NavMeshAgent agent = null;
+    private Transform target;
+    public GameObject[] targetBarrier;
+    public bool focusBarrier, isAlive, isInZone;
+    public float t_barrier, barrier_coolDown, d_Nearest, hp;
 
     void Start()
     {
-        // Inicialización de variables y configuración inicial
-        hp = GameManager.Instance.zm_HP; // Establece la salud del zombie
-        targetBarrier = GameObject.FindGameObjectsWithTag("DestroyBarrier"); // Encuentra las barreras en el escenario
-        nearestObject = targetBarrier[0]; // Establece la barrera más cercana como objetivo inicial
+        hp = GameManager.Instance.zm_HP;
+        targetBarrier = GameObject.FindGameObjectsWithTag("DestroyBarrier");
+        nearestObject = targetBarrier[0];
         d_Nearest = Vector3.Distance(transform.position, nearestObject.transform.position);
 
         // Encuentra la barrera más cercana al zombie
@@ -37,7 +36,6 @@ public class ZM_AI : MonoBehaviour
             }
         }
 
-        // Configuración inicial del agente de navegación y el objetivo del zombie
         target = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         agent.speed = 2f;
@@ -201,7 +199,7 @@ public class ZM_AI : MonoBehaviour
     // Crea un alma en la zona correspondiente si el zombie muere en ella
     public void HarvestSoul()
     {
-        if (isInZone)
+        if (isInZone && GameManager.Instance.powerOn)
         {
             Instantiate(soulPrefab, this.gameObject.transform.position, this.gameObject.transform.rotation);
         }
@@ -210,18 +208,14 @@ public class ZM_AI : MonoBehaviour
     // Genera un objeto de potenciador al azar cuando el zombie muere
     public void DropPowerUp()
     {
-        // Si la cantidad de powerups que han salido en la ronda es inferior a la cantidad máxima, entra en el condicional
         if (GameManager.Instance.powerUp_current < GameManager.Instance.powerUp_max)
         {
-            // Declaración de variable bool local 
             bool dropPowerUp = false;
             float rnd = GameManager.Instance.RandomNumberGenerator(0f, 1f);
-            // Si el valor de rnd está por debajo del valor de la probabilidad de instanciar un powerup, asigna el valor true a la variable bool local
             if (rnd < GameManager.Instance.powerUpChance)
             {
                 dropPowerUp = true;
             }
-            // Si la variable bool local es true, instancia un powerup atleatorio
             if (dropPowerUp.Equals(true))
             {
                 int rndINT = GameManager.Instance.RandomNumberGenerator(0, GameManager.Instance.powerUpArray.Length);
@@ -232,18 +226,12 @@ public class ZM_AI : MonoBehaviour
         }
     }
 
-    // Detecta la entrada del jugador o el zombie en una zona específica
     private void OnTriggerEnter(Collider other)
     {
         // Detecta si el zombie ha colisionado con el jugador y activa la animación de ataque
         if (other.CompareTag("Player"))
         {
             zm_Animator.SetBool("isAttacking", true);
-        }
-        // Detecta si el zombie ha entrado en una zona de recolección y asigna el valor a la variable
-        if (other.CompareTag("SoulZone"))
-        {
-            isInZone = true;
         }
     }
 
@@ -261,11 +249,6 @@ public class ZM_AI : MonoBehaviour
         {
             focusBarrier = false;
             zm_Animator.SetBool("isAttacking", false);
-        }
-        // Detecta si el zombie ha salido de una zona de recolección y asigna el valor a la variable
-        if (other.CompareTag("SoulZone"))
-        {
-            isInZone = false;
         }
     }
 
@@ -289,6 +272,14 @@ public class ZM_AI : MonoBehaviour
             {
                 focusBarrier = false;
             }
+        }
+        if (other.CompareTag("SoulZone") && other.gameObject.activeSelf == true)
+        {
+            isInZone = true;
+        }
+        else
+        {
+            isInZone = false;
         }
     }
 }

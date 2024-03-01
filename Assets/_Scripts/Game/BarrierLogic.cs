@@ -9,8 +9,8 @@ using UnityEngine;
 
 public class BarrierLogic : MonoBehaviour
 {
-    public int hitPoints; // Puntos de resistencia de la barrera
-    public GameObject[] planks; // Array de objetos de las partes de la barrera
+    public int hitPoints;
+    public GameObject[] planks;
 
     // Reduce los puntos de resistencia de la barrera y la destruye si alcanza cero puntos
     public void ReduceHitPoints()
@@ -36,9 +36,9 @@ public class BarrierLogic : MonoBehaviour
         {
             transform.GetChild(0).gameObject.SetActive(true); // Activa la barrera completa si estaba completamente destruida
         }
-        planks[hitPoints].SetActive(true); // Activa la parte de la barrera correspondiente a los puntos de resistencia actuales
-        hitPoints++; // Aumenta los puntos de resistencia
-        GameManager.Instance.AddPoints(10); // Añade puntos al jugador por reparar la barrera
+        planks[hitPoints].SetActive(true);
+        hitPoints++;
+        GameManager.Instance.AddPoints(10);
     }
 }
 

@@ -22,12 +22,9 @@ public class Soul_AI : MonoBehaviour
 
     private void Update()
     {
-        // Encuentra todos los contenedores en el juego
         targetContainer = GameObject.FindGameObjectsWithTag("SoulBox");
-        nearestObject = targetContainer[0]; // Establece el primer contenedor como el más cercano inicialmente
-        d_Nearest = Vector3.Distance(transform.position, nearestObject.transform.position); // Calcula la distancia al contenedor más cercano
-
-        // Encuentra el contenedor más cercano entre todos los contenedores
+        nearestObject = targetContainer[0];
+        d_Nearest = Vector3.Distance(transform.position, nearestObject.transform.position);
         for (int i = 1; i < targetContainer.Length; i++)
         {
             float distanceToCurrent = Vector3.Distance(transform.position, targetContainer[i].transform.position);
@@ -39,7 +36,7 @@ public class Soul_AI : MonoBehaviour
             }
         }
 
-        MoveToTarget(); // Mueve el alma hacia el contenedor más cercano
+        MoveToTarget();
     }
 
     private void MoveToTarget()

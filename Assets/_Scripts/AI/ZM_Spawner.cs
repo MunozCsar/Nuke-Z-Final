@@ -13,53 +13,39 @@ using UnityEngine.Serialization;
 public class ZM_Spawner : MonoBehaviour
 {
     [Header("Generadores")]
-    public Transform[] zmSpawners; // Array de transformaciones de generadores de zombies
-    public bool activeSpawner; // Indica si el generador está activo
+    public Transform[] zmSpawners;
+    public bool activeSpawner;
 
-    // Start se llama antes del primer frame
     void Start()
     {
-        // Inicializa la primera oleada
         NextWave();
-
-        // Actualiza los elementos de la interfaz de usuario con la información de la oleada actual
         GameManager.Instance.waveText.text = GameManager.Instance.wave.ToString();
-
-        // Aumenta la salud del jugador según la oleada actual
         GameManager.Instance.IncreaseZombieHP(GameManager.Instance.wave);
-
-        // Configura los tiempos para la aparición de zombies
         Timings();
     }
 
-    // Update se llama una vez por frame
     private void Update()
     {
-        // Comprueba si se cumplen las condiciones para aparecer zombies
         if (GameManager.Instance.timer >= GameManager.Instance.timerGoal && GameManager.Instance.roundEnd == false && activeSpawner)
         {
-            // Aparece zombies
             ZM_Spawn();
         }
-        // Si el temporizador aún no ha alcanzado la meta, continúa contando
         else if (GameManager.Instance.timer < GameManager.Instance.timerGoal)
         {
             GameManager.Instance.timer++;
         }
 
-        // Comprueba si todos los zombies han muerto y se han aparecido todos los zombies para terminar la ronda
         if (GameManager.Instance.zm_alive.Equals(0) && GameManager.Instance.zm_spawned.Equals(GameManager.Instance.zm_Count))
         {
             GameManager.Instance.roundEnd = true;
             GameManager.Instance.waveText.GetComponent<Animator>().SetTrigger("onRoundChange");
-            StartCoroutine(NewRound()); // Inicia una nueva ronda
+            StartCoroutine(NewRound());
         }
     }
 
-    // Determina el recuento de zombies para la próxima oleada
+    // Determina la cantidad de zombies para la próxima oleada
     private void NextWave()
     {
-        // Establece el recuento de zombies según la oleada actual
         switch (GameManager.Instance.wave)
         {
             default:
@@ -100,7 +86,6 @@ public class ZM_Spawner : MonoBehaviour
                 break;
         }
 
-        // Restablece el recuento actual de potenciadores
         GameManager.Instance.powerUp_current = 0;
     }
 
@@ -128,10 +113,9 @@ public class ZM_Spawner : MonoBehaviour
         }
     }
 
-    // Aparece zombies
+    // Función que gestiona la aparición de zombies
     private void ZM_Spawn()
     {
-        // Comprueba las condiciones para aparecer zombies
         if (GameManager.Instance.zm_alive < GameManager.Instance.zm_maxHorde && GameManager.Instance.roundEnd == false && GameManager.Instance.isPaused == false)
         {
             if (GameManager.Instance.zm_spawned < GameManager.Instance.zm_Count)

@@ -10,9 +10,7 @@ public class PartManager : MonoBehaviour
 {
     [SerializeField] GameObject[] parts;
     public int activeParts = 0;
-    public bool turnOnPower, powerOn;
-
-    // Se llama en cada frame
+    public bool turnOnPower;
     private void Update()
     {
         PlaceObject();
@@ -49,7 +47,7 @@ public class PartManager : MonoBehaviour
             GameManager.Instance.lightMaterial.SetColor("_EmissionColor", emissionColor) ; // Al activar la electricidad, activa la propiedad de emission del material de las luces
             GameManager.Instance.electricDoor.GetComponent<Animator>().SetTrigger("Fold");
             turnOnPower = false;
-            powerOn = true;
+            GameManager.Instance.powerOn = true;
         }
     }
 
@@ -63,7 +61,7 @@ public class PartManager : MonoBehaviour
             GameManager.Instance.allowPickup = true;
         }
         // Si todas las partes están colocadas y la energía no está activa, permite activar la energía
-        if (activeParts == 3 && powerOn == false)
+        if (activeParts == 3 && GameManager.Instance.powerOn == false)
         {
             GameManager.Instance.interactText.gameObject.SetActive(true);
             GameManager.Instance.interactText.GetComponent<Animator>().Play("interact_text_idle");
